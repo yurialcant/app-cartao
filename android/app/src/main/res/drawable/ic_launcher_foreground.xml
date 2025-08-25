@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Background circle -->
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M54,54m-54,0a54,54 0,1 1,108 0a54,54 0,1 1,-108 0" />
+    
+    <!-- Origami Bird Body -->
+    <path
+        android:fillColor="#1E40AF"
+        android:pathData="M54,30 L70,45 L65,60 L54,70 L43,60 L38,45 Z" />
+    
+    <!-- Bird Wings -->
+    <path
+        android:fillColor="#3B82F6"
+        android:pathData="M30,40 L45,35 L50,50 L40,65 L25,60 Z" />
+    <path
+        android:fillColor="#3B82F6"
+        android:pathData="M78,40 L63,35 L58,50 L68,65 L83,60 Z" />
+    
+    <!-- Circuit Pattern Lines -->
+    <path
+        android:strokeColor="#60A5FA"
+        android:strokeWidth="1"
+        android:pathData="M54,35 L54,65" />
+    <path
+        android:strokeColor="#60A5FA"
+        android:strokeWidth="1"
+        android:pathData="M45,45 L63,45" />
+    <path
+        android:strokeColor="#60A5FA"
+        android:strokeWidth="1"
+        android:pathData="M40,55 L68,55" />
+    
+    <!-- Circuit Nodes (using small rectangles instead of circles) -->
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M52,38 L56,38 L56,42 L52,42 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M52,48 L56,48 L56,52 L52,52 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M52,58 L56,58 L56,62 L52,62 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M43.5,43.5 L46.5,43.5 L46.5,46.5 L43.5,46.5 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M61.5,43.5 L64.5,43.5 L64.5,46.5 L61.5,46.5 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M38.5,53.5 L41.5,53.5 L41.5,56.5 L38.5,56.5 Z" />
+    <path
+        android:fillColor="#60A5FA"
+        android:pathData="M66.5,53.5 L69.5,53.5 L69.5,56.5 L66.5,56.5 Z" />
+    
+    <!-- Bird Head -->
+    <path
+        android:fillColor="#1E40AF"
+        android:pathData="M54,25 L58,30 L54,35 L50,30 Z" />
+    
+    <!-- Eye (using small rectangle) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M53,29 L55,29 L55,31 L53,31 Z" />
+</vector>

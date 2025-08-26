@@ -6,6 +6,9 @@ import 'package:get_it/get_it.dart';
 import 'core/di/service_locator.dart';
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/services/session_manager.dart';
+import 'core/services/navigation_service.dart';
+import 'core/config/app_version.dart';
 
 void main() async {
   // Garante que o Flutter está inicializado
@@ -18,8 +21,25 @@ void main() async {
   // Inicializa o Service Locator (GetIt)
   await ServiceLocator.init();
   
+  // Inicializa o gerenciador de sessão
+  await SessionManager().initialize();
+  
+  // Inicializa o serviço de navegação
+  await NavigationService().initialize();
+  
   // Garante que o AppStorage está inicializado
   print('🔍 DEBUG: [Main] App inicializando...');
+  
+  // ========================================
+  // 🏷️ INFORMAÇÕES DE VERSÃO
+  // ========================================
+  
+  // Imprime informações de versão no console
+  AppVersion.printDebugInfo();
+  
+  print('🚀 [Main] Iniciando ${AppVersion.appName} ${AppVersion.fullVersion}');
+  print('🔧 [Main] Ambiente: ${AppVersion.environment}');
+  print('📅 [Main] Data de lançamento: ${AppVersion.releaseDate}');
   
   // ========================================
   // 📱 CONFIGURAÇÕES DO SISTEMA
@@ -58,7 +78,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Carteira de Benefícios',
+      title: '${AppVersion.appName} ${AppVersion.displayVersion}',
       debugShowCheckedModeBanner: false,
       
       // ========================================

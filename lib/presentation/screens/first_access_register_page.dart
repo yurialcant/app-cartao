@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
 import '../../core/storage/app_storage.dart';
-import 'dashboard_page.dart';
 
 class FirstAccessRegisterPage extends StatefulWidget {
   const FirstAccessRegisterPage({super.key});
@@ -27,7 +25,6 @@ class _FirstAccessRegisterPageState extends State<FirstAccessRegisterPage> {
   bool _hasMinLength = false;
   bool _hasNumbers = false;
   bool _hasUppercase = false;
-  bool _hasLowercase = false;
   bool _hasSpecialChars = false;
   bool _passwordsMatch = false;
 

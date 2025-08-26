@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
+import '../../core/services/navigation_service.dart';
+import '../../core/services/attempt_control_service.dart';
 import '../../data/services/auth_service.dart';
 
 class ForgotPasswordTokenPage extends StatefulWidget {
@@ -25,12 +26,24 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
   
   bool _isLoading = false;
   String? _errorMessage;
-  int _resendCountdown = 60; // 60 segundos
+  int _resendCountdown = 0; // Começa em 0
+  
+  // Controle de tentativas
+  late AttemptControlService _attemptControl;
+  AttemptState? _currentAttemptState;
   
   @override
   void initState() {
     super.initState();
-    _startResendCountdown();
+    
+    // Inicializa controle de tentativas
+    _attemptControl = AttemptControlService();
+    _loadAttemptState();
+    
+    // Inicializa a sessão com dados do fluxo
+    if (widget.cpf != null) {
+      NavigationService().setCurrentMethod(widget.method ?? 'sms');
+    }
     
     // Configura listeners para auto-focus
     for (int i = 0; i < 3; i++) {
@@ -40,6 +53,15 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
         }
       });
     }
+    
+    // Escuta mudanças no estado de tentativas
+    _attemptControl.stateStream.listen((state) {
+      if (mounted) {
+        setState(() {
+          _currentAttemptState = state;
+        });
+      }
+    });
   }
   
   @override
@@ -50,10 +72,22 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
     for (var node in _focusNodes) {
       node.dispose();
     }
+    
+    // Limpa controle de tentativas
+    _attemptControl.dispose();
+    
     super.dispose();
   }
   
+  /// Carrega estado de tentativas
+  Future<void> _loadAttemptState() async {
+    await _attemptControl.loadState();
+    _currentAttemptState = _attemptControl.currentState;
+  }
+  
   void _startResendCountdown() {
+    if (_resendCountdown <= 0) return;
+    
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted && _resendCountdown > 0) {
         setState(() {
@@ -68,7 +102,6 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
   Widget build(BuildContext context) {
     final method = widget.method ?? 'sms';
     final methodText = method == 'email' ? 'e-mail' : 'SMS';
-    final methodIcon = method == 'email' ? Icons.email_outlined : Icons.sms_outlined;
     
     return Scaffold(
       backgroundColor: Colors.white,
@@ -137,6 +170,12 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
                       ),
                     ),
                     
+                    // Informações de tentativas
+                    if (_currentAttemptState != null) ...[
+                      const SizedBox(height: 16),
+                      _buildAttemptInfo(method),
+                    ],
+                    
                     const SizedBox(height: 32),
                     
                     // Campos de token
@@ -173,7 +212,10 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Usa NavigationService para navegar de volta de forma segura
+              NavigationService().navigateBack(context);
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF1A1A1A),
@@ -269,6 +311,70 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
                 fontSize: 14,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildAttemptInfo(String method) {
+    final isMethodBlocked = _attemptControl.isMethodBlocked(method);
+    final remainingTime = _attemptControl.getRemainingTime(method);
+    final minutes = remainingTime ~/ 60;
+    final seconds = remainingTime % 60;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF3F4F6),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                method == 'email' ? Icons.email_outlined : Icons.sms_outlined,
+                color: const Color(0xFF1E40AF),
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  'Tentativas restantes: ${_attemptControl.getRemainingAttempts(method)}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF374151),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Icon(
+                isMethodBlocked ? Icons.lock_outline : Icons.lock_open_outlined,
+                color: isMethodBlocked ? Colors.red : Colors.green,
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  isMethodBlocked
+                    ? 'Método $method bloqueado. Aguarde $minutes min e ${seconds}s'
+                    : 'Método $method disponível.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: isMethodBlocked ? Colors.red : Colors.green,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -383,28 +489,114 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
   }
   
   void _resendToken() {
-    print('🔍 DEBUG: [ForgotPasswordTokenPage] Reenviando token...');
+    final method = widget.method ?? 'sms';
     
-    setState(() {
-      _resendCountdown = 60;
-    });
+    // Verifica se pode tentar
+    if (!_attemptControl.canAttempt(method)) {
+      final remainingTime = _attemptControl.getRemainingTime(method);
+      final minutes = remainingTime ~/ 60;
+      final seconds = remainingTime % 60;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            minutes > 0 
+              ? 'Aguarde $minutes min e ${seconds}s para tentar novamente'
+              : 'Aguarde ${seconds}s para tentar novamente'
+          ),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+    
+    print('🔍 DEBUG: [ForgotPasswordTokenPage] Reenviando token por: $method');
+    
+    // Registra tentativa
+    _attemptControl.recordAttempt(method);
+    
+    // Inicia contador baseado no método
+    _resendCountdown = method == 'sms' ? 60 : 60;
     _startResendCountdown();
+    
+    // Atualiza dados do fluxo na sessão
+    NavigationService().setCurrentMethod(method);
     
     // Aqui você implementaria a lógica para reenviar o token
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Token reenviado com sucesso!'),
+      SnackBar(
+        content: Text('Token reenviado por $method com sucesso!'),
         backgroundColor: Colors.green,
       ),
     );
   }
   
   void _changeMethod() {
-    final newMethod = widget.method == 'email' ? 'sms' : 'email';
+    final currentMethod = widget.method ?? 'sms';
+    final newMethod = currentMethod == 'email' ? 'sms' : 'email';
+    
+    print('🔍 DEBUG: [ForgotPasswordTokenPage] Tentando alterar método de $currentMethod para $newMethod');
+    
+    // Verifica se o novo método está disponível
+    if (!_attemptControl.canAttempt(newMethod)) {
+      final remainingTime = _attemptControl.getRemainingTime(newMethod);
+      final minutes = remainingTime ~/ 60;
+      final seconds = remainingTime % 60;
+      
+      String message;
+      if (_attemptControl.isMethodBlocked(newMethod)) {
+        message = minutes > 0 
+          ? 'Método $newMethod bloqueado. Aguarde $minutes min e ${seconds}s'
+          : 'Método $newMethod bloqueado. Aguarde ${seconds}s';
+      } else {
+        message = minutes > 0 
+          ? 'Aguarde $minutes min e ${seconds}s para usar $newMethod'
+          : 'Aguarde ${seconds}s para usar $newMethod';
+      }
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+    
+    // Se está bloqueado geralmente, não permite alternar
+    if (_attemptControl.isGenerallyBlocked) {
+      final remainingTime = _attemptControl.getGeneralBlockRemainingTime();
+      final minutes = remainingTime ~/ 60;
+      final seconds = remainingTime % 60;
+      
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Todos os métodos estão bloqueados. Aguarde $minutes min e ${seconds}s'
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    
     print('🔍 DEBUG: [ForgotPasswordTokenPage] Alterando método para: $newMethod');
     
-    // Navega para a mesma tela com método diferente
-    context.go('${RoutePaths.forgotPasswordToken}?method=$newMethod');
+    // Atualiza o método na sessão
+    NavigationService().setCurrentMethod(newMethod);
+    
+    // Reseta contador para o novo método
+    _resendCountdown = 0;
+    
+    // Usa NavigationService para substituir a tela
+    NavigationService().navigateReplace(
+      context, 
+      RoutePaths.forgotPasswordToken, 
+      queryParams: {
+        'method': newMethod,
+        'cpf': widget.cpf ?? '',
+      }
+    );
   }
   
   void _verifyToken() async {
@@ -433,8 +625,19 @@ class _ForgotPasswordTokenPageState extends State<ForgotPasswordTokenPage> {
       if (!mounted) return;
       
       if (success) {
-        // Token válido - navega para criação de nova senha
-        context.go('${RoutePaths.forgotPasswordNewPassword}?method=${widget.method}&token=$token&cpf=${widget.cpf ?? ''}');
+        // Token válido - atualiza na sessão
+        NavigationService().setCurrentToken(token);
+        
+        // Navega para criação de nova senha
+        NavigationService().navigateTo(
+          context, 
+          RoutePaths.forgotPasswordNewPassword, 
+          queryParams: {
+            'method': widget.method ?? 'sms',
+            'token': token,
+            'cpf': widget.cpf ?? '',
+          }
+        );
       } else {
         // Token inválido
         setState(() {

@@ -16,8 +16,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      final cpf = _cpfController.text;
-
       await Future.delayed(const Duration(seconds: 1)); // simula requisição
 
       if (!mounted) return;

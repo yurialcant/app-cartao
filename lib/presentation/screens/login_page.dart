@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
 import '../../data/services/auth_service.dart';
 import '../../core/storage/app_storage.dart';
-import 'dashboard_page.dart';
 
 class LoginScreen extends StatefulWidget {
   final String? cpf; // CPF passado da tela anterior
@@ -565,10 +564,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _lockAccount() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('account_lockout_time', DateTime.now().toIso8601String());
-  }
+
 
   Future<void> _forgotPassword() async {
     final cpf = _cpfController.text.replaceAll(RegExp(r'[^\d]'), '');

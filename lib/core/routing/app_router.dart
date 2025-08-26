@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_login_app/core/routing/route_guards.dart';
 import 'package:flutter_login_app/core/routing/route_paths.dart';
+import 'package:flutter_login_app/presentation/screens/splash_screen.dart';
 import 'package:flutter_login_app/presentation/screens/welcome_screen.dart';
 import 'package:flutter_login_app/presentation/screens/cpf_check_screen.dart';
 import 'package:flutter_login_app/presentation/screens/first_access_method_page.dart';
@@ -19,7 +20,7 @@ import 'package:flutter_login_app/presentation/screens/forgot_password_new_passw
 /// Sistema de roteamento principal com guardas de segurança
 class AppRouter {
   static final GoRouter _router = GoRouter(
-    initialLocation: RoutePaths.welcome,
+    initialLocation: RoutePaths.splash,
     debugLogDiagnostics: true,
     
     // ========================================
@@ -39,6 +40,13 @@ class AppRouter {
     // ========================================
     
     routes: [
+      // Tela de splash
+      GoRoute(
+        path: RoutePaths.splash,
+        name: RouteNames.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
+      
       // Tela de boas-vindas
       GoRoute(
         path: RoutePaths.welcome,

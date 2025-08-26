@@ -49,12 +49,49 @@ if ($LASTEXITCODE -eq 0) {
     exit 1
 }
 
+# Mostrar opções de execução
+Write-Host "🎯 OPÇÕES DE EXECUÇÃO:" -ForegroundColor Cyan
+Write-Host "=====================" -ForegroundColor Cyan
+Write-Host "1️⃣  Modo Normal (TEST_MODE=true, USE_MOCKS=true)" -ForegroundColor Yellow
+Write-Host "2️⃣  Modo Força Login (FORCE_LOGIN_MODE=true)" -ForegroundColor Yellow
+Write-Host "3️⃣  Modo Teste Recuperação (FORGOT_PASSWORD_TEST_MODE=true)" -ForegroundColor Yellow
+Write-Host "4️⃣  Modo Completo (Todas as variáveis)" -ForegroundColor Yellow
+
+# Escolher modo de execução
+Write-Host ""
+Write-Host "Escolha o modo de execução (1-4):" -ForegroundColor White
+$choice = Read-Host
+
+# Configurar variáveis baseado na escolha
+switch ($choice) {
+    "1" {
+        $command = "flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true"
+        Write-Host "🎯 Modo Normal selecionado" -ForegroundColor Green
+    }
+    "2" {
+        $command = "flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true --dart-define=FORCE_LOGIN_MODE=true"
+        Write-Host "🎯 Modo Força Login selecionado" -ForegroundColor Green
+    }
+    "3" {
+        $command = "flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true --dart-define=FORGOT_PASSWORD_TEST_MODE=true"
+        Write-Host "🎯 Modo Teste Recuperação selecionado" -ForegroundColor Green
+    }
+    "4" {
+        $command = "flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true --dart-define=FORGOT_PASSWORD_TEST_MODE=true --dart-define=FORCE_LOGIN_MODE=false --dart-define=API_BASE_URL=https://api.exemplo.com --dart-define=API_TIMEOUT_SECONDS=30 --dart-define=NETWORK_DELAY_SECONDS=1.0"
+        Write-Host "🎯 Modo Completo selecionado" -ForegroundColor Green
+    }
+    default {
+        $command = "flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true"
+        Write-Host "🎯 Modo padrão selecionado (Normal)" -ForegroundColor Green
+    }
+}
+
 # Verificar configurações ativas
 Write-Host "⚙️  Configurações ativas:" -ForegroundColor Yellow
 Write-Host "   • TEST_MODE: true (limpa storage para testes)" -ForegroundColor White
 Write-Host "   • USE_MOCKS: true (usa sistema de mocks)" -ForegroundColor White
-Write-Host "   • FORCE_LOGIN_MODE: false (permite fluxo normal)" -ForegroundColor White
-Write-Host "   • FORGOT_PASSWORD_TEST_MODE: true (modo teste recuperação)" -ForegroundColor White
+Write-Host "   • FORCE_LOGIN_MODE: $($choice -eq '2')" -ForegroundColor White
+Write-Host "   • FORGOT_PASSWORD_TEST_MODE: $($choice -eq '3' -or $choice -eq '4')" -ForegroundColor White
 Write-Host "   • API_BASE_URL: https://api.exemplo.com (será substituída pelo dev)" -ForegroundColor White
 Write-Host "   • API_TIMEOUT_SECONDS: 30" -ForegroundColor White
 Write-Host "   • NETWORK_DELAY_SECONDS: 1.0 (simula latência de rede)" -ForegroundColor White
@@ -83,13 +120,9 @@ Write-Host "📱 5. BIOMETRIA:" -ForegroundColor Yellow
 Write-Host "    • Após login normal, teste autenticação biométrica" -ForegroundColor White
 Write-Host "    • Simulação com 80% de sucesso para testes realistas" -ForegroundColor White
 
-# Executar o sistema com todas as variáveis de teste
-Write-Host "🚀 EXECUTANDO SISTEMA COMPLETO..." -ForegroundColor Green
-Write-Host "=================================" -ForegroundColor Green
-
-$command = @"
-flutter run --debug --dart-define=TEST_MODE=true --dart-define=USE_MOCKS=true --dart-define=FORGOT_PASSWORD_TEST_MODE=true --dart-define=FORCE_LOGIN_MODE=false --dart-define=API_BASE_URL=https://api.exemplo.com --dart-define=API_TIMEOUT_SECONDS=30 --dart-define=NETWORK_DELAY_SECONDS=1.0
-"@
+# Executar o sistema
+Write-Host "🚀 EXECUTANDO SISTEMA..." -ForegroundColor Green
+Write-Host "=========================" -ForegroundColor Green
 
 Write-Host "Comando executado:" -ForegroundColor Cyan
 Write-Host $command -ForegroundColor White

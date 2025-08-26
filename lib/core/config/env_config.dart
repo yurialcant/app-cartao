@@ -22,7 +22,11 @@ class EnvConfig {
   /// Força sempre o fluxo de login, ignorando dados salvos
   static bool get isForceLoginMode {
     // Prioridade: --dart-define > LocalConfig > default
-    return bool.fromEnvironment('FORCE_LOGIN_MODE', defaultValue: LocalConfig.forceLoginMode);
+    try {
+      return bool.fromEnvironment('FORCE_LOGIN_MODE', defaultValue: LocalConfig.forceLoginMode);
+    } catch (e) {
+      return LocalConfig.forceLoginMode;
+    }
   }
   
   // ========================================

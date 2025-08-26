@@ -3,10 +3,6 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
 import '../../data/services/auth_service.dart';
-import '../../core/storage/app_storage.dart';
-import 'first_access_method_page.dart';
-import 'login_page.dart';
-import 'terms_of_use_page.dart';
 
 class CPFCheckScreen extends StatefulWidget {
   const CPFCheckScreen({super.key});
@@ -32,10 +28,24 @@ class _CPFCheckScreenState extends State<CPFCheckScreen> {
 
   void _onCPFChanged() {
     final cpf = _cpfController.text;
+    final cleanCPF = cpf.replaceAll(RegExp(r'[^\d]'), '');
+    
     setState(() {
-      _isValidCPF = cpf.length >= 14 && AuthService.isValidCPF(cpf);
+      // Valida CPF apenas quando estiver completo (11 dígitos + máscara)
+      _isValidCPF = cleanCPF.length == 11 && AuthService.isValidCPF(cleanCPF);
       _errorMessage = null;
     });
+    
+    // Se o CPF estiver completo e válido, foca automaticamente no botão
+    if (_isValidCPF) {
+      // Aguarda um pouco para a validação ser processada
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          // Foca no botão continuar
+          FocusScope.of(context).requestFocus(FocusNode());
+        }
+      });
+    }
   }
 
   @override
@@ -115,7 +125,15 @@ class _CPFCheckScreenState extends State<CPFCheckScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Usa GoRouter para navegar de volta de forma segura
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                // Se não pode fazer pop, volta para welcome
+                context.go(RoutePaths.welcome);
+              }
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF1A1A1A),

@@ -99,7 +99,7 @@ class HttpService {
     // SEGUNDO: Se não usa mocks, faz requisição HTTP real
     try {
       // Constrói a URL completa do endpoint
-      final url = Uri.parse('$_baseUrl/api/v1/auth/login');
+      final url = Uri.parse('$_baseUrl/auth/login-cpf');
       
       // Faz a requisição POST para a API real
       final response = await http.post(
@@ -133,13 +133,15 @@ class HttpService {
     // SEGUNDO: Se não usa mocks, faz requisição HTTP real
     try {
       // Constrói a URL completa do endpoint
-      final url = Uri.parse('$_baseUrl/api/v1/auth/register');
+      final url = Uri.parse('$_baseUrl/auth/register');
       
       // Faz a requisição POST para a API real
       final response = await http.post(
         url,                    // URL do endpoint
         headers: _defaultHeaders,  // Headers padrão
         body: jsonEncode({      // Corpo da requisição em JSON
+          'name': 'Usuário',   // Nome padrão
+          'email': cpf,        // Email do usuário (usando CPF como email para compatibilidade)
           'cpf': cpf,          // CPF do usuário
           'password': password, // Senha do usuário
         }),

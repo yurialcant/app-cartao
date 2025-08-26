@@ -113,7 +113,15 @@ class ForgotPasswordMethodPage extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Usa GoRouter para navegar de volta de forma segura
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                // Se não pode fazer pop, volta para login
+                context.go(RoutePaths.login);
+              }
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF1A1A1A),

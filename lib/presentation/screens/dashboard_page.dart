@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/storage/app_storage.dart';
 import '../../core/routing/route_paths.dart';
+import '../../core/config/app_version.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -16,8 +17,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _currentIndex = 0;
   final LocalAuthentication _localAuth = LocalAuthentication();
-  bool _isBiometricAvailable = false;
-  List<BiometricType> _availableBiometrics = [];
 
   @override
   void initState() {
@@ -34,8 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
         final availableBiometrics = await _localAuth.getAvailableBiometrics();
         
         setState(() {
-          _isBiometricAvailable = availableBiometrics.isNotEmpty;
-          _availableBiometrics = availableBiometrics;
+          // Biometria disponível - pode ser usada no futuro
         });
       }
     } on PlatformException catch (e) {
@@ -77,42 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return 'U';
   }
 
-  Future<void> _authenticateWithBiometrics() async {
-    try {
-      final authenticated = await _localAuth.authenticate(
-        localizedReason: 'Confirme sua identidade para acessar o app',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
-      );
 
-      if (authenticated) {
-        // Biometria autenticada com sucesso
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Autenticação biométrica realizada com sucesso!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } else {
-        // Usuário cancelou ou falhou na autenticação
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Autenticação biométrica cancelada'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-      }
-    } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erro na autenticação: ${e.message}'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   /// Faz logout do usuário
   void _logout() async {
@@ -211,6 +174,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   style: TextStyle(
                     fontSize: 14,
                     color: Color(0xFF666666),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  AppVersion.dashboardText,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF999999),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],

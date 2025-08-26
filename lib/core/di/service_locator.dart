@@ -1,53 +1,38 @@
 import 'package:get_it/get_it.dart';
 import '../storage/app_storage.dart';
+import '../services/session_manager.dart';
+import '../services/navigation_service.dart';
+import '../services/attempt_control_service.dart';
 
 /// Service Locator usando GetIt para injeção de dependências
 class ServiceLocator {
   static final GetIt _getIt = GetIt.instance;
   
-  /// Inicializa o service locator
+  /// Inicializa todos os serviços
   static Future<void> init() async {
-    // Inicializa AppStorage
-    await AppStorage.init();
+    print('🔍 DEBUG: [ServiceLocator] Inicializando serviços...');
     
-    // Aqui você pode registrar seus serviços
-    // Por exemplo:
-    // _getIt.registerLazySingleton<AuthService>(() => AuthService());
-    // _getIt.registerLazySingleton<BiometricService>(() => BiometricService());
+    // Registra serviços essenciais
+    _getIt.registerLazySingleton<SessionManager>(() => SessionManager());
+    _getIt.registerLazySingleton<NavigationService>(() => NavigationService());
+    _getIt.registerLazySingleton<AttemptControlService>(() => AttemptControlService());
+    
+    print('🔍 DEBUG: [ServiceLocator] Todos os serviços registrados com sucesso');
   }
   
-  /// Registra um singleton
-  static void registerSingleton<T extends Object>(T instance) {
-    _getIt.registerSingleton<T>(instance);
-  }
-  
-  /// Registra um lazy singleton
-  static void registerLazySingleton<T extends Object>(T Function() factory) {
-    _getIt.registerLazySingleton<T>(factory);
-  }
-  
-  /// Registra uma factory
-  static void registerFactory<T extends Object>(T Function() factory) {
-    _getIt.registerFactory<T>(factory);
-  }
-  
-  /// Obtém uma instância
+  /// Obtém uma instância de um serviço
   static T get<T extends Object>() {
     return _getIt.get<T>();
   }
   
-  /// Verifica se está registrado
+  /// Verifica se um serviço está registrado
   static bool isRegistered<T extends Object>() {
     return _getIt.isRegistered<T>();
   }
   
-  /// Remove um registro
-  static void unregister<T extends Object>() {
-    _getIt.unregister<T>();
-  }
-  
-  /// Remove todos os registros
-  static void reset() {
-    _getIt.reset();
+  /// Reseta todos os serviços (útil para testes)
+  static Future<void> reset() async {
+    await _getIt.reset();
+    print('🔍 DEBUG: [ServiceLocator] Todos os serviços resetados');
   }
 }

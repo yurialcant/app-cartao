@@ -13,6 +13,9 @@ class AppStorage {
   static const String _termsAcceptedKey = 'terms_accepted';
   static const String _firstAccessKey = 'first_access';
   static const String _cacheExpiryKey = 'cache_expiry';
+  static const String _sessionDataKey = 'session_data';
+  static const String _testModeKey = 'test_mode';
+  static const String _attemptControlKey = 'attempt_control';
   
   static const Duration _cacheDuration = Duration(hours: 1);
   static const Duration _sessionTimeout = Duration(hours: 24);
@@ -372,4 +375,63 @@ class AppStorage {
   
   /// Verifica se o storage está inicializado
   static bool get isInitialized => _prefs != null;
+  
+  // ========================================
+  // 🎭 GERENCIAMENTO DE SESSÃO
+  // ========================================
+  
+  /// Salva dados da sessão
+  static Future<void> saveSessionData(String sessionJson) async {
+    await saveLocal(_sessionDataKey, sessionJson);
+    print('🔍 DEBUG: [AppStorage] Dados de sessão salvos');
+  }
+  
+  /// Recupera dados da sessão
+  static String? getSessionData() {
+    return getLocal<String>(_sessionDataKey);
+  }
+  
+  /// Limpa dados da sessão
+  static Future<void> clearSessionData() async {
+    await removeLocal(_sessionDataKey);
+    print('🔍 DEBUG: [AppStorage] Dados de sessão limpos');
+  }
+  
+  /// Salva modo de teste
+  static Future<void> setTestMode(bool enabled) async {
+    await saveLocal(_testModeKey, enabled);
+    print('🔍 DEBUG: [AppStorage] Modo teste: $enabled');
+  }
+  
+  /// Verifica modo de teste
+  static bool? getTestMode() {
+    return getLocal<bool>(_testModeKey);
+  }
+  
+  /// Limpa modo de teste
+  static Future<void> clearTestMode() async {
+    await removeLocal(_testModeKey);
+    print('🔍 DEBUG: [AppStorage] Modo teste limpo');
+  }
+  
+  // ========================================
+  // 🔒 CONTROLE DE TENTATIVAS
+  // ========================================
+  
+  /// Salva estado de controle de tentativas
+  static Future<void> saveAttemptControlState(Map<String, dynamic> state) async {
+    await saveLocal(_attemptControlKey, state);
+    print('🔍 DEBUG: [AppStorage] Estado de tentativas salvo');
+  }
+  
+  /// Recupera estado de controle de tentativas
+  static Map<String, dynamic>? getAttemptControlState() {
+    return getLocal<Map<String, dynamic>>(_attemptControlKey);
+  }
+  
+  /// Limpa estado de controle de tentativas
+  static Future<void> clearAttemptControlState() async {
+    await removeLocal(_attemptControlKey);
+    print('🔍 DEBUG: [AppStorage] Estado de tentativas limpo');
+  }
 }

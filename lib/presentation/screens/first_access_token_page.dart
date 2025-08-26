@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
-import 'first_access_register_page.dart';
 
 class FirstAccessTokenPage extends StatefulWidget {
   const FirstAccessTokenPage({super.key});
@@ -39,6 +38,31 @@ class _FirstAccessTokenPageState extends State<FirstAccessTokenPage> {
           _focusNodes[i + 1].requestFocus();
         }
       });
+      
+      // Adiciona listener para detectar backspace
+      _tokenControllers[i].addListener(() {
+        if (_tokenControllers[i].text.isEmpty && i > 0) {
+          // Se o campo ficou vazio e não é o primeiro, volta para o anterior
+          _focusNodes[i - 1].requestFocus();
+        }
+      });
+    }
+  }
+
+  // Função para lidar com o botão de apagar do teclado
+  void _handleBackspace(int currentIndex) {
+    if (currentIndex > 0) {
+      // Se o campo atual está vazio, volta para o anterior e limpa
+      if (_tokenControllers[currentIndex].text.isEmpty) {
+        _focusNodes[currentIndex - 1].requestFocus();
+        _tokenControllers[currentIndex - 1].clear();
+      } else {
+        // Se o campo atual tem conteúdo, apenas limpa
+        _tokenControllers[currentIndex].clear();
+      }
+    } else if (currentIndex == 0) {
+      // Se é o primeiro campo, apenas limpa
+      _tokenControllers[0].clear();
     }
   }
 
@@ -132,7 +156,15 @@ class _FirstAccessTokenPageState extends State<FirstAccessTokenPage> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Usa GoRouter para navegar de volta de forma segura
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                // Se não pode fazer pop, volta para a tela anterior
+                context.go(RoutePaths.firstAccessMethod);
+              }
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF1A1A1A),
@@ -151,52 +183,76 @@ class _FirstAccessTokenPageState extends State<FirstAccessTokenPage> {
         return SizedBox(
           width: 60,
           height: 60,
-          child: TextField(
-            controller: _tokenControllers[index],
-            focusNode: _focusNodes[index],
-            textAlign: TextAlign.center,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(1),
-            ],
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
-            ),
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFFE5E7EB),
-                  width: 1.5,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFFE5E7EB),
-                  width: 1.5,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  color: Color(0xFF3B82F6),
-                  width: 2,
-                ),
-              ),
-              contentPadding: const EdgeInsets.all(16),
-            ),
-            onChanged: (value) {
-              setState(() {
-                _errorMessage = null;
-              });
-            },
-          ),
+          child: _buildTokenField(index),
         );
       }),
+    );
+  }
+
+  Widget _buildTokenField(int index) {
+    return RawKeyboardListener(
+      focusNode: FocusNode(),
+      onKey: (RawKeyEvent event) {
+        if (event is RawKeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.backspace) {
+            _handleBackspace(index);
+          }
+        }
+      },
+      child: TextField(
+        controller: _tokenControllers[index],
+        focusNode: _focusNodes[index],
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.number,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(1),
+        ],
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF1A1A1A),
+        ),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+              width: 1.5,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color(0xFFE5E7EB),
+              width: 1.5,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(
+              color: Color(0xFF3B82F6),
+              width: 2,
+            ),
+          ),
+          contentPadding: const EdgeInsets.all(16),
+        ),
+        onChanged: (value) {
+          setState(() {
+            _errorMessage = null;
+          });
+        },
+        onTap: () {
+          // Foca no campo quando tocado
+          _focusNodes[index].requestFocus();
+        },
+        onEditingComplete: () {
+          // Quando o usuário pressiona Enter, vai para o próximo campo
+          if (index < 3) {
+            _focusNodes[index + 1].requestFocus();
+          }
+        },
+      ),
     );
   }
 

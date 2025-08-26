@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
 import '../../core/storage/app_storage.dart';
-import 'first_access_method_page.dart';
 
 class TermsOfUsePage extends StatefulWidget {
   const TermsOfUsePage({super.key});

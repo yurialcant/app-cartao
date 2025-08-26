@@ -4,6 +4,9 @@ class RoutePaths {
   // 🏠 ROTAS PÚBLICAS
   // ========================================
   
+  /// Tela de splash
+  static const String splash = '/splash';
+  
   /// Tela de boas-vindas
   static const String welcome = '/';
   
@@ -115,6 +118,7 @@ class RouteNames {
   // 🏠 ROTAS PÚBLICAS
   // ========================================
   
+  static const String splash = 'splash';
   static const String welcome = 'welcome';
   static const String cpfCheck = 'cpfCheck';
   static const String termsOfUse = 'termsOfUse';

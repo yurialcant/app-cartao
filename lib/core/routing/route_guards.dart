@@ -141,6 +141,7 @@ class RouteGuards {
     
     // Rotas públicas normais
     return [
+      RoutePaths.splash,  // Adiciona a tela de splash como rota pública
       RoutePaths.welcome,
       RoutePaths.cpfCheck,
       RoutePaths.termsOfUse,

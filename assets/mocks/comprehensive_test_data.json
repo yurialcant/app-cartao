@@ -1,0 +1,538 @@
+{
+  "test_users": {
+    "first_access": [
+      {
+        "cpf": "111.444.777-35",
+        "name": "João Primeiro Acesso",
+        "email": "joao.primeiro@teste.com",
+        "phone": "(11) 11111-1111",
+        "isNewUser": true,
+        "needsRegistration": true,
+        "scenario": "Usuário completamente novo"
+      },
+      {
+        "cpf": "222.555.888-46",
+        "name": "Maria Primeiro Acesso",
+        "email": "maria.primeiro@teste.com",
+        "phone": "(11) 22222-2222",
+        "isNewUser": true,
+        "needsRegistration": true,
+        "scenario": "Usuária com dados básicos"
+      },
+      {
+        "cpf": "333.666.999-57",
+        "name": "Pedro Teste",
+        "email": "pedro.teste@teste.com",
+        "phone": "(11) 33333-3333",
+        "isNewUser": true,
+        "needsRegistration": true,
+        "scenario": "Usuário para teste de validação"
+      }
+    ],
+    "existing": [
+      {
+        "cpf": "946.919.070-09",
+        "name": "João Silva",
+        "email": "joao.silva@email.com",
+        "phone": "(11) 99999-9999",
+        "password": "Senha1@",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-15T10:30:00.000Z",
+        "isActive": true,
+        "roles": ["user"],
+        "scenario": "Usuário ativo normal"
+      },
+      {
+        "cpf": "632.543.510-96",
+        "name": "Maria Santos",
+        "email": "maria.santos@email.com",
+        "phone": "(11) 88888-8888",
+        "password": "Test2#",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-14T15:45:00.000Z",
+        "isActive": true,
+        "roles": ["user"],
+        "scenario": "Usuária com acesso recente"
+      },
+      {
+        "cpf": "123.456.789-09",
+        "name": "Carlos Teste",
+        "email": "carlos.teste@email.com",
+        "phone": "(11) 77777-7777",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-10T08:15:00.000Z",
+        "isActive": true,
+        "roles": ["user"],
+        "scenario": "Usuário para teste de login"
+      }
+    ],
+    "locked": [
+      {
+        "cpf": "987.654.321-00",
+        "name": "Usuário Bloqueado",
+        "email": "bloqueado@email.com",
+        "phone": "(11) 66666-6666",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-20T14:20:00.000Z",
+        "isActive": false,
+        "roles": ["user"],
+        "lockReason": "Múltiplas tentativas de login",
+        "lockExpiresAt": "2024-01-21T14:20:00.000Z",
+        "scenario": "Usuário temporariamente bloqueado"
+      },
+      {
+        "cpf": "555.444.333-22",
+        "name": "Usuário Permanente",
+        "email": "permanente@email.com",
+        "phone": "(11) 55555-5555",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-18T09:30:00.000Z",
+        "isActive": false,
+        "roles": ["user"],
+        "lockReason": "Bloqueio permanente por segurança",
+        "lockExpiresAt": null,
+        "scenario": "Usuário permanentemente bloqueado"
+      }
+    ],
+    "biometric_enabled": [
+      {
+        "cpf": "111.222.333-44",
+        "name": "Ana Biometria",
+        "email": "ana.biometria@email.com",
+        "phone": "(11) 44444-4444",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-16T11:45:00.000Z",
+        "isActive": true,
+        "roles": ["user"],
+        "biometricEnabled": true,
+        "biometricType": "fingerprint",
+        "scenario": "Usuário com biometria habilitada"
+      }
+    ]
+  },
+  "test_tokens": {
+    "sms": {
+      "valid": ["1234", "5678", "9999"],
+      "invalid": ["0000", "1111", "9999"],
+      "expired": ["8888"],
+      "scenarios": {
+        "normal": "1234",
+        "repeated": "1111",
+        "expired": "8888"
+      }
+    },
+    "email": {
+      "valid": ["1234", "5678", "9999"],
+      "invalid": ["0000", "1111", "9999"],
+      "expired": ["8888"],
+      "scenarios": {
+        "normal": "1234",
+        "repeated": "1111",
+        "expired": "8888"
+      }
+    },
+    "device": {
+      "valid": ["DEVICE123", "DEVICE456", "DEVICE789"],
+      "invalid": ["INVALID", "WRONG", "ERROR"],
+      "scenarios": {
+        "normal": "DEVICE123",
+        "invalid": "INVALID"
+      }
+    }
+  },
+  "test_passwords": {
+    "valid": [
+      "Test1!",
+      "Abc123@",
+      "Xyz789#",
+      "Pass1$",
+      "Word2%"
+    ],
+    "invalid": [
+      "teste123#",
+      "TESTE123#",
+      "Teste123",
+      "Test!",
+      "Teste12345!",
+      "abc",
+      "123456",
+      "abcdef",
+      "!@#$%^",
+      ""
+    ],
+    "scenarios": {
+      "too_short": "abc",
+      "too_long": "Teste12345!",
+      "no_uppercase": "teste123#",
+      "no_lowercase": "TESTE123#",
+      "no_number": "Teste!@#",
+      "no_special": "Teste123",
+      "empty": ""
+    }
+  },
+  "test_scenarios": {
+    "first_access_flow": {
+      "cpf": "111.444.777-35",
+      "token": "1234",
+      "password": "Test1!",
+      "expected_result": "dashboard",
+      "description": "Fluxo completo de primeiro acesso"
+    },
+    "login_existing_user": {
+      "cpf": "946.919.070-09",
+      "password": "Test123!",
+      "expected_result": "dashboard",
+      "description": "Login de usuário existente"
+    },
+    "account_lockout": {
+      "cpf": "946.919.070-09",
+      "wrong_passwords": ["Wrong1!", "Wrong2!", "Wrong3!"],
+      "expected_result": "temporary_lockout",
+      "description": "Bloqueio temporário por tentativas"
+    },
+    "permanent_lockout": {
+      "cpf": "946.919.070-09",
+      "wrong_passwords": ["Wrong1!", "Wrong2!", "Wrong3!", "Wrong4!", "Wrong5!"],
+      "expected_result": "permanent_lockout",
+      "description": "Bloqueio permanente por múltiplas tentativas"
+    },
+    "biometric_login": {
+      "cpf": "111.222.333-44",
+      "biometricType": "fingerprint",
+      "expected_result": "dashboard",
+      "description": "Login por biometria"
+    },
+    "password_recovery": {
+      "cpf": "946.919.070-09",
+      "method": "email",
+      "token": "1234",
+      "newPassword": "NewPass1!",
+      "expected_result": "password_changed",
+      "description": "Recuperação de senha por email"
+    },
+    "invalid_cpf_format": {
+      "cpf": "123.456.789",
+      "expected_result": "validation_error",
+      "description": "CPF com formato inválido"
+    },
+    "expired_token": {
+      "cpf": "111.444.777-35",
+      "token": "8888",
+      "expected_result": "token_expired",
+      "description": "Token expirado"
+    }
+  },
+  "api_responses": {
+    "cpf_check": {
+      "success": {
+        "status": "success",
+        "message": "CPF verificado com sucesso",
+        "data": {
+          "isFirstAccess": true,
+          "userExists": false
+        }
+      },
+      "user_exists": {
+        "status": "success",
+        "message": "Usuário encontrado",
+        "data": {
+          "isFirstAccess": false,
+          "userExists": true
+        }
+      },
+      "invalid_cpf": {
+        "status": "error",
+        "message": "CPF inválido",
+        "error": "INVALID_CPF"
+      },
+      "server_error": {
+        "status": "error",
+        "message": "Erro interno do servidor",
+        "error": "INTERNAL_SERVER_ERROR"
+      },
+      "network_error": {
+        "status": "error",
+        "message": "Erro de conexão",
+        "error": "NETWORK_ERROR"
+      }
+    },
+    "login": {
+      "success": {
+        "status": "success",
+        "message": "Login realizado com sucesso",
+        "data": {
+          "user": {
+            "cpf": "946.919.070-09",
+            "name": "João Silva",
+            "email": "joao.silva@email.com"
+          },
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "expiresAt": "2024-12-31T23:59:59.000Z"
+        }
+      },
+      "invalid_credentials": {
+        "status": "error",
+        "message": "Credenciais inválidas",
+        "error": "INVALID_CREDENTIALS"
+      },
+      "account_locked": {
+        "status": "error",
+        "message": "Conta bloqueada temporariamente",
+        "error": "ACCOUNT_LOCKED",
+        "data": {
+          "remainingMinutes": 8
+        }
+      },
+      "account_permanently_locked": {
+        "status": "error",
+        "message": "Conta bloqueada permanentemente",
+        "error": "ACCOUNT_PERMANENTLY_LOCKED"
+      },
+      "biometric_required": {
+        "status": "error",
+        "message": "Biometria requerida para este usuário",
+        "error": "BIOMETRIC_REQUIRED"
+      }
+    },
+    "first_access": {
+      "send_token": {
+        "success": {
+          "status": "success",
+          "message": "Token enviado com sucesso",
+          "data": {
+            "method": "email",
+            "expiresAt": "2024-12-31T23:59:59.000Z"
+          }
+        },
+        "rate_limit": {
+          "status": "error",
+          "message": "Muitas tentativas. Tente novamente em 5 minutos",
+          "error": "RATE_LIMIT_EXCEEDED"
+        }
+      },
+      "verify_token": {
+        "success": {
+          "status": "success",
+          "message": "Token verificado com sucesso"
+        },
+        "invalid": {
+          "status": "error",
+          "message": "Token inválido",
+          "error": "INVALID_TOKEN"
+        },
+        "expired": {
+          "status": "error",
+          "message": "Token expirado",
+          "error": "TOKEN_EXPIRED"
+        }
+      },
+      "register": {
+        "success": {
+          "status": "success",
+          "message": "Usuário registrado com sucesso",
+          "data": {
+            "user": {
+              "cpf": "111.444.777-35",
+              "name": "João Primeiro Acesso"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "validation_error": {
+          "status": "error",
+          "message": "Dados de validação inválidos",
+          "error": "VALIDATION_ERROR",
+          "details": {
+            "password": "Senha não atende aos requisitos mínimos"
+          }
+        }
+      }
+    },
+    "password_recovery": {
+      "initiate": {
+        "success": {
+          "status": "success",
+          "message": "Processo de recuperação iniciado",
+          "data": {
+            "method": "email",
+            "expiresAt": "2024-12-31T23:59:59.000Z"
+          }
+        }
+      },
+      "verify": {
+        "success": {
+          "status": "success",
+          "message": "Token verificado com sucesso"
+        }
+      },
+      "change": {
+        "success": {
+          "status": "success",
+          "message": "Senha alterada com sucesso"
+        },
+        "same_password": {
+          "status": "error",
+          "message": "Nova senha deve ser diferente da atual",
+          "error": "SAME_PASSWORD"
+        }
+      }
+    },
+    "biometric": {
+      "enable": {
+        "success": {
+          "status": "success",
+          "message": "Biometria habilitada com sucesso"
+        },
+        "not_available": {
+          "status": "error",
+          "message": "Biometria não disponível neste dispositivo",
+          "error": "BIOMETRIC_NOT_AVAILABLE"
+        }
+      },
+      "verify": {
+        "success": {
+          "status": "success",
+          "message": "Autenticação biométrica realizada com sucesso"
+        },
+        "failed": {
+          "status": "error",
+          "message": "Autenticação biométrica falhou",
+          "error": "BIOMETRIC_FAILED"
+        }
+      }
+    }
+  },
+  "error_codes": {
+    "AUTH_001": "CPF inválido",
+    "AUTH_002": "Senha inválida",
+    "AUTH_003": "Usuário não encontrado",
+    "AUTH_004": "Conta bloqueada temporariamente",
+    "AUTH_005": "Conta bloqueada permanentemente",
+    "AUTH_006": "Token inválido",
+    "AUTH_007": "Token expirado",
+    "AUTH_008": "Biometria não habilitada",
+    "AUTH_009": "Autenticação biométrica falhou",
+    "AUTH_010": "Termos de uso não aceitos",
+    "AUTH_011": "Rate limit excedido",
+    "AUTH_012": "Biometria não disponível",
+    "AUTH_013": "Senha igual à anterior",
+    "AUTH_014": "Dados de validação inválidos",
+    "AUTH_015": "Erro interno do servidor",
+    "AUTH_016": "Erro de conexão",
+    "AUTH_017": "Biometria requerida",
+    "AUTH_018": "Sessão expirada",
+    "AUTH_019": "Permissão negada",
+    "AUTH_020": "Método não suportado"
+  },
+  "validation_rules": {
+    "cpf": {
+      "length": 11,
+      "pattern": "^[0-9]{11}$",
+      "description": "CPF deve ter 11 dígitos numéricos",
+      "examples": {
+        "valid": ["94691907009", "63254351096"],
+        "invalid": ["123456789", "12345678901", "abc123def45"]
+      }
+    },
+    "password": {
+      "min_length": 6,
+      "max_length": 8,
+      "requirements": [
+        "Pelo menos uma letra maiúscula",
+        "Pelo menos uma letra minúscula",
+        "Pelo menos um número",
+        "Pelo menos um caractere especial (!@#$%^&*)"
+      ],
+      "description": "Senha deve ter entre 6 e 8 caracteres com requisitos específicos",
+      "examples": {
+        "valid": ["Test1!", "Abc123@", "Xyz789#"],
+        "invalid": ["teste123#", "TESTE123#", "Teste123", "Test!", "Teste12345!"]
+      }
+    },
+    "token": {
+      "length": 4,
+      "pattern": "^[0-9]{4}$",
+      "description": "Token deve ter 4 dígitos numéricos",
+      "examples": {
+        "valid": ["1234", "5678", "9999"],
+        "invalid": ["0000", "1111", "123", "12345", "abcd"]
+      }
+    },
+    "email": {
+      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "description": "Email deve ter formato válido",
+      "examples": {
+        "valid": ["teste@email.com", "user.name@domain.co.uk"],
+        "invalid": ["teste@", "@email.com", "teste.email", ""]
+      }
+    },
+    "phone": {
+      "pattern": "^\\([0-9]{2}\\) [0-9]{4,5}-[0-9]{4}$",
+      "description": "Telefone deve ter formato (XX) XXXXX-XXXX",
+      "examples": {
+        "valid": ["(11) 99999-9999", "(21) 88888-8888"],
+        "invalid": ["11999999999", "(11) 99999-999", "11 99999-9999"]
+      }
+    }
+  },
+  "test_networks": {
+    "slow_connection": {
+      "delay_ms": 3000,
+      "description": "Conexão lenta para teste de timeout"
+    },
+    "unstable_connection": {
+      "delay_ms": 1000,
+      "failure_rate": 0.3,
+      "description": "Conexão instável com falhas"
+    },
+    "no_connection": {
+      "delay_ms": 10000,
+      "description": "Sem conexão para teste offline"
+    }
+  },
+  "test_devices": {
+    "android": {
+      "versions": ["Android 8.0", "Android 9.0", "Android 10.0", "Android 11.0", "Android 12.0", "Android 13.0"],
+      "screen_sizes": ["480x800", "720x1280", "1080x1920", "1440x2560"],
+      "biometric_support": true
+    },
+    "ios": {
+      "versions": ["iOS 12.0", "iOS 13.0", "iOS 14.0", "iOS 15.0", "iOS 16.0", "iOS 17.0"],
+      "screen_sizes": ["375x667", "414x896", "390x844", "428x926"],
+      "biometric_support": true
+    }
+  },
+  "performance_metrics": {
+    "login_time": {
+      "target": "< 2 segundos",
+      "acceptable": "< 5 segundos",
+      "unacceptable": "> 10 segundos"
+    },
+    "token_validation": {
+      "target": "< 1 segundo",
+      "acceptable": "< 3 segundos",
+      "unacceptable": "> 5 segundos"
+    },
+    "app_startup": {
+      "target": "< 3 segundos",
+      "acceptable": "< 6 segundos",
+      "unacceptable": "> 12 segundos"
+    }
+  }
+}

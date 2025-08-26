@@ -34,9 +34,10 @@ class AuthService {
   ];
   
   // Senhas válidas para teste
+  // Regras: 6-8 caracteres, 1 maiúscula, 1 número, 1 especial
   static const Map<String, String> _validPasswords = {
-    '94691907009': 'Senha123@',
-    '63254351096': 'Test123!',
+    '94691907009': 'Senha1@',   // 8 caracteres
+    '63254351096': 'Test2#',    // 6 caracteres
   };
   
   // Token válido para teste
@@ -513,8 +514,15 @@ class AuthService {
         return false;
       }
       
-      // Simula sucesso para outros CPFs
-      print('🔍 DEBUG: [AuthService] Simulando sucesso para CPF: $cpf');
+      // Simula sucesso e mostra tokens válidos para cada método
+      if (method == 'email') {
+        print('🔍 DEBUG: [AuthService] ✅ Token enviado por EMAIL para CPF: $cpf');
+        print('🔍 DEBUG: [AuthService] 📧 Tokens válidos para EMAIL: 1234, 5678, 9999');
+      } else {
+        print('🔍 DEBUG: [AuthService] ✅ Token enviado por SMS para CPF: $cpf');
+        print('🔍 DEBUG: [AuthService] 📱 Tokens válidos para SMS: 2222, 3333, 4444');
+      }
+      
       return true;
     }
     
@@ -546,15 +554,20 @@ class AuthService {
     if (EnvConfig.isForgotPasswordTestMode) {
       print('🔍 DEBUG: [AuthService] Modo de teste ativado para verificação de token');
       
-      // Simula falha para tokens específicos em modo de teste
-      if (token == '0000') {
-        print('🔍 DEBUG: [AuthService] Simulando falha para token inválido: $token');
-        return false;
+      // Tokens válidos diferentes para cada método
+      if (method == 'email') {
+        // Tokens válidos para email
+        final validEmailTokens = ['1234', '5678', '9999'];
+        final isValid = validEmailTokens.contains(token);
+        print('🔍 DEBUG: [AuthService] Verificação por EMAIL - Token: $token, Válido: $isValid');
+        return isValid;
+      } else {
+        // Tokens válidos para SMS
+        final validSmsTokens = ['2222', '3333', '4444'];
+        final isValid = validSmsTokens.contains(token);
+        print('🔍 DEBUG: [AuthService] Verificação por SMS - Token: $token, Válido: $isValid');
+        return isValid;
       }
-      
-      // Simula sucesso para outros tokens
-      print('🔍 DEBUG: [AuthService] Simulando sucesso para token: $token');
-      return true;
     }
     
     // Comportamento normal (sempre sucesso para tokens válidos)

@@ -489,13 +489,16 @@ class MockApiService {
   static const List<String> _existingCpfs = [
     '94691907009',  // Usuário João Silva
     '63254351096',  // Usuário Maria Santos
+    '12345678909',  // Usuário Carlos Teste
   ];
   
   // Mapa de senhas válidas para cada CPF de usuário existente
   // Em um sistema real, isso seria armazenado de forma segura no backend
+  // Regras: 6-8 caracteres, 1 maiúscula, 1 número, 1 especial
   static const Map<String, String> _validPasswords = {
-    '94691907009': 'Senha123@',  // Senha do usuário João Silva
-    '63254351096': 'Test123!',   // Senha do usuário Maria Santos
+    '94691907009': 'Senha1@',   // Senha do usuário João Silva (8 caracteres)
+    '63254351096': 'Test2#',    // Senha do usuário Maria Santos (6 caracteres)
+    '12345678909': 'Pass3\$',    // Senha do usuário Carlos Teste (6 caracteres)
   };
   
   // Dados mockados dos usuários existentes no sistema
@@ -518,6 +521,16 @@ class MockApiService {
       'phone': '(11) 88888-8888',             // Telefone de contato
       'createdAt': '2024-01-01T00:00:00.000Z', // Data de criação da conta
       'lastLogin': '2024-01-14T15:45:00.000Z', // Último login realizado
+      'isActive': true,                        // Status da conta (ativa)
+      'roles': ['user'],                       // Papéis/permissões do usuário
+    },
+    '12345678909': {  // Dados do usuário Carlos Teste
+      'cpf': '12345678909',                    // CPF do usuário
+      'name': 'Carlos Teste',                  // Nome completo
+      'email': 'carlos.teste@email.com',       // Email de contato
+      'phone': '(11) 77777-7777',             // Telefone de contato
+      'createdAt': '2024-01-01T00:00:00.000Z', // Data de criação da conta
+      'lastLogin': '2024-01-10T08:15:00.000Z', // Último login realizado
       'isActive': true,                        // Status da conta (ativa)
       'roles': ['user'],                       // Papéis/permissões do usuário
     },

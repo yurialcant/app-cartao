@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/routing/route_paths.dart';
-import 'first_access_token_page.dart';
 
 class FirstAccessMethodScreen extends StatefulWidget {
   const FirstAccessMethodScreen({super.key});
@@ -193,7 +192,15 @@ class _FirstAccessMethodScreenState extends State<FirstAccessMethodScreen> {
       child: Row(
         children: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // Usa GoRouter para navegar de volta de forma segura
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                // Se não pode fazer pop, volta para termos
+                context.go(RoutePaths.termsOfUse);
+              }
+            },
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Color(0xFF1A1A1A),

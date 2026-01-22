@@ -88,3 +88,9 @@
 [submodule "services/acquirer-adapter"]
 	path = services/acquirer-adapter
 	url = git@github.com:ttiede/acquirer-adapter.git
+[submodule "services/merchant-bff"]
+	path = services/merchant-bff
+	url = git@github.com:ttiede/merchant-bff.git
+[submodule "bffs/support-bff"]
+	path = bffs/support-bff
+	url = git@github.com:ttiede/support-bff.git

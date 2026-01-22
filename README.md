@@ -125,7 +125,7 @@ git push origin main
 | app-pos-flutter | ✅ Completo | [app-pos-flutter](https://github.com/ttiede/app-pos-flutter) |
 | app-user-flutter | ✅ Completo | [app-user-flutter](https://github.com/ttiede/app-user-flutter) |
 
-**Total: 32 componentes organizados em repositórios individuais**
+**Total: 37 componentes organizados em repositórios individuais**
 
 ## 🛠️ Tecnologias
 

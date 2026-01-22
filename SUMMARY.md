@@ -9,13 +9,11 @@
 ## ✅ **O QUE FOI FEITO NESTE CICLO**
 
 ### **1. Re-entry Protocol Executado**
-- ✅ Leitura completa dos arquivos de estado (STATUS.md, ROADMAP.md, AGENT-COMMUNICATION.md)
+- ✅ Leitura completa dos arquivos de estado (STATUS.md, ROADMAP.md)
 - ✅ Estado atual consolidado: F05 90% completo, validação E2E pendente
 - ✅ Próximo trabalho identificado: F05 Validation (ROADMAP item #5)
-- ✅ Sistema de comunicação entre agentes verificado e atualizado
 
 ### **2. Arquivos Atualizados**
-- ✅ **`docs/AGENT-COMMUNICATION.md`** - Mensagem do Scrum Master adicionada
 - ✅ **`docs/STATUS.md`** - Timestamp atualizado, referência ao plano de validação
 - ✅ **`SUMMARY.md`** - Este arquivo criado
 
@@ -106,7 +104,6 @@ Após concluir F05 validação, os próximos slices podem ser executados:
 - **Plano Validação F05:** `docs/PLANO-VALIDACAO-F05.md`
 - **Status Detalhado:** `docs/STATUS.md`
 - **Roadmap:** `docs/ROADMAP.md`
-- **Comunicação Agentes:** `docs/AGENT-COMMUNICATION.md`
 - **Decisões:** `docs/decisions.md`
 - **Issues:** `docs/issues.md`
 

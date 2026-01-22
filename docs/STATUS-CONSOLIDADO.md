@@ -86,10 +86,6 @@
    - Script Start: start-ops-relay.ps1
    - Flyway habilitado em ops-relay
 
-4. **Sistema de Comunicação Entre Agentes:**
-   - `docs/AGENT-COMMUNICATION.md` criado com status ativo/inativo
-   - Protocolo de check-in implementado
-
 5. **Documentação de Fluxos Criada:**
    - `docs/flows/F05_Credit_Batch.md` criado (SSOT, lineage, campos exibidos vs internos)
    - `docs/flows/F07_Refund.md` criado (SSOT, lineage, campos exibidos vs internos)
@@ -656,7 +652,6 @@
 | **docs/issues.md** | 🟢 100% | Issues conhecidas |
 | **docs/references.md** | 🟢 100% | Referências estudadas |
 | **docs/STATUS-CONSOLIDADO.md** | 🟢 100% | Este arquivo (única fonte de verdade) |
-| **docs/AGENT-COMMUNICATION.md** | 🟢 100% | Sistema de comunicação |
 | **docs/architecture/** | 🟡 50% | Parcial |
 | **docs/flows/** | 🟢 75% | F05, F06, F07 documentados |
 | **docs/contracts/** | 🟢 75% | employer-bff e pos-bff OpenAPI criados |
@@ -733,28 +728,24 @@
    - Remova relatórios duplicados antigos
    - Mova informações relevantes para `docs/STATUS-CONSOLIDADO.md`
 
-### **Instruções para Novos Agentes**
+### **Instruções para Novos Desenvolvedores**
 
 1. **Ao iniciar trabalho:**
    - Leia `docs/STATUS-CONSOLIDADO.md` para entender estado atual
-   - Atualize `docs/AGENT-COMMUNICATION.md` com sua mensagem (não crie novo relatório)
-   - Siga o protocolo de atualização em `docs/AGENT-COMMUNICATION.md`
+   - Use `docs/STATUS-CONSOLIDADO.md` como referência principal
 
 2. **Durante o trabalho:**
-   - Atualize `docs/AGENT-COMMUNICATION.md` quando necessário
-   - Não crie relatórios intermediários
-   - Use `docs/STATUS-CONSOLIDADO.md` como referência
+   - Consulte `docs/STATUS-CONSOLIDADO.md` quando necessário
+   - Não crie relatórios intermediários desnecessários
 
 3. **Ao terminar trabalho:**
    - Atualize `docs/STATUS-CONSOLIDADO.md` se houver mudanças significativas
-   - Atualize `docs/AGENT-COMMUNICATION.md` com status final
-   - Não crie relatórios de conclusão separados
+   - Documente mudanças importantes no código
 
 ---
 
 ## 🔗 **LINKS ÚTEIS**
 
-- **Comunicação Agentes:** `docs/AGENT-COMMUNICATION.md` - Sistema de comunicação em tempo real
 - **Roadmap:** `docs/ROADMAP.md` - Backlog priorizado
 - **Decisões Técnicas:** `docs/decisions.md` - ADRs documentados
 - **Issues:** `docs/issues.md` - Issues conhecidas
@@ -771,9 +762,8 @@
 - Quando um slice for concluído ou iniciado
 
 **Este arquivo NÃO deve ser atualizado:**
-- Durante trabalho em progresso (use `docs/AGENT-COMMUNICATION.md`)
+- Durante trabalho em progresso (use commits e documentação no código)
 - Para logs de ciclo específico (use `logs/YYYY-MM-DD/HHmm/SUMMARY.md`)
-- Para comunicação entre agentes (use `docs/AGENT-COMMUNICATION.md`)
 
 ---
 

@@ -1,52 +1,190 @@
-# Benefits Platform - 100% Completo
+# Benefits Platform - Monorepo de Referências
 
-## ✅ STATUS: SISTEMA 100% VALIDADO E INTEGRADO
+Este repositório contém **apenas referências** (submodules) para todos os componentes da plataforma Benefits. Cada serviço, BFF e aplicação tem seu próprio repositório individual no GitHub.
 
-**Última atualização:** 2026-01-19 - Integração completa corrigida
-- ✅ **Business Logic**: 100% funcional sem mocks
-- ✅ **Integração**: Todos os componentes integrados (100%)
-- ✅ **Mocks**: Removidos ou movidos para `legacy-mocks/`
-- ✅ **Duplicatas**: Packages consolidados em `com.benefits.*`
-- ✅ **Compilação**: Todos os serviços principais compilam
-- ✅ **Configurações**: Unificadas e padronizadas
-- ✅ **BFFs ↔ Services**: Comunicação corrigida
-- ✅ **Apps ↔ BFFs**: Configurações atualizadas
-- ✅ **Docker**: Services Java adicionados ao compose
+## 🏗️ Arquitetura da Plataforma
 
-### Modos de Execução Disponíveis:
+### 📁 Estrutura de Submodules
 
-#### 🟢 **MODO MÍNIMO** (Business Logic Only - Sem Mocks)
-```bash
-.\scripts\start-minimal-no-mocks.ps1
 ```
-- ✅ benefits-core + tenant-service
-- ✅ Postgres + Redis reais
-- ✅ F05, F06, F07 100% funcionais
-- ✅ **0% mocks externos**
-
-#### 🟡 **MODO DESENVOLVIMENTO** (Auth + AWS Locais)
-```bash
-.\scripts\start-everything.ps1
+benefits-platform/ (este repositório - apenas referências)
+├── services/                    # Serviços backend
+│   ├── benefits-core           # Serviço central de benefícios
+│   ├── tenant-service          # Gestão de tenants
+│   ├── identity-service        # Autenticação e identidade
+│   ├── payments-orchestrator   # Orquestração de pagamentos
+│   ├── merchant-service        # Gestão de merchants
+│   ├── support-service         # Sistema de suporte
+│   ├── notification-service    # Notificações
+│   ├── reconciliation-service  # Reconciliação
+│   ├── risk-service           # Avaliação de risco
+│   ├── settlement-service     # Liquidação
+│   ├── privacy-service        # Privacidade (LGPD)
+│   ├── webhook-receiver       # Receptor de webhooks
+│   ├── webhook-service        # Serviço de webhooks
+│   ├── payments-service       # Processamento de pagamentos
+│   ├── billing-service        # Faturamento
+│   ├── device-service         # Gestão de dispositivos
+│   ├── employer-service       # Gestão de empregadores
+│   ├── kyb-service           # Know Your Business
+│   ├── kyc-service           # Know Your Customer
+│   ├── ops-relay             # Relay operacional
+│   └── acquirer-adapter      # Adaptador de adquirentes
+├── bffs/                      # Backend-for-Frontend
+│   ├── admin-bff             # BFF para admin
+│   ├── employer-bff          # BFF para empregadores
+│   ├── merchant-bff          # BFF para merchants
+│   ├── platform-bff          # BFF da plataforma
+│   ├── pos-bff              # BFF para POS
+│   ├── support-bff          # BFF para suporte
+│   ├── tenant-bff           # BFF para tenants
+│   └── user-bff             # BFF para usuários
+└── apps/                     # Aplicações frontend
+    ├── app-pos-flutter      # App POS (Flutter)
+    └── app-user-flutter     # App usuário (Flutter)
 ```
-- ✅ Keycloak para autenticação real
-- ✅ LocalStack para AWS services
-- ✅ Todos os BFFs funcionais
-- ✅ ~10% mocks (apenas externos)
 
-#### 🔴 **MODO COMPLETO** (Production-Ready)
+## 🚀 Como Usar
+
+### Clonando com Submodules
+
 ```bash
-# Com credenciais reais
-spring.profiles.active=production
+# Clone o repositório principal
+git clone git@github.com:ttiede/benefits-platform.git
+cd benefits-platform
+
+# Clone todos os submodules
+git submodule update --init --recursive
 ```
-- ✅ APIs externas reais
-- ✅ Notifications reais
-- ✅ **0% mocks** (se configurado)
+
+### Atualizando Submodules
+
+```bash
+# Atualizar todos os submodules para a versão mais recente
+git submodule update --remote
+
+# Ou atualizar um submodule específico
+cd services/benefits-core
+git pull origin main
+cd ../..
+git add services/benefits-core
+git commit -m "Update benefits-core submodule"
+```
+
+### Trabalhando com um Componente Específico
+
+```bash
+# Para trabalhar no benefits-core, por exemplo:
+cd services/benefits-core
+
+# Faça suas mudanças normalmente
+# git add, git commit, git push
+
+# Volte para o repositório principal
+cd ../..
+
+# Atualize a referência
+git add services/benefits-core
+git commit -m "Update benefits-core reference"
+git push origin main
+```
+
+## 📊 Status dos Componentes
+
+| Componente | Status | Repositório |
+|------------|--------|-------------|
+| benefits-core | ✅ Completo | [benefits-core](https://github.com/ttiede/benefits-core) |
+| tenant-service | ✅ Completo | [tenant-service](https://github.com/ttiede/tenant-service) |
+| identity-service | ✅ Completo | [identity-service](https://github.com/ttiede/identity-service) |
+| payments-orchestrator | ✅ Completo | [payments-orchestrator](https://github.com/ttiede/payments-orchestrator) |
+| merchant-service | ✅ Completo | [merchant-service](https://github.com/ttiede/merchant-service) |
+| support-service | ✅ Completo | [support-service](https://github.com/ttiede/support-service) |
+| notification-service | ✅ Completo | [notification-service](https://github.com/ttiede/notification-service) |
+| reconciliation-service | ✅ Completo | [reconciliation-service](https://github.com/ttiede/reconciliation-service) |
+| risk-service | ✅ Completo | [risk-service](https://github.com/ttiede/risk-service) |
+| settlement-service | ✅ Completo | [settlement-service](https://github.com/ttiede/settlement-service) |
+| privacy-service | ✅ Completo | [privacy-service](https://github.com/ttiede/privacy-service) |
+| webhook-receiver | ✅ Completo | [webhook-receiver](https://github.com/ttiede/webhook-receiver) |
+| webhook-service | ✅ Completo | [webhook-service](https://github.com/ttiede/webhook-service) |
+| payments-service | ✅ Completo | [payments-service](https://github.com/ttiede/payments-service) |
+| billing-service | ✅ Completo | [billing-service](https://github.com/ttiede/billing-service) |
+| device-service | ✅ Completo | [device-service](https://github.com/ttiede/device-service) |
+| employer-service | ✅ Completo | [employer-service](https://github.com/ttiede/employer-service) |
+| kyb-service | ✅ Completo | [kyb-service](https://github.com/ttiede/kyb-service) |
+| kyc-service | ✅ Completo | [kyc-service](https://github.com/ttiede/kyc-service) |
+| ops-relay | ✅ Completo | [ops-relay](https://github.com/ttiede/ops-relay) |
+| acquirer-adapter | ✅ Completo | [acquirer-adapter](https://github.com/ttiede/acquirer-adapter) |
+| admin-bff | ✅ Completo | [admin-bff](https://github.com/ttiede/admin-bff) |
+| employer-bff | ✅ Completo | [employer-bff](https://github.com/ttiede/employer-bff) |
+| merchant-bff | ✅ Completo | [merchant-bff](https://github.com/ttiede/merchant-bff) |
+| platform-bff | ✅ Completo | [platform-bff](https://github.com/ttiede/platform-bff) |
+| pos-bff | ✅ Completo | [pos-bff](https://github.com/ttiede/pos-bff) |
+| support-bff | ✅ Completo | [support-bff](https://github.com/ttiede/support-bff) |
+| tenant-bff | ✅ Completo | [tenant-bff](https://github.com/ttiede/tenant-bff) |
+| user-bff | ✅ Completo | [user-bff](https://github.com/ttiede/user-bff) |
+| app-pos-flutter | ✅ Completo | [app-pos-flutter](https://github.com/ttiede/app-pos-flutter) |
+| app-user-flutter | ✅ Completo | [app-user-flutter](https://github.com/ttiede/app-user-flutter) |
+
+**Total: 32 componentes organizados em repositórios individuais**
+
+## 🛠️ Tecnologias
+
+- **Backend**: Java 21, Spring Boot 3.5.9
+- **Frontend**: Flutter (mobile), Angular (web portals)
+- **Banco**: PostgreSQL 16
+- **Mensageria**: Event-driven architecture
+- **Infra**: Docker, Kubernetes
+- **CI/CD**: GitHub Actions
+
+## 📋 Desenvolvimento
+
+### Pré-requisitos
+
+- Java 21
+- Docker & Docker Compose
+- Git
+- SSH configurado para GitHub
+
+### Configuração Inicial
+
+```bash
+# Clone com submodules
+git clone --recurse-submodules git@github.com:ttiede/benefits-platform.git
+
+# Ou clone e depois inicialize submodules
+git clone git@github.com:ttiede/benefits-platform.git
+cd benefits-platform
+git submodule update --init --recursive
+```
+
+### Executando Serviços
+
+Cada componente tem seu próprio README com instruções específicas. Geralmente:
+
+```bash
+cd services/benefits-core
+./mvnw spring-boot:run
+```
+
+## 🤝 Contribuição
+
+1. **Para mudanças em um componente específico**:
+   - Vá para o repositório individual
+   - Crie uma branch
+   - Faça suas mudanças
+   - Abra PR no repositório específico
+
+2. **Para mudanças na estrutura geral**:
+   - Modifique este repositório
+   - Atualize as referências dos submodules conforme necessário
+
+## 📞 Suporte
+
+Para questões sobre desenvolvimento, consulte os READMEs individuais de cada componente ou abra uma issue neste repositório.
 
 ---
 
-# Benefits Platform - Multi-Tenant White-Label
-
-**A comprehensive microservices platform for corporate benefits management**
+**🎉 Benefits Platform - Transformando benefícios em experiências digitais!**
 
 ---
 

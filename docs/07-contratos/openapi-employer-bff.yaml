@@ -1,0 +1,307 @@
+openapi: 3.1.0
+
+info:
+  title: Employer BFF API
+  version: 1.0.0
+  description: Backend para portal de empregadores (crédito em lote, gerenciamento)
+  contact:
+    name: Platform Team
+
+servers:
+  - url: http://localhost:8083
+    description: Local development
+  - url: http://employer-bff:8083
+    description: Docker network
+
+security:
+  - bearerAuth: []
+  - tenantId: []
+
+paths:
+  /credits/batch:
+    post:
+      operationId: createCreditBatch
+      summary: Criar lote de crédito
+      description: |
+        Submeter lote de crédito para múltiplos usuários.
+        - Cada linha: { user_id, wallet_type, amount_cents }
+        - Validação: user_id existe, wallet_type válido, amount > 0
+        - Processamento: ACID transaction em benefits-core, async publish via EventBridge
+        - Idempotência: X-Idempotency-Key (24h TTL)
+      tags:
+        - Credits
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [description, lines]
+              properties:
+                description:
+                  type: string
+                  maxLength: 256
+                  example: "Crédito de vale refeição - Maio 2024"
+                lines:
+                  type: array
+                  minItems: 1
+                  maxItems: 50000
+                  items:
+                    type: object
+                    required: [user_id, wallet_type, amount_cents]
+                    properties:
+                      user_id:
+                        type: string
+                        example: "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+                      wallet_type:
+                        type: string
+                        enum: [MEAL_VOUCHER, FLEXIBLE, FOOD_ALLOWANCE]
+                      amount_cents:
+                        type: integer
+                        minimum: 1
+                        example: 100000
+                      metadata:
+                        type: object
+                        additionalProperties: true
+      responses:
+        '202':
+          description: Lote aceito para processamento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch_id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum: [CREATED, PROCESSING]
+                  total_lines:
+                    type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  tracking_url:
+                    type: string
+                    format: uri
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Idempotency conflict (X-Idempotency-Key já foi processado)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /credits/batch/{batchId}:
+    get:
+      operationId: getBatchStatus
+      summary: Obter status do lote
+      description: |
+        Retorna status e estatísticas do lote.
+        - Status: CREATED | PROCESSING | COMPLETED | PARTIAL_FAILURE | FAILED
+        - Contadores: total_lines, processed, success, failed
+      tags:
+        - Credits
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: batchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Status do lote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  batch_id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                  statistics:
+                    type: object
+                    properties:
+                      total_lines:
+                        type: integer
+                      processed:
+                        type: integer
+                      success:
+                        type: integer
+                      failed:
+                        type: integer
+                      total_amount_cents:
+                        type: integer
+                  created_at:
+                    type: string
+                    format: date-time
+                  completed_at:
+                    type: string
+                    format: date-time
+                    nullable: true
+                  details_url:
+                    type: string
+                    format: uri
+
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /credits/batch/{batchId}/lines:
+    get:
+      operationId: getBatchLines
+      summary: Listar linhas do lote com status
+      description: |
+        Retorna todas as linhas com status individual.
+        Paginação: limit=100 default, max=1000.
+      tags:
+        - Credits
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: batchId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status_filter
+          in: query
+          schema:
+            type: string
+            enum: [SUCCESS, FAILED, ALL]
+            default: ALL
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            maximum: 1000
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Linhas do lote
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lines:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        line_number:
+                          type: integer
+                        user_id:
+                          type: string
+                        wallet_type:
+                          type: string
+                        amount_cents:
+                          type: integer
+                        status:
+                          type: string
+                          enum: [SUCCESS, FAILED]
+                        error_code:
+                          type: string
+                          nullable: true
+                          example: "USER_NOT_FOUND"
+                        processed_at:
+                          type: string
+                          format: date-time
+                          nullable: true
+                  pagination:
+                    type: object
+                    properties:
+                      limit:
+                        type: integer
+                      offset:
+                        type: integer
+                      total:
+                        type: integer
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    X-Tenant-Id:
+      name: X-Tenant-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+
+    X-Request-Id:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+
+    X-Idempotency-Key:
+      name: X-Idempotency-Key
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Chave para idempotência (24h TTL)
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+
+  responses:
+    BadRequest:
+      description: Erro de validação
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalError:
+      description: Erro interno
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+

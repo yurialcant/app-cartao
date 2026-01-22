@@ -1,0 +1,26 @@
+<div class="container mt-4">
+  <h2>Terminals</h2>
+
+  <div *ngIf="loading" class="text-center"><div class="spinner-border" role="status"></div></div>
+
+  <table *ngIf="!loading" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Alias</th>
+        <th>Status</th>
+        <th>Last Seen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let t of terminals">
+        <td>{{ t.id }}</td>
+        <td>{{ t.alias }}</td>
+        <td>
+          <span class="badge" [ngClass]="t.status === 'ONLINE' ? 'bg-success' : 'bg-secondary'">{{ t.status }}</span>
+        </td>
+        <td>{{ t.lastSeen | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

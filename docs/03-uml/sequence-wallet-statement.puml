@@ -1,0 +1,37 @@
+@startuml
+title Sequence - Get Wallet + Statement (User App)
+
+actor "End User" as U
+participant "User App" as APP
+participant "user-bff" as BFF
+participant "benefits-core" as BC
+database "Postgres" as PG
+
+U -> APP: Open Wallets tab
+APP -> BFF: GET /wallets\nAuthorization: Bearer {JWT}\nX-Correlation-Id: {uuid}
+
+BFF -> BFF: Extract tenant_id, user_id from JWT
+BFF -> BC: GET /internal/wallets (tenant_id, user_id from context)
+
+BC -> PG: SELECT wallet WHERE tenant_id = ? AND user_id = ?\nLEFT JOIN wallet_balance USING (wallet_id)
+PG --> BC: wallets[] {wallet_id, wallet_type, label, balance {available, reserved}}
+BC --> BFF: WalletListDTO
+
+BFF --> APP: 200 {wallets: [{id, type, label, balance}]}
+APP -> APP: Render wallet list with balances
+
+U -> APP: Tap wallet to see statement
+APP -> BFF: GET /wallets/{walletId}/statement?from={date}&to={date}\nAuthorization: Bearer {JWT}\nX-Correlation-Id: {uuid}
+
+BFF -> BFF: Extract user_id from JWT; verify wallet ownership
+BFF -> BC: GET /internal/wallets/{walletId}/statement?from={date}&to={date}
+
+BC -> PG: SELECT * FROM ledger_entry\nWHERE wallet_id = ? AND created_at BETWEEN ? AND ?\nORDER BY created_at DESC
+PG --> BC: entries[] {entry_id, entry_type, amount, currency, ref_type, ref_id, created_at, description}
+BC --> BFF: StatementDTO {wallet_id, entries[], balance_snapshot}
+
+BFF --> APP: 200 {entries: [{id, type, amount, date, description}], balance}
+APP -> APP: Render statement list (reverse chronological)
+APP -> APP: Each row clickable for detail
+
+@enduml

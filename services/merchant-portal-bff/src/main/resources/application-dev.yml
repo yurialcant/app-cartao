@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    root: INFO
+    com.benefits.merchantportalbff: DEBUG
+
+core:
+  service:
+    url: http://benefits-core:8081
+    api-key: core-service-secret-key

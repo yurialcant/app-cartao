@@ -1,0 +1,114 @@
+<div class="merchant-dashboard container-fluid">
+  
+  <h1>Merchant Portal Dashboard</h1>
+  
+  <!-- Main Metrics -->
+  <div class="row metrics-row">
+    <div class="col-md-2 metric-card">
+      <h3>Total Sales</h3>
+      <p class="metric-value">R$ {{ dashboardData.totalSales | number:'1.2-2' }}</p>
+    </div>
+    <div class="col-md-2 metric-card">
+      <h3>Transactions</h3>
+      <p class="metric-value">{{ dashboardData.totalTransactions }}</p>
+    </div>
+    <div class="col-md-2 metric-card">
+      <h3>Net Revenue</h3>
+      <p class="metric-value success">R$ {{ dashboardData.netRevenue | number:'1.2-2' }}</p>
+    </div>
+    <div class="col-md-2 metric-card">
+      <h3>Pending Settlements</h3>
+      <p class="metric-value">{{ dashboardData.pendingSettlements }}</p>
+    </div>
+    <div class="col-md-2 metric-card">
+      <h3>Operators Online</h3>
+      <p class="metric-value">{{ dashboardData.operatorsOnline }}</p>
+    </div>
+    <div class="col-md-2 metric-card">
+      <h3>Avg Ticket</h3>
+      <p class="metric-value">R$ {{ dashboardData.averageTicket | number:'1.2-2' }}</p>
+    </div>
+  </div>
+  
+  <!-- Terminals -->
+  <div class="row mt-4">
+    <div class="col-md-8">
+      <h2>Terminals</h2>
+      <div class="terminals-list">
+        <div class="terminal-item" *ngFor="let terminal of terminals">
+          <div class="terminal-info">
+            <h5>{{ terminal.name }}</h5>
+            <small class="terminal-id">ID: {{ terminal.serialNumber }}</small>
+          </div>
+          <div class="terminal-status" [ngClass]="'status-' + terminal.status.toLowerCase()">
+            {{ terminal.status }}
+          </div>
+          <div class="terminal-actions">
+            <button class="btn btn-sm btn-primary" (click)="openTerminal(terminal.id)">
+              Manage
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Operators -->
+    <div class="col-md-4">
+      <h2>Operators</h2>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Shift</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let op of operators">
+            <td>{{ op.name }}</td>
+            <td>
+              <span class="badge" [ngClass]="'badge-' + op.status.toLowerCase()">
+                {{ op.status }}
+              </span>
+            </td>
+            <td>{{ op.currentShift ? 'Active' : 'Off' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Recent Transactions -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <h2>Recent Transactions</h2>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Transaction ID</th>
+            <th>Terminal</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let txn of recentTransactions">
+            <td><code>{{ txn.transactionId | slice:0:8 }}...</code></td>
+            <td>{{ txn.terminalName }}</td>
+            <td class="amount">R$ {{ txn.amount | number:'1.2-2' }}</td>
+            <td>{{ txn.type }}</td>
+            <td>
+              <span class="badge" [ngClass]="'badge-' + txn.status.toLowerCase()">
+                {{ txn.status }}
+              </span>
+            </td>
+            <td>{{ txn.createdAt | date:'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+</div>

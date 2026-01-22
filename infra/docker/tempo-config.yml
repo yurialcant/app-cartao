@@ -1,0 +1,31 @@
+server:
+  http_listen_port: 3200
+  log_level: debug
+
+distributor:
+  rate_limit_enabled: false
+
+ingester:
+  max_block_duration: 5m
+
+storage:
+  trace:
+    backend: local
+    local:
+      path: /var/tempo/traces
+    blocklist_poll: 5m
+
+querier:
+  frontend_worker:
+    frontend_address: localhost:3200
+
+api:
+  prom_instance_client_target: localhost:9090
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318

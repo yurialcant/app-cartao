@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: recon-service
+server:
+  port: 8097
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

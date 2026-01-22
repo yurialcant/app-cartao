@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: acquirer-stub
+server:
+  port: 8104
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

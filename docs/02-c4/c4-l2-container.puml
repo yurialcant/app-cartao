@@ -1,0 +1,103 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+title C4 L2 - Containers
+
+System_Boundary(s1, "Benefícios Platform (Monorepo)") {
+  Container(appUser, "User App", "Flutter", "End-user: wallets, statement, cards, corporate, expenses")
+  Container(appPOS, "POS App", "Flutter", "Terminal: authorize/refund")
+  Container(portPlatform, "Platform Portal", "Angular 17", "Platform owner: tenants/templates/branding/ops")
+  Container(portAdmin, "Admin Portal", "Angular 17", "Administrator ops: tenants/users/payments/support/DLQ")
+  Container(portEmployer, "Employer Portal", "Angular 17", "Employer: credits/approvals/reports")
+  Container(portMerchant, "Merchant Portal", "Angular 17", "Merchant: terminals/transactions/recon/settlement")
+
+  Container(bffUser, "user-bff", "Spring Boot 3 (WebFlux)", "API para User App (wallets, statement, catalog)")
+  Container(bffPOS, "pos-bff", "Spring Boot 3 (WebFlux)", "API para POS App (authorize, refund)")
+  Container(bffPlatform, "platform-bff", "Spring Boot 3 (WebFlux)", "API Portal Platform (tenants, templates, ops)")
+  Container(bffAdmin, "admin-bff", "Spring Boot 3 (WebFlux)", "API Portal Admin (users, payments, support, DLQ)")
+  Container(bffEmployer, "employer-bff", "Spring Boot 3 (WebFlux)", "API Portal Employer (credits, approvals, reports)")
+  Container(bffMerchant, "merchant-bff", "Spring Boot 3 (WebFlux)", "API Portal Merchant (terminals, transactions, recon, settlement)")
+
+  Container(tenantSvc, "tenant-service", "Spring Boot 3 + R2DBC", "SSOT catálogo/white-label/branding/módulos/políticas")
+  Container(benefitsSvc, "benefits-core", "Spring Boot 3 + R2DBC", "SSOT wallets/ledger/saldo/extrato/cartões")
+  Container(paymentsSvc, "payments-orchestrator", "Spring Boot 3 + R2DBC", "SSOT pagamentos/cartões/webhooks/provider")
+  Container(supportSvc, "support-service", "Spring Boot 3 + R2DBC", "SSOT corporate/expenses/receipts/approval")
+  Container(merchantSvc, "merchant-service", "Spring Boot 3 + R2DBC", "SSOT merchant/terminal/fees")
+  Container(reconSvc, "recon-service", "Spring Boot 3 + R2DBC", "Reconciliação (transações vs payments)")
+  Container(settleSvc, "settlement-service", "Spring Boot 3 + R2DBC", "Settlement batches (lotes de pagamento)")
+  Container(auditSvc, "audit-service", "Spring Boot 3 + R2DBC", "Audit timeline imutável (evento consumer)")
+  Container(notifySvc, "notification-service", "Spring Boot 3", "Notificações (in-app, SMS fake, email fake)")
+  Container(privacySvc, "privacy-service", "Spring Boot 3 + R2DBC", "LGPD export/delete/anonymize")
+
+  ContainerDb(pg, "PostgreSQL", "DB (Postgres 15+)", "Schemas por serviço: tenant_service, benefits_core, payments, support, etc")
+  ContainerDb(redis, "Redis", "Cache/Locks (Redis 7+)", "Idempotência, rate-limit, session cache, distributed locks")
+}
+
+System_Ext(keycloak, "Keycloak", "OIDC/RBAC (local Docker)")
+System_Ext(bus, "EventBridge + SQS + DLQ", "LocalStack (dev) / AWS (prod)", "Event bus + filas + dead-letter-queue")
+System_Ext(s3, "S3 Buckets", "LocalStack (dev) / AWS (prod)", "Receipts, exports, backups")
+System_Ext(obs, "OTel + Grafana", "Observability Stack", "Traces (Tempo), Logs (Loki), Metrics (Prometheus)")
+
+Rel(appUser, bffUser, "HTTPS/JSON + Bearer JWT")
+Rel(appPOS, bffPOS, "HTTPS/JSON + Bearer JWT")
+Rel(portPlatform, bffPlatform, "HTTPS/JSON + Bearer JWT")
+Rel(portAdmin, bffAdmin, "HTTPS/JSON + Bearer JWT")
+Rel(portEmployer, bffEmployer, "HTTPS/JSON + Bearer JWT")
+Rel(portMerchant, bffMerchant, "HTTPS/JSON + Bearer JWT")
+
+Rel(bffUser, tenantSvc, "REST (internal)")
+Rel(bffUser, benefitsSvc, "REST (internal)")
+Rel(bffPOS, paymentsSvc, "REST (internal)")
+Rel(bffPOS, benefitsSvc, "REST (internal)")
+Rel(bffPlatform, tenantSvc, "REST (internal)")
+Rel(bffPlatform, privacySvc, "REST (internal)")
+Rel(bffAdmin, tenantSvc, "REST (internal)")
+Rel(bffAdmin, benefitsSvc, "REST (internal)")
+Rel(bffAdmin, paymentsSvc, "REST (internal)")
+Rel(bffAdmin, supportSvc, "REST (internal)")
+Rel(bffEmployer, benefitsSvc, "REST (internal)")
+Rel(bffMerchant, paymentsSvc, "REST (internal)")
+Rel(bffMerchant, merchantSvc, "REST (internal)")
+Rel(bffMerchant, reconSvc, "REST (internal)")
+Rel(bffMerchant, settleSvc, "REST (internal)")
+
+Rel(tenantSvc, pg, "R2DBC SQL")
+Rel(benefitsSvc, pg, "R2DBC SQL")
+Rel(paymentsSvc, pg, "R2DBC SQL")
+Rel(supportSvc, pg, "R2DBC SQL")
+Rel(merchantSvc, pg, "R2DBC SQL")
+Rel(reconSvc, pg, "R2DBC SQL")
+Rel(settleSvc, pg, "R2DBC SQL")
+Rel(auditSvc, pg, "R2DBC SQL")
+Rel(privacySvc, pg, "R2DBC SQL")
+
+Rel(bffUser, redis, "Idempotency check/cache")
+Rel(bffPOS, redis, "Idempotency check/rate-limit")
+Rel(bffAdmin, redis, "Idempotency check")
+Rel(benefitsSvc, redis, "Cache")
+Rel(paymentsSvc, redis, "Idempotency storage")
+
+Rel(tenantSvc, keycloak, "Token validation + roles lookup")
+Rel(bffUser, keycloak, "OIDC redirect")
+Rel(bffPOS, keycloak, "OIDC redirect")
+Rel(bffPlatform, keycloak, "OIDC redirect")
+Rel(bffAdmin, keycloak, "OIDC redirect")
+Rel(bffEmployer, keycloak, "OIDC redirect")
+Rel(bffMerchant, keycloak, "OIDC redirect")
+
+Rel(benefitsSvc, bus, "Publish events (Outbox → EventBridge)")
+Rel(paymentsSvc, bus, "Publish events (Outbox → EventBridge)")
+Rel(supportSvc, bus, "Publish events (Outbox → EventBridge)")
+Rel(bus, auditSvc, "Consume events (SQS)")
+Rel(bus, notifySvc, "Consume events (SQS)")
+
+Rel(supportSvc, s3, "Presign/upload receipts")
+Rel(privacySvc, s3, "Export arquivos LGPD")
+Rel(settleSvc, s3, "Exports batches")
+
+Rel(tenantSvc, obs, "OTel logs/traces/metrics")
+Rel(bffUser, obs, "OTel logs/traces/metrics")
+Rel(bffPOS, obs, "OTel logs/traces/metrics")
+Rel(benefitsSvc, obs, "OTel logs/traces/metrics")
+Rel(paymentsSvc, obs, "OTel logs/traces/metrics")
+
+@enduml

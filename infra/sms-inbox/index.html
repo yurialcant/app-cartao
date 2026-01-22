@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Inbox - Benefits (Stub)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .refresh-btn {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .refresh-btn:hover {
+            background: #0056b3;
+        }
+        .clear-btn {
+            padding: 8px 16px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 8px;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        .info {
+            background: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 12px;
+            margin-bottom: 24px;
+            border-radius: 4px;
+        }
+        .sms-list {
+            display: grid;
+            gap: 16px;
+        }
+        .sms-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+        .sms-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .sms-to {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .sms-time {
+            color: #666;
+            font-size: 12px;
+        }
+        .sms-message {
+            color: #333;
+            margin-top: 8px;
+            white-space: pre-wrap;
+        }
+        .empty {
+            text-align: center;
+            padding: 48px;
+            color: #999;
+        }
+        .auto-refresh {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span>📱 SMS Inbox (Stub)</span>
+            <div>
+                <button class="refresh-btn" onclick="loadSms()">🔄 Atualizar</button>
+                <button class="clear-btn" onclick="clearInbox()">🗑️ Limpar</button>
+            </div>
+        </h1>
+        
+        <div class="info">
+            <strong>ℹ️ Informação:</strong> Este é o inbox de SMS stub para desenvolvimento.
+            Todos os SMS enviados via provider "stub" aparecem aqui.
+        </div>
+
+        <div class="auto-refresh">
+            <input type="checkbox" id="autoRefresh" checked onchange="toggleAutoRefresh()">
+            <label for="autoRefresh">Atualizar automaticamente a cada 5 segundos</label>
+        </div>
+
+        <div id="smsList" class="sms-list">
+            <div class="empty">Carregando...</div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshInterval = null;
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('pt-BR');
+        }
+
+        function loadSms() {
+            fetch('http://localhost:8080/sms/inbox')
+                .then(response => response.json())
+                .then(data => {
+                    const smsList = document.getElementById('smsList');
+                    const smsArray = Object.values(data);
+                    
+                    if (smsArray.length === 0) {
+                        smsList.innerHTML = '<div class="empty">📭 Nenhum SMS no inbox</div>';
+                        return;
+                    }
+
+                    smsList.innerHTML = smsArray
+                        .sort((a, b) => b.timestamp - a.timestamp)
+                        .map(sms => `
+                            <div class="sms-item">
+                                <div class="sms-header">
+                                    <span class="sms-to">📞 ${sms.to}</span>
+                                    <span class="sms-time">${formatTime(sms.timestamp)}</span>
+                                </div>
+                                <div class="sms-message">${sms.message}</div>
+                            </div>
+                        `).join('');
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar SMS:', error);
+                    document.getElementById('smsList').innerHTML = 
+                        '<div class="empty">❌ Erro ao carregar SMS. Verifique se o BFF está rodando.</div>';
+                });
+        }
+
+        function clearInbox() {
+            if (!confirm('Tem certeza que deseja limpar o inbox?')) {
+                return;
+            }
+
+            fetch('http://localhost:8080/sms/inbox', { method: 'DELETE' })
+                .then(() => {
+                    loadSms();
+                })
+                .catch(error => {
+                    console.error('Erro ao limpar inbox:', error);
+                    alert('Erro ao limpar inbox');
+                });
+        }
+
+        function toggleAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+            if (checkbox.checked) {
+                autoRefreshInterval = setInterval(loadSms, 5000);
+            } else {
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    autoRefreshInterval = null;
+                }
+            }
+        }
+
+        // Carregar SMS ao iniciar
+        loadSms();
+        
+        // Iniciar auto-refresh se habilitado
+        if (document.getElementById('autoRefresh').checked) {
+            toggleAutoRefresh();
+        }
+    </script>
+</body>
+</html>

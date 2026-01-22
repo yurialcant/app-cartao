@@ -1,0 +1,40 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: tenant-service
+  
+  webflux:
+    base-path: /
+  
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+
+server:
+  port: ${SERVER_PORT:9000}
+  servlet:
+    context-path: /
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 30000
+        loggerLevel: BASIC
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    root: INFO
+    com.benefits: DEBUG

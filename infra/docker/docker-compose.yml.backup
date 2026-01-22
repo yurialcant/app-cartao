@@ -1,0 +1,983 @@
+version: '3.9'
+
+services:
+  # Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: benefits-postgres
+    environment:
+      POSTGRES_USER: benefits
+      POSTGRES_PASSWORD: benefits_password
+      POSTGRES_DB: benefits_db
+      POSTGRES_INITDB_ARGS: "-c shared_preload_libraries=pgcrypto"
+    ports:
+      - "5432:5432"
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benefits"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    container_name: benefits-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Identity Provider
+  keycloak:
+    image: keycloak/keycloak:26.0.0
+    container_name: benefits-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: benefits
+      KC_DB_PASSWORD: benefits_password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_PROXY: edge
+      KC_HOSTNAME_STRICT: false
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: start-dev --import-realm
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+    volumes:
+      - ./keycloak/realm-benefits.json:/opt/keycloak/data/import/realm.json
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # AWS Mock
+  localstack:
+    image: localstack/localstack:3.0
+    container_name: benefits-localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      SERVICES: s3,sqs,sns,events,dynamodb,kinesis
+      DEBUG: 1
+      DATA_DIR: /tmp/localstack/data
+      DOCKER_HOST: unix:///var/run/docker.sock
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - "./localstack-init.sh:/docker-entrypoint-initaws.d/init-aws.sh"
+      - localstack_data:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "awslocal", "s3", "ls"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Observability - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: benefits-prometheus
+    ports:
+      - "9090:9090"
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Observability - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: benefits-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    depends_on:
+      - prometheus
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Observability - Loki (Logs)
+  loki:
+    image: grafana/loki:latest
+    container_name: benefits-loki
+    ports:
+      - "3100:3100"
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - ./loki-config.yml:/etc/loki/local-config.yml
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yml
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3100/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Observability - Tempo (Traces)
+  tempo:
+    image: grafana/tempo:latest
+    container_name: benefits-tempo
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - ./tempo-config.yml:/etc/tempo-config.yml
+      - tempo_data:/var/tempo
+    command: [ "-config.file=/etc/tempo-config.yml" ]
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3200/status"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Observability - Jaeger (UI for traces)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: benefits-jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:14269/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Feature Flags
+  flagd:
+    image: ghcr.io/open-feature/flagd:latest
+    container_name: benefits-flagd
+    ports:
+      - "8013:8013"
+      - "8014:8014"
+    
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+      - ./flags.json:/etc/flagd/flags.json
+    command: start --config-file /etc/flagd/flags.json
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8013/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+
+  # ==================== JAVA SERVICES ====================
+
+  benefits-core:
+    build:
+      context: ../../services/benefits-core
+      dockerfile: Dockerfile
+    container_name: benefits-core
+    ports:
+      - "8091:8091"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+      SPRING_DATASOURCE_USERNAME: benefits
+      SPRING_DATASOURCE_PASSWORD: benefits_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  tenant-service:
+    build:
+      context: ../../services/tenant-service
+      dockerfile: Dockerfile
+    container_name: tenant-service
+    ports:
+      - "8106:8106"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/benefits_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  # ==================== BFF SERVICES ====================
+
+  user-bff:
+    build:
+      context: ../../bffs/user-bff
+      dockerfile: Dockerfile
+    container_name: user-bff
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+      tenant-service:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+  admin-bff:
+    build:
+      context: ../../bffs/admin-bff
+      dockerfile: Dockerfile
+    container_name: admin-bff
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      benefits-core:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  loki_data:
+  tempo_data:
+  localstack_data:
+
+networks:
+  benefits-network:
+    driver: bridge

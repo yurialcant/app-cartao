@@ -1,0 +1,33 @@
+@startuml
+title Sequence - Login + Bootstrap Catálogo (User App → Home)
+
+actor User
+participant "User App" as APP
+participant "Keycloak" as KC
+participant "user-bff" as BFF
+participant "tenant-service" as TS
+database "Postgres" as PG
+
+User -> APP: Open app
+APP -> KC: OIDC Login (code flow)
+KC --> APP: Authorization Code
+
+APP -> KC: Exchange code for token
+KC --> APP: Access Token (JWT with tenant_id + roles)
+APP -> APP: Store token (secure storage)
+
+APP -> BFF: GET /catalog\nAuthorization: Bearer {JWT}\nX-Correlation-Id: {uuid}
+BFF -> BFF: Extract tenant_id from JWT claims
+BFF -> TS: GET /internal/catalog (tenant_id from context)
+TS -> PG: SELECT tenant, branding, modules, ui_composition, wallet_definitions WHERE tenant_id = ?
+PG --> TS: Result (tenant, branding, modules, home_json, wallet_definitions)
+TS --> BFF: CatalogDTO (status 200)
+BFF --> APP: CatalogDTO
+
+APP -> APP: Apply branding (colors, logo, theme)
+APP -> APP: Parse home_json and mount blocks
+APP -> APP: Build routes based on modules enabled
+APP -> APP: Render HomeScreen with dynamic blocks
+APP -> APP: Navigate to Home
+
+@enduml

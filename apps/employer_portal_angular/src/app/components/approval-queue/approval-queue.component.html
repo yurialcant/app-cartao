@@ -1,0 +1,38 @@
+<div class="container mt-4">
+  <h2>Pending Approvals</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status"></div>
+  </div>
+
+  <table *ngIf="!loading" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Employee</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Note / Reason</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let approval of approvals">
+        <td>{{ approval.id }}</td>
+        <td>{{ approval.employeeId }}</td>
+        <td>{{ approval.amount | currency:'BRL' }}</td>
+        <td>{{ approval.type }}</td>
+        <td>{{ approval.createdAt | date:'short' }}</td>
+        <td>
+          <input class="form-control form-control-sm mb-1" placeholder="Note (approve)" [(ngModel)]="note" />
+          <input class="form-control form-control-sm" placeholder="Reason (reject)" [(ngModel)]="reason" />
+        </td>
+        <td>
+          <button class="btn btn-sm btn-success me-2" (click)="approve(approval.id)">Approve</button>
+          <button class="btn btn-sm btn-danger" (click)="reject(approval.id)">Reject</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,8 @@
+{
+  "personId": "550e8400-e29b-41d4-a716-446655440001",
+  "walletId": "00000000-0000-0000-0000-000000000000",
+  "originalTransactionId": "AUTH002-ORIGINAL-67890",
+  "amount": 10.00,
+  "reason": "Test invalid wallet",
+  "idempotencyKey": "smoke-test-refund-002"
+}

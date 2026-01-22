@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+title C4 L1 - Contexto (Benefícios White-label)
+
+Person(platformOwner, "Platform Owner", "Dono da plataforma (SaaS)")
+Person(adminOps, "Administrator Ops", "Operadora/Administradora")
+Person(employerAdmin, "Employer Admin", "RH/Financeiro")
+Person(merchantAdmin, "Merchant Admin", "Lojista")
+Person(endUser, "End User", "Colaborador")
+Person(posTerminal, "POS Terminal", "App/Terminal")
+
+System(system, "Plataforma de Benefícios White-label", "Apps Flutter, Portais Angular, BFFs, Serviços Spring, Ledger, Pagamentos, Corporate, Ops")
+
+System_Ext(keycloak, "Keycloak", "OIDC / RBAC")
+System_Ext(awsLocal, "LocalStack (AWS local)", "EventBridge/SQS/S3/Secrets")
+System_Ext(obs, "Observability Stack", "OTel + Grafana/Tempo/Loki/Prom")
+System_Ext(db, "PostgreSQL + Redis", "Dados + Cache + Idempotência")
+
+Rel(platformOwner, system, "Configura plataforma (tenants, templates, branding, políticas)")
+Rel(adminOps, system, "Opera tenants, usuários, pagamentos, suporte, DLQ/replay")
+Rel(employerAdmin, system, "Créditos em lote, relatórios, aprovações")
+Rel(merchantAdmin, system, "Terminais POS, transações, reconciliação, settlement")
+Rel(endUser, system, "Saldo, extrato, cartões, despesas, aprovações")
+Rel(posTerminal, system, "Autoriza/refunda compras, confirma")
+
+Rel(system, keycloak, "Autenticação/Autorização (OAuth2/OIDC)")
+Rel(system, awsLocal, "Eventos (EventBridge), Filas (SQS+DLQ), Armazenamento (S3)")
+Rel(system, obs, "Logs/Traces/Métricas estruturadas")
+Rel(system, db, "Persistência multi-tenant + caches distribuídas")
+
+@enduml

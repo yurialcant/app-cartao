@@ -1,0 +1,52 @@
+@startuml
+title Sequence - Credit Batch (Employer → Benefits Core → Ledger → Event Bus)
+
+actor "Employer Admin" as EA
+participant "Employer Portal" as EP
+participant "employer-bff" as EBFF
+participant "benefits-core" as BC
+database "Postgres" as PG
+participant "Outbox Relay" as RELAY
+participant "EventBridge" as BUS
+participant "audit-service" as AUD
+
+EA -> EP: Create batch (CSV or form items)
+note right of EP: Items: user_id, wallet_type, amount
+
+EP -> EBFF: POST /credits:batch\nBody: batch_id, items[]\nIdempotency-Key: {idempotency_key}\nX-Correlation-Id: {uuid}\nAuthorization: Bearer {JWT}
+
+EBFF -> EBFF: Extract tenant_id from JWT
+EBFF -> EBFF: Check idempotency key in Redis
+EBFF -> BC: POST /internal/credits:batch\n(tenant_id, employer_id from context)
+
+BC -> PG: START TRANSACTION
+BC -> PG: INSERT credit_batch (status=CREATED, employer_id)
+BC -> PG: FOR each item:\n  INSERT ledger_entry (CREDIT, wallet_id, amount, ref=batch_id)\n  UPDATE wallet_balance (available += amount)
+
+BC -> PG: INSERT outbox_event (wallet.credited) for each item
+BC -> PG: UPDATE credit_batch (status=COMPLETED)
+BC -> PG: COMMIT
+
+BC --> EBFF: 202 Accepted {batch_id, status, accepted_count, rejected_count}
+EBFF -> EBFF: Store in Redis: {batch_id} -> response (idempotency)
+EBFF --> EP: 202 {batch_id, status, summary}
+
+EP -> EP: Show "Batch accepted" + summary
+EP -> EP: Auto-refresh history
+
+== async (5-10 sec delay) ==
+RELAY -> PG: SELECT outbox_event WHERE status='PENDING' AND created_at > now()-5min
+RELAY -> BUS: PutEvents (wallet.credited events)
+BUS --> RELAY: Success
+
+BUS -> AUD: Route wallet.credited events to audit-service queue
+AUD -> PG: INSERT audit_record (action=CREDIT_APPLIED, user_id, amount, batch_id, actor=employer_id)
+
+EA -> EP: Open wallets
+EP -> EBFF: GET /wallets (after batch)
+EBFF -> BC: GET /wallets (via BFF)
+BC -> PG: SELECT wallet WHERE user_id IN batch_items
+BC --> EBFF: Updated balances
+EBFF --> EP: Wallets list (new balances visible)
+
+@enduml

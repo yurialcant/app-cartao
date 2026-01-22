@@ -1,0 +1,69 @@
+<div class="container mt-4">
+  <h2>Transactions</h2>
+
+  <div *ngIf="loading" class="text-center"><div class="spinner-border" role="status"></div></div>
+
+  <div class="row mb-3" *ngIf="!loading">
+    <div class="col-md-2">
+      <label class="form-label">Status</label>
+      <select class="form-select" [(ngModel)]="status" (change)="load()">
+        <option [ngValue]="undefined">Todos</option>
+        <option value="PENDING">PENDING</option>
+        <option value="AUTHORIZED">AUTHORIZED</option>
+        <option value="CAPTURED">CAPTURED</option>
+        <option value="DECLINED">DECLINED</option>
+        <option value="REFUNDED">REFUNDED</option>
+        <option value="FAILED">FAILED</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">De</label>
+      <input type="date" class="form-control" [(ngModel)]="from" (change)="load()" />
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Até</label>
+      <input type="date" class="form-control" [(ngModel)]="to" (change)="load()" />
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Página</label>
+      <div class="input-group">
+        <button class="btn btn-outline-secondary" (click)="onPageChange(-1)">«</button>
+        <input type="number" class="form-control" [(ngModel)]="page" (change)="load()" />
+        <button class="btn btn-outline-secondary" (click)="onPageChange(1)">»</button>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Itens/Página</label>
+      <select class="form-select" [(ngModel)]="pageSize" (change)="load()">
+        <option [ngValue]="10">10</option>
+        <option [ngValue]="25">25</option>
+        <option [ngValue]="50">50</option>
+      </select>
+    </div>
+  </div>
+
+  <table *ngIf="!loading" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Terminal</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tx of transactions">
+        <td>{{ tx.id }}</td>
+        <td>{{ tx.createdAt | date:'short' }}</td>
+        <td>{{ tx.terminalId }}</td>
+        <td>{{ tx.amount | currency:'BRL' }}</td>
+        <td>
+          <span class="badge" [ngClass]="tx.status === 'APPROVED' ? 'bg-success' : (tx.status === 'PENDING' ? 'bg-warning' : 'bg-danger')">
+            {{ tx.status }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

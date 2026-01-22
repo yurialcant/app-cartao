@@ -1,0 +1,361 @@
+openapi: 3.1.0
+
+info:
+  title: User BFF API
+  version: 1.0.0
+  description: Backend for Frontend da aplicação mobile de usuários
+  contact:
+    name: Platform Team
+    email: platform@benefits.local
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+  - url: http://user-bff:8080
+    description: Docker network
+
+security:
+  - bearerAuth: []
+  - tenantId: []
+
+paths:
+  /catalog:
+    get:
+      operationId: getCatalog
+      summary: Obter catálogo dinâmico de benefícios
+      description: |
+        Retorna composição dinâmica da home baseada em tenant + usuário.
+        Cache: 5 minutos por tenant.
+      tags:
+        - Catalog
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /wallets:
+    get:
+      operationId: listWallets
+      summary: Listar wallets do usuário
+      description: |
+        Retorna lista de wallets com saldo snapshot.
+        - Status: ACTIVE | FROZEN | EXPIRED
+        - Saldo em centavos
+        - Cache: 5 minutos
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+      responses:
+        '200':
+          description: Lista de wallets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wallets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WalletResponse'
+                  meta:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      count:
+                        type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /wallets/{walletId}/statement:
+    get:
+      operationId: getStatement
+      summary: Obter extrato da wallet
+      description: |
+        Retorna movimentações (ledger) em ordem reversa (mais recente primeiro).
+        Filtros opcionais: data_from, data_to, entry_type.
+        Paginação: limit=50 default, max=200.
+      tags:
+        - Wallets
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - name: walletId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: date_from
+          in: query
+          schema:
+            type: string
+            format: date
+            description: 'Data inicial (YYYY-MM-DD)'
+        - name: date_to
+          in: query
+          schema:
+            type: string
+            format: date
+            description: 'Data final (YYYY-MM-DD)'
+        - name: entry_type
+          in: query
+          schema:
+            type: string
+            enum: [CREDIT, DEBIT, RESERVE, RELEASE]
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+            maximum: 200
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Extrato da wallet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wallet:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      balance:
+                        type: object
+                        properties:
+                          available:
+                            type: integer
+                            description: Centavos
+                          reserved:
+                            type: integer
+                          total:
+                            type: integer
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LedgerEntry'
+                  pagination:
+                    type: object
+                    properties:
+                      limit:
+                        type: integer
+                      offset:
+                        type: integer
+                      total:
+                        type: integer
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token do Keycloak com claims:
+        - sub: user_id
+        - tenant_id: tenant UUID
+        - roles: [list of roles]
+    tenantId:
+      type: apiKey
+      in: header
+      name: X-Tenant-Id
+      description: Tenant UUID (extraído do JWT automaticamente)
+
+  parameters:
+    X-Tenant-Id:
+      name: X-Tenant-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Tenant UUID (extraído do JWT se não fornecido)
+
+    X-Request-Id:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Request correlation ID (gerado se não fornecido)
+
+  schemas:
+    CatalogResponse:
+      type: object
+      required: [sections]
+      properties:
+        sections:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                enum: [wallets, catalog, promotions, help]
+              type:
+                type: string
+                enum: [wallet_list, catalog_grid, banner_carousel, support_links]
+              title:
+                type: string
+              order:
+                type: integer
+              enabled:
+                type: boolean
+              data:
+                type: object
+
+    WalletResponse:
+      type: object
+      required: [id, type, label, status, balance]
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [MEAL_VOUCHER, FLEXIBLE, CORPORATE_CARD, FOOD_ALLOWANCE]
+        label:
+          type: string
+          example: "Vale Refeição"
+        status:
+          type: string
+          enum: [ACTIVE, FROZEN, EXPIRED]
+        balance:
+          type: object
+          properties:
+            available:
+              type: integer
+              description: Centavos
+            reserved:
+              type: integer
+              description: Montante reservado em transação POS
+            total:
+              type: integer
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    LedgerEntry:
+      type: object
+      required: [id, type, amount, description, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [CREDIT, DEBIT, RESERVE, RELEASE]
+          description: Tipo de movimento
+        amount:
+          type: integer
+          description: Valor em centavos (sempre positivo)
+        description:
+          type: string
+          example: "Crédito de vale refeição - Maio"
+        reference:
+          type: string
+          description: "batch_id, payment_id, ou adjustment_id"
+        created_at:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+          additionalProperties: true
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          enum:
+            - INVALID_REQUEST
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - NOT_FOUND
+            - CONFLICT
+            - INTERNAL_ERROR
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+        requestId:
+          type: string
+          format: uuid
+
+  responses:
+    Unauthorized:
+      description: Não autenticado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: UNAUTHORIZED
+            message: "Token ausente ou inválido"
+
+    Forbidden:
+      description: Não autorizado para este recurso
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+

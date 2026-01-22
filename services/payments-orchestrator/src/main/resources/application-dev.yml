@@ -1,9 +1,0 @@
-spring:
-  cloud:
-    compatibility-verifier:
-      enabled: false
-
-logging:
-  level:
-    root: INFO
-    com.benefits.paymentsorchestrator: DEBUG

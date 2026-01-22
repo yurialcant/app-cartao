@@ -1,0 +1,90 @@
+[submodule "services/benefits-core"]
+	path = services/benefits-core
+	url = git@github.com:ttiede/benefits-core.git
+[submodule "services/tenant-service"]
+	path = services/tenant-service
+	url = git@github.com:ttiede/tenant-service.git
+[submodule "services/admin-bff"]
+	path = services/admin-bff
+	url = git@github.com:ttiede/admin-bff.git
+[submodule "services/identity-service"]
+	path = services/identity-service
+	url = git@github.com:ttiede/identity-service.git
+[submodule "services/payments-orchestrator"]
+	path = services/payments-orchestrator
+	url = git@github.com:ttiede/payments-orchestrator.git
+[submodule "services/merchant-service"]
+	path = services/merchant-service
+	url = git@github.com:ttiede/merchant-service.git
+[submodule "services/support-service"]
+	path = services/support-service
+	url = git@github.com:ttiede/support-service.git
+[submodule "services/notification-service"]
+	path = services/notification-service
+	url = git@github.com:ttiede/notification-service.git
+[submodule "services/reconciliation-service"]
+	path = services/reconciliation-service
+	url = git@github.com:ttiede/reconciliation-service.git
+[submodule "services/risk-service"]
+	path = services/risk-service
+	url = git@github.com:ttiede/risk-service.git
+[submodule "services/settlement-service"]
+	path = services/settlement-service
+	url = git@github.com:ttiede/settlement-service.git
+[submodule "bffs/employer-bff"]
+	path = bffs/employer-bff
+	url = git@github.com:ttiede/employer-bff.git
+[submodule "bffs/merchant-bff"]
+	path = bffs/merchant-bff
+	url = git@github.com:ttiede/merchant-bff.git
+[submodule "bffs/platform-bff"]
+	path = bffs/platform-bff
+	url = git@github.com:ttiede/platform-bff.git
+[submodule "bffs/pos-bff"]
+	path = bffs/pos-bff
+	url = git@github.com:ttiede/pos-bff.git
+[submodule "bffs/tenant-bff"]
+	path = bffs/tenant-bff
+	url = git@github.com:ttiede/tenant-bff.git
+[submodule "bffs/user-bff"]
+	path = bffs/user-bff
+	url = git@github.com:ttiede/user-bff.git
+[submodule "apps/app-pos-flutter"]
+	path = apps/app-pos-flutter
+	url = git@github.com:ttiede/app-pos-flutter.git
+[submodule "apps/app-user-flutter"]
+	path = apps/app-user-flutter
+	url = git@github.com:ttiede/app-user-flutter.git
+[submodule "services/privacy-service"]
+	path = services/privacy-service
+	url = git@github.com:ttiede/privacy-service.git
+[submodule "services/webhook-receiver"]
+	path = services/webhook-receiver
+	url = git@github.com:ttiede/webhook-receiver.git
+[submodule "services/webhook-service"]
+	path = services/webhook-service
+	url = git@github.com:ttiede/webhook-service.git
+[submodule "services/payments-service"]
+	path = services/payments-service
+	url = git@github.com:ttiede/payments-service.git
+[submodule "services/billing-service"]
+	path = services/billing-service
+	url = git@github.com:ttiede/billing-service.git
+[submodule "services/device-service"]
+	path = services/device-service
+	url = git@github.com:ttiede/device-service.git
+[submodule "services/employer-service"]
+	path = services/employer-service
+	url = git@github.com:ttiede/employer-service.git
+[submodule "services/kyb-service"]
+	path = services/kyb-service
+	url = git@github.com:ttiede/kyb-service.git
+[submodule "services/kyc-service"]
+	path = services/kyc-service
+	url = git@github.com:ttiede/kyc-service.git
+[submodule "services/ops-relay"]
+	path = services/ops-relay
+	url = git@github.com:ttiede/ops-relay.git
+[submodule "services/acquirer-adapter"]
+	path = services/acquirer-adapter
+	url = git@github.com:ttiede/acquirer-adapter.git

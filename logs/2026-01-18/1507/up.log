@@ -1,0 +1,27 @@
+WARNING: No blkio throttle.read_bps_device support
+WARNING: No blkio throttle.write_bps_device support
+WARNING: No blkio throttle.read_iops_device support
+WARNING: No blkio throttle.write_iops_device support
+WARNING: DOCKER_INSECURE_NO_IPTABLES_RAW is set
+time="2026-01-18T15:07:54-03:00" level=warning msg="Found orphan containers ([benefits-otel benefits-flagd benefits-loki benefits-tempo]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container benefits-redis  Running
+ Container benefits-jaeger  Running
+ Container benefits-prometheus  Running
+ Container benefits-postgres  Running
+ Container benefits-postgres  Waiting
+ Container benefits-localstack  Starting
+ Container benefits-grafana  Starting
+ Container benefits-postgres  Healthy
+ Container benefits-keycloak  Starting
+ Container benefits-localstack  Started
+ Container benefits-grafana  Started
+ Container benefits-keycloak  Started
+time="2026-01-18T15:07:56-03:00" level=warning msg="C:\\Users\\gesch\\Documents\\projeto-lucas\\infra\\docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+NAME                  IMAGE                              COMMAND                  SERVICE      CREATED              STATUS                                     PORTS
+benefits-grafana      grafana/grafana:latest             "/run.sh"                grafana      About a minute ago   Up 1 second (health: starting)             0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp
+benefits-jaeger       jaegertracing/all-in-one:latest    "/go/bin/all-in-one-ÔÇª"   jaeger       About a minute ago   Up About a minute (unhealthy)              0.0.0.0:4317-4318->4317-4318/tcp, [::]:4317-4318->4317-4318/tcp, 0.0.0.0:14268->14268/tcp, [::]:14268->14268/tcp, 0.0.0.0:16686->16686/tcp, [::]:16686->16686/tcp
+benefits-keycloak     quay.io/keycloak/keycloak:latest   "/opt/keycloak/bin/kÔÇª"   keycloak     About a minute ago   Up Less than a second (health: starting)   0.0.0.0:8081->8080/tcp, [::]:8081->8080/tcp
+benefits-localstack   localstack/localstack:latest       "docker-entrypoint.sh"   localstack   About a minute ago   Up 1 second (health: starting)             0.0.0.0:4566->4566/tcp, [::]:4566->4566/tcp
+benefits-postgres     postgres:15-alpine                 "docker-entrypoint.sÔÇª"   postgres     About a minute ago   Up About a minute (healthy)                0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+benefits-prometheus   prom/prometheus:latest             "/bin/prometheus --cÔÇª"   prometheus   About a minute ago   Up About a minute (unhealthy)              0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp
+benefits-redis        redis:7-alpine                     "docker-entrypoint.sÔÇª"   redis        About a minute ago   Up About a minute (healthy)                0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp

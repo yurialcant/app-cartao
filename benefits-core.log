@@ -1,0 +1,1118 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T07:13:53.933Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T07:13:53.936Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T07:13:53.937Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T07:13:55.859Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T07:13:56.095Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 223 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T07:13:56.985Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T07:13:57.005Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T07:13:57.006Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T07:13:57.070Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T07:13:57.073Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3049 ms
+2026-01-15T07:13:57.360Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T07:13:58.522Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T07:13:59.049Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T07:13:59.107Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 34d5856e-04cc-45b6-9662-86e986b005b1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T07:13:59.127Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T07:13:59.941Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T07:13:59.967Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.834 seconds (process running for 7.581)
+2026-01-15T07:14:00.361Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T07:14:00.361Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T07:14:00.367Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-01-15T07:14:02.185Z  INFO 1 --- [benefits-core] [nio-8091-exec-2] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T07:14:02.814Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T07:14:02.815Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant null
+2026-01-15T07:14:02.815Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: fa46fcdf-0c4d-47b5-9289-7a06c724ac9f
+2026-01-15T07:14:02.816Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=fa46fcdf-0c4d-47b5-9289-7a06c724ac9f, tenantId=tenant1, merchantId=null, amount=1000
+2026-01-15T07:14:02.935Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent fa46fcdf-0c4d-47b5-9289-7a06c724ac9f
+2026-01-15T07:14:03.099Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: fa46fcdf-0c4d-47b5-9289-7a06c724ac9f
+2026-01-15T07:14:03.099Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=fa46fcdf-0c4d-47b5-9289-7a06c724ac9f, tenantId=tenant1, merchantId=null, amount=1000
+2026-01-15T07:14:03.100Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Charge intent created successfully: fa46fcdf-0c4d-47b5-9289-7a06c724ac9f
+2026-01-15T07:14:03.112Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-1] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T15:47:49.155Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:47:49.173Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:47:52.125Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:47:52.129Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:47:52.131Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:47:53.677Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:47:53.892Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 203 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:47:54.754Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:47:54.771Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:47:54.772Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:47:54.823Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:47:54.826Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2628 ms
+2026-01-15T15:47:55.157Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:47:56.425Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:47:56.942Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:47:56.995Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: aebbb8a9-7860-46de-89f9-adddd57a5851
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:47:57.009Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:47:57.765Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:47:57.788Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.544 seconds (process running for 7.222)
+2026-01-15T15:47:58.925Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:47:58.925Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:47:58.928Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-01-15T15:48:12.149Z  INFO 1 --- [benefits-core] [nio-8091-exec-6] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T15:48:12.174Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T15:48:12.174Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T15:48:12.175Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 939ac444-1d0f-4d60-84b5-bb702289f546
+2026-01-15T15:48:12.175Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=939ac444-1d0f-4d60-84b5-bb702289f546, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:48:12.232Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 939ac444-1d0f-4d60-84b5-bb702289f546
+2026-01-15T15:48:12.287Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 939ac444-1d0f-4d60-84b5-bb702289f546
+2026-01-15T15:48:12.287Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=939ac444-1d0f-4d60-84b5-bb702289f546, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:48:12.287Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 939ac444-1d0f-4d60-84b5-bb702289f546
+2026-01-15T15:48:12.292Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T15:49:06.840Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:49:06.846Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:49:10.145Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:49:10.156Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:49:10.159Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:49:11.914Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:49:12.160Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 236 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:49:13.061Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:49:13.086Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:49:13.088Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:49:13.137Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:49:13.139Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2881 ms
+2026-01-15T15:49:13.435Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:49:14.649Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:49:15.185Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:49:15.232Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: cc878706-5022-4c2a-8601-56dd90609e60
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:49:15.246Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:49:16.099Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:49:16.120Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 7.175 seconds (process running for 7.918)
+2026-01-15T15:49:18.394Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:49:18.394Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:49:18.396Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T15:49:28.538Z  INFO 1 --- [benefits-core] [nio-8091-exec-2] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T15:49:28.564Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T15:49:28.565Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T15:49:28.565Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 0029599e-d5c2-4e0c-bf21-8ddd0aaa8516
+2026-01-15T15:49:28.565Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=0029599e-d5c2-4e0c-bf21-8ddd0aaa8516, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:49:28.611Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 0029599e-d5c2-4e0c-bf21-8ddd0aaa8516
+2026-01-15T15:49:28.679Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 0029599e-d5c2-4e0c-bf21-8ddd0aaa8516
+2026-01-15T15:49:28.680Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=0029599e-d5c2-4e0c-bf21-8ddd0aaa8516, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:49:28.680Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 0029599e-d5c2-4e0c-bf21-8ddd0aaa8516
+2026-01-15T15:49:28.686Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T15:50:20.858Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:50:20.866Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:50:23.657Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:50:23.660Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:50:23.661Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:50:25.010Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:50:25.215Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 195 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:50:25.996Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:50:26.018Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:50:26.019Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:50:26.072Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:50:26.074Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2350 ms
+2026-01-15T15:50:26.343Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:50:27.523Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:50:28.132Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:50:28.194Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 8143b485-6310-436f-9317-88f61e00338a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:50:28.211Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:50:28.949Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:50:28.970Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.021 seconds (process running for 6.741)
+2026-01-15T15:50:32.429Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:50:32.429Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:50:32.431Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T15:50:41.390Z  INFO 1 --- [benefits-core] [nio-8091-exec-2] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T15:50:41.428Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T15:50:41.429Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T15:50:41.431Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 64def64e-a269-4edb-bb2a-8193ac577bc6
+2026-01-15T15:50:41.432Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=64def64e-a269-4edb-bb2a-8193ac577bc6, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:50:41.528Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 64def64e-a269-4edb-bb2a-8193ac577bc6
+2026-01-15T15:50:41.616Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 64def64e-a269-4edb-bb2a-8193ac577bc6
+2026-01-15T15:50:41.616Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=64def64e-a269-4edb-bb2a-8193ac577bc6, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=1000
+2026-01-15T15:50:41.617Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 64def64e-a269-4edb-bb2a-8193ac577bc6
+2026-01-15T15:50:41.625Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T15:51:53.001Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:51:53.006Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:51:55.589Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:51:55.592Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:51:55.593Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:51:57.008Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:51:57.207Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 189 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:51:58.022Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:51:58.042Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:51:58.043Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:51:58.082Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:51:58.084Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2415 ms
+2026-01-15T15:51:58.389Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:51:59.775Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:52:00.315Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:52:00.369Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: f51b5002-8079-4237-8f84-7fcb0ce71cca
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:52:00.386Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:52:01.234Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:52:01.259Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.385 seconds (process running for 7.01)
+2026-01-15T15:52:04.451Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:52:04.452Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:52:04.454Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T15:54:11.894Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:54:11.901Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:54:14.697Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:54:14.700Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:54:14.702Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:54:16.266Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:54:16.495Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 216 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:54:17.324Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:54:17.349Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:54:17.350Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:54:17.408Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:54:17.411Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2611 ms
+2026-01-15T15:54:17.705Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:54:18.870Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:54:19.386Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:54:19.441Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 90e45dbb-b0e9-4eee-b93f-11bfbe3ac517
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:54:19.458Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:54:20.238Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:54:20.259Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.355 seconds (process running for 6.979)
+2026-01-15T15:54:23.476Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:54:23.476Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:54:23.479Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T15:54:25.582Z  WARN 1 --- [benefits-core] [nio-8091-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('\' (code 92)): was expecting double-quote to start field name]
+2026-01-15T15:54:29.916Z  WARN 1 --- [benefits-core] [nio-8091-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Unexpected character ('\' (code 92)): was expecting double-quote to start field name]
+2026-01-15T15:54:47.466Z  INFO 1 --- [benefits-core] [io-8091-exec-10] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T15:54:47.490Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T15:54:47.490Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T15:54:47.491Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: ee85d5fe-e376-4173-8e44-249d5ded7234
+2026-01-15T15:54:47.491Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=ee85d5fe-e376-4173-8e44-249d5ded7234, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.00
+2026-01-15T15:54:47.544Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent ee85d5fe-e376-4173-8e44-249d5ded7234
+2026-01-15T15:54:47.594Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: ee85d5fe-e376-4173-8e44-249d5ded7234
+2026-01-15T15:54:47.594Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=ee85d5fe-e376-4173-8e44-249d5ded7234, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.00
+2026-01-15T15:54:47.594Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: ee85d5fe-e376-4173-8e44-249d5ded7234
+2026-01-15T15:54:47.599Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T15:58:50.650Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T15:58:50.656Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T15:58:53.266Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T15:58:53.269Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T15:58:53.270Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T15:58:54.659Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T15:58:54.901Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 230 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T15:58:55.867Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T15:58:55.889Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T15:58:55.891Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T15:58:55.943Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T15:58:55.945Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2613 ms
+2026-01-15T15:58:56.232Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T15:58:57.442Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T15:58:57.944Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T15:58:57.996Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6959cdb7-8e25-4051-971a-3a1a907baab7
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T15:58:58.009Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T15:58:58.749Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T15:58:58.772Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.229 seconds (process running for 6.9)
+2026-01-15T15:58:58.917Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T15:58:58.918Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T15:58:58.920Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T15:59:07.734Z  INFO 1 --- [benefits-core] [nio-8091-exec-4] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T15:59:07.765Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T15:59:07.765Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T15:59:07.766Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: ecfe6e67-1933-433e-bf7d-06d4ca61e983
+2026-01-15T15:59:07.766Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=ecfe6e67-1933-433e-bf7d-06d4ca61e983, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.00
+2026-01-15T15:59:07.830Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent ecfe6e67-1933-433e-bf7d-06d4ca61e983
+2026-01-15T15:59:07.900Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: ecfe6e67-1933-433e-bf7d-06d4ca61e983
+2026-01-15T15:59:07.900Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=ecfe6e67-1933-433e-bf7d-06d4ca61e983, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.00
+2026-01-15T15:59:07.900Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: ecfe6e67-1933-433e-bf7d-06d4ca61e983
+2026-01-15T15:59:07.907Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T16:31:23.237Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T16:31:23.243Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T16:31:27.074Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T16:31:27.077Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T16:31:27.078Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T16:31:28.475Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T16:31:28.697Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 210 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T16:31:29.614Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T16:31:29.643Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T16:31:29.644Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T16:31:29.696Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T16:31:29.698Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2554 ms
+2026-01-15T16:31:30.033Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T16:31:31.300Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T16:31:31.828Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T16:31:31.884Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3202c301-366c-40ce-aa67-799fa7fbe8bf
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T16:31:31.901Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T16:31:32.674Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T16:31:32.697Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.321 seconds (process running for 6.889)
+2026-01-15T16:31:36.038Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T16:31:36.039Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T16:31:36.041Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T16:37:32.367Z  INFO 1 --- [benefits-core] [nio-8091-exec-6] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T16:37:32.392Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T16:37:32.392Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T16:37:32.393Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 8f5c3668-d6ba-46f5-984c-24a630b4d984
+2026-01-15T16:37:32.393Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=8f5c3668-d6ba-46f5-984c-24a630b4d984, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T16:37:32.436Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 8f5c3668-d6ba-46f5-984c-24a630b4d984
+2026-01-15T16:37:32.481Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 8f5c3668-d6ba-46f5-984c-24a630b4d984
+2026-01-15T16:37:32.481Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=8f5c3668-d6ba-46f5-984c-24a630b4d984, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T16:37:32.481Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 8f5c3668-d6ba-46f5-984c-24a630b4d984
+2026-01-15T16:37:32.486Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:12:16.683Z  INFO 1 --- [benefits-core] [nio-8091-exec-9] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:12:16.686Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:12:16.686Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:12:16.686Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: a840a42e-44d9-4472-b135-e98b782bacb8
+2026-01-15T17:12:16.686Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=a840a42e-44d9-4472-b135-e98b782bacb8, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:12:16.689Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent a840a42e-44d9-4472-b135-e98b782bacb8
+2026-01-15T17:12:16.693Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: a840a42e-44d9-4472-b135-e98b782bacb8
+2026-01-15T17:12:16.693Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=a840a42e-44d9-4472-b135-e98b782bacb8, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:12:16.693Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: a840a42e-44d9-4472-b135-e98b782bacb8
+2026-01-15T17:12:16.693Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:13:04.148Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:13:04.153Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:13:06.996Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:13:06.999Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:13:07.001Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:13:08.508Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:13:08.740Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 221 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:13:09.484Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:13:09.503Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:13:09.504Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:13:09.539Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:13:09.541Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2477 ms
+2026-01-15T17:13:09.776Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:13:10.962Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:13:11.498Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:13:11.553Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: ab013f8c-a147-48ef-bddb-57e2110d5785
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:13:11.570Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:13:12.365Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:13:12.385Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.098 seconds (process running for 6.869)
+2026-01-15T17:13:13.694Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:13:13.695Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:13:13.697Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:14:14.413Z  INFO 1 --- [benefits-core] [nio-8091-exec-8] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:14:14.445Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:14:14.445Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:14:14.446Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 53adee27-6633-46ed-b17f-4170be44f8c9
+2026-01-15T17:14:14.446Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=53adee27-6633-46ed-b17f-4170be44f8c9, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:14:14.517Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 53adee27-6633-46ed-b17f-4170be44f8c9
+2026-01-15T17:14:14.575Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 53adee27-6633-46ed-b17f-4170be44f8c9
+2026-01-15T17:14:14.575Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=53adee27-6633-46ed-b17f-4170be44f8c9, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:14:14.576Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 53adee27-6633-46ed-b17f-4170be44f8c9
+2026-01-15T17:14:14.582Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:15:08.373Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:15:08.378Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:15:11.235Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:15:11.238Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:15:11.239Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:15:12.656Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:15:12.857Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 190 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:15:13.774Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:15:13.797Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:15:13.799Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:15:13.847Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:15:13.850Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2548 ms
+2026-01-15T17:15:14.167Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:15:15.394Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:15:15.987Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:15:16.059Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 4dfbe431-0bb9-4143-9684-464cea8f85fe
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:15:16.076Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:15:16.964Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:15:16.991Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.592 seconds (process running for 7.421)
+2026-01-15T17:15:19.748Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:15:19.748Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:15:19.750Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:15:35.447Z  INFO 1 --- [benefits-core] [nio-8091-exec-5] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:15:35.473Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:15:35.473Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:15:35.474Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 4523f0b6-5c8a-44d3-b853-2c797fb95dea
+2026-01-15T17:15:35.474Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=4523f0b6-5c8a-44d3-b853-2c797fb95dea, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:15:35.530Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 4523f0b6-5c8a-44d3-b853-2c797fb95dea
+2026-01-15T17:15:35.583Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 4523f0b6-5c8a-44d3-b853-2c797fb95dea
+2026-01-15T17:15:35.584Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=4523f0b6-5c8a-44d3-b853-2c797fb95dea, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:15:35.584Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 4523f0b6-5c8a-44d3-b853-2c797fb95dea
+2026-01-15T17:15:35.590Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:16:30.979Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:16:30.987Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:16:35.405Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:16:35.407Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:16:35.409Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:16:36.887Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:16:37.137Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 238 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:16:37.981Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:16:38.003Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:16:38.003Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:16:38.044Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:16:38.046Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2554 ms
+2026-01-15T17:16:38.344Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:16:39.574Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:16:40.081Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:16:40.141Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: dc637414-6770-4e21-b25e-51dd29e2c287
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:16:40.159Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:16:40.897Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:16:40.919Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.187 seconds (process running for 6.811)
+2026-01-15T17:16:43.687Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:16:43.687Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:16:43.689Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:16:49.192Z  INFO 1 --- [benefits-core] [nio-8091-exec-4] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:16:49.218Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:16:49.219Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:16:49.220Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 1843abcd-36a7-42b1-b395-568a88dfae85
+2026-01-15T17:16:49.220Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=1843abcd-36a7-42b1-b395-568a88dfae85, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:16:49.284Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 1843abcd-36a7-42b1-b395-568a88dfae85
+2026-01-15T17:16:49.339Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 1843abcd-36a7-42b1-b395-568a88dfae85
+2026-01-15T17:16:49.339Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=1843abcd-36a7-42b1-b395-568a88dfae85, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:16:49.339Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 1843abcd-36a7-42b1-b395-568a88dfae85
+2026-01-15T17:16:49.345Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:17:38.298Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:17:38.304Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:17:40.851Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:17:40.856Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:17:40.858Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:17:42.240Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:17:42.447Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 196 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:17:43.236Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:17:43.261Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:17:43.262Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:17:43.321Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:17:43.324Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2397 ms
+2026-01-15T17:17:43.667Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:17:44.961Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:17:45.472Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:17:45.535Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b108fb85-f329-4305-9190-391f180334f0
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:17:45.558Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:17:46.481Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:17:46.549Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.405 seconds (process running for 6.996)
+2026-01-15T17:17:49.734Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:17:49.734Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:17:49.737Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-01-15T17:18:03.896Z  INFO 1 --- [benefits-core] [nio-8091-exec-5] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:18:03.933Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:18:03.934Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:18:03.935Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: c1b4b659-e750-48c6-a294-df40f3ff2be7
+2026-01-15T17:18:03.935Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=c1b4b659-e750-48c6-a294-df40f3ff2be7, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:18:04.001Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent c1b4b659-e750-48c6-a294-df40f3ff2be7
+2026-01-15T17:18:04.050Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: c1b4b659-e750-48c6-a294-df40f3ff2be7
+2026-01-15T17:18:04.050Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=c1b4b659-e750-48c6-a294-df40f3ff2be7, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:18:04.051Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: c1b4b659-e750-48c6-a294-df40f3ff2be7
+2026-01-15T17:18:04.056Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:21:14.453Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:21:14.461Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:21:17.396Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:21:17.401Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:21:17.403Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:21:19.023Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:21:19.273Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 235 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:21:20.134Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:21:20.153Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:21:20.154Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:21:20.199Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:21:20.201Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2691 ms
+2026-01-15T17:21:20.437Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:21:21.599Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:21:22.099Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:21:22.147Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 190d178a-c9dc-4238-ad85-0ed8b854d109
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:21:22.162Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:21:22.911Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:21:22.935Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.32 seconds (process running for 7.056)
+2026-01-15T17:21:26.063Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:21:26.063Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:21:26.065Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:21:30.433Z  INFO 1 --- [benefits-core] [nio-8091-exec-3] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:21:30.465Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:21:30.466Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:21:30.467Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: bd59be88-ef69-40f6-9a5a-60f777a3d1f9
+2026-01-15T17:21:30.467Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=bd59be88-ef69-40f6-9a5a-60f777a3d1f9, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:21:30.542Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent bd59be88-ef69-40f6-9a5a-60f777a3d1f9
+2026-01-15T17:21:30.607Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: bd59be88-ef69-40f6-9a5a-60f777a3d1f9
+2026-01-15T17:21:30.607Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=bd59be88-ef69-40f6-9a5a-60f777a3d1f9, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:21:30.607Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: bd59be88-ef69-40f6-9a5a-60f777a3d1f9
+2026-01-15T17:21:30.617Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:22:22.210Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:22:22.216Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:22:24.921Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:22:24.925Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:22:24.927Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:22:26.417Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:22:26.614Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 187 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:22:27.480Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:22:27.501Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:22:27.502Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:22:27.541Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:22:27.543Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2550 ms
+2026-01-15T17:22:27.841Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:22:29.312Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:22:29.920Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:22:29.982Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 21824116-1da8-404c-b393-21c5329dcc01
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:22:29.998Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:22:30.815Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:22:30.835Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.674 seconds (process running for 7.368)
+2026-01-15T17:22:33.667Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:22:33.667Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:22:33.670Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-01-15T17:22:35.481Z  INFO 1 --- [benefits-core] [nio-8091-exec-2] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:22:35.523Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:22:35.524Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:22:35.524Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 5707f737-c634-4f81-9dcf-09b22ab9971f
+2026-01-15T17:22:35.525Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=5707f737-c634-4f81-9dcf-09b22ab9971f, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:22:35.599Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 5707f737-c634-4f81-9dcf-09b22ab9971f
+2026-01-15T17:22:35.710Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 5707f737-c634-4f81-9dcf-09b22ab9971f
+2026-01-15T17:22:35.711Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=5707f737-c634-4f81-9dcf-09b22ab9971f, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:22:35.711Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 5707f737-c634-4f81-9dcf-09b22ab9971f
+2026-01-15T17:22:35.721Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-4] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:23:15.824Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:23:15.831Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:23:18.716Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:23:18.718Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:23:18.719Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:23:20.225Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:23:20.437Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 199 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:23:21.262Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:23:21.281Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:23:21.282Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:23:21.316Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:23:21.317Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2523 ms
+2026-01-15T17:23:21.564Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:23:22.714Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:23:23.252Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:23:23.304Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 55b957af-0bc8-4439-989b-664f185c41f6
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:23:23.321Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:23:24.202Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:23:24.234Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.304 seconds (process running for 7.108)
+2026-01-15T17:23:27.155Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:23:27.156Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:23:27.158Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:23:27.320Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] c.b.c.controller.ChargeIntentController  : Creating charge intent for tenant tenant1
+2026-01-15T17:23:27.925Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : === STARTING createChargeIntent ===
+2026-01-15T17:23:27.925Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Creating charge intent for tenant tenant1 merchant 550e8400-e29b-41d4-a716-446655440000
+2026-01-15T17:23:27.926Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : About to save charge intent with ID: 0d79ce42-6c17-44b8-9119-21d930f0b4ab
+2026-01-15T17:23:27.926Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : ChargeIntent object before save: id=0d79ce42-6c17-44b8-9119-21d930f0b4ab, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:23:28.028Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Save operation subscribed for charge intent 0d79ce42-6c17-44b8-9119-21d930f0b4ab
+2026-01-15T17:23:28.173Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Save operation emitted charge intent: 0d79ce42-6c17-44b8-9119-21d930f0b4ab
+2026-01-15T17:23:28.174Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Saved charge intent details: id=0d79ce42-6c17-44b8-9119-21d930f0b4ab, tenantId=tenant1, merchantId=550e8400-e29b-41d4-a716-446655440000, amount=100.0
+2026-01-15T17:23:28.174Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Charge intent created successfully: 0d79ce42-6c17-44b8-9119-21d930f0b4ab
+2026-01-15T17:23:28.185Z  INFO 1 --- [benefits-core] [tor-tcp-epoll-2] c.b.core.service.ChargeIntentService     : Save operation completed with signal: onComplete
+2026-01-15T17:24:52.550Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:24:52.556Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:24:55.269Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:24:55.274Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:24:55.275Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:24:56.755Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:24:57.008Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 238 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:24:57.936Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:24:57.961Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:24:57.962Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:24:58.009Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:24:58.010Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2666 ms
+2026-01-15T17:24:58.309Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:24:59.437Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:25:00.046Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:25:00.101Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d1578ed7-4422-4b8c-83a9-1fd7b85742e7
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:25:00.121Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:25:00.983Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:25:01.007Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.515 seconds (process running for 7.104)
+2026-01-15T17:25:04.085Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:25:04.086Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:25:04.087Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-01-15T17:25:15.732Z  WARN 1 --- [benefits-core] [nio-8091-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported]
+2026-01-15T17:25:45.356Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:25:45.364Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:25:48.348Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:25:48.351Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:25:48.353Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:25:49.761Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:25:49.995Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 220 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:25:50.900Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:25:50.922Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:25:50.923Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:25:50.969Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:25:50.971Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2552 ms
+2026-01-15T17:25:51.445Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:25:52.730Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:25:53.261Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:25:53.320Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b0c6bcea-30bf-4347-b5e7-3a3b4a0a8dd2
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:25:53.337Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:25:54.204Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:25:54.229Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.582 seconds (process running for 7.274)
+2026-01-15T17:25:57.133Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:25:57.134Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:25:57.136Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:25:59.502Z  WARN 1 --- [benefits-core] [nio-8091-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: all]
+2026-01-15T17:26:27.086Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:26:27.092Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:26:31.096Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:26:31.100Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:26:31.102Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:26:32.420Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:26:32.657Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 226 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:26:33.474Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:26:33.494Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:26:33.494Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:26:33.537Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:26:33.538Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2363 ms
+2026-01-15T17:26:33.924Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:26:35.133Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:26:35.675Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:26:35.727Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d220895a-817b-4969-a1fa-1d48dfae2132
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:26:35.745Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:26:36.530Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:26:36.554Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.172 seconds (process running for 6.85)
+2026-01-15T17:26:39.882Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:26:39.883Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:26:39.885Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-01-15T17:26:42.950Z  WARN 1 --- [benefits-core] [nio-8091-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: all]
+2026-01-15T17:42:44.601Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:42:44.608Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:42:47.772Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:42:47.775Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:42:47.776Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:42:49.123Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:42:49.362Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 228 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:42:50.202Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:42:50.222Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:42:50.223Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:42:50.269Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:42:50.271Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2437 ms
+2026-01-15T17:42:50.565Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:42:51.907Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:42:52.430Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:42:52.489Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: fa295176-5b2f-4cc2-a957-04ee0cb21c15
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:42:52.504Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:42:53.250Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:42:53.272Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.499 seconds (process running for 7.219)
+2026-01-15T17:42:56.235Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:42:56.236Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:42:56.238Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:43:00.839Z  WARN 1 --- [benefits-core] [nio-8091-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: all]
+2026-01-15T17:43:18.469Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:43:18.478Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:43:21.189Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:43:21.192Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:43:21.194Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:43:22.582Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:43:22.791Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 198 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:43:23.690Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:43:23.715Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:43:23.716Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:43:23.772Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:43:23.775Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2507 ms
+2026-01-15T17:43:24.111Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:43:25.649Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:43:26.184Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:43:26.244Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c4c105c1-f33d-4ede-94c2-e575d0cee4e5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:43:26.262Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:43:27.035Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:43:27.059Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.666 seconds (process running for 7.32)
+2026-01-15T17:43:28.615Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:43:28.616Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:43:28.618Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-01-15T17:43:35.450Z  WARN 1 --- [benefits-core] [nio-8091-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: list]
+2026-01-15T17:44:07.023Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:44:07.027Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:44:09.623Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:44:09.627Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:44:09.628Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:44:11.057Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:44:11.293Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 224 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:44:12.087Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:44:12.110Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:44:12.111Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:44:12.160Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:44:12.162Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2470 ms
+2026-01-15T17:44:12.445Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:44:13.529Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:44:14.120Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:44:14.186Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 6a720bc8-9c47-4a82-a35f-cfaf178b733e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:44:14.204Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:44:15.066Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:44:15.086Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.166 seconds (process running for 6.74)
+2026-01-15T17:44:18.523Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:44:18.524Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:44:18.525Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-01-15T17:44:31.339Z  WARN 1 --- [benefits-core] [nio-8091-exec-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'id': Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: list]
+2026-01-15T17:45:44.765Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:45:44.772Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:45:47.560Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:45:47.563Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:45:47.564Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:45:48.988Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:45:49.188Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 190 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:45:50.045Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:45:50.068Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:45:50.069Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:45:50.110Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:45:50.112Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2478 ms
+2026-01-15T17:45:50.401Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:45:51.727Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:45:52.275Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:45:52.330Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: e8684742-c15d-4a7b-b407-e44cefbee613
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:45:52.351Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:45:53.147Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:45:53.171Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.364 seconds (process running for 7.072)
+2026-01-15T17:45:56.269Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:45:56.270Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:45:56.271Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-01-15T17:46:28.901Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:46:28.907Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:46:31.516Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:46:31.519Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:46:31.520Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:46:32.933Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:46:33.145Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 203 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:46:33.889Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:46:33.906Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:46:33.907Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:46:33.957Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:46:33.959Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2377 ms
+2026-01-15T17:46:34.214Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:46:35.419Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:46:35.986Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:46:36.056Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c08a5046-cdf6-4ec6-8a76-9205dcaf529e
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:46:36.079Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:46:36.913Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:46:36.943Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.153 seconds (process running for 6.792)
+2026-01-15T17:46:40.336Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:46:40.337Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:46:40.339Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:47:04.956Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:47:04.961Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:47:07.621Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:47:07.624Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:47:07.626Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:47:09.016Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:47:09.217Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 190 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:47:09.963Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:47:09.982Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:47:09.983Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:47:10.021Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:47:10.023Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2328 ms
+2026-01-15T17:47:10.270Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:47:11.447Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:47:11.952Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:47:12.012Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 7005e75f-290b-4589-99e9-6b0c90b0174c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:47:12.033Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:47:12.788Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:47:12.814Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 5.909 seconds (process running for 6.623)
+2026-01-15T17:47:13.604Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:47:13.604Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:47:13.606Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:47:53.343Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:47:53.349Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:47:56.261Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:47:56.265Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:47:56.266Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:47:57.790Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:47:57.999Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 198 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:47:58.838Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:47:58.858Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:47:58.858Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:47:58.901Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:47:58.903Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2562 ms
+2026-01-15T17:47:59.212Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:48:00.432Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:48:00.927Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:48:00.982Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c4053d71-51ef-490e-8229-c0308bf2bd26
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:48:00.995Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:48:01.700Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:48:01.721Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 6.364 seconds (process running for 7.089)
+2026-01-15T17:48:04.851Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:48:04.852Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:48:04.854Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-01-15T17:50:04.406Z  INFO 1 --- [benefits-core] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-01-15T17:50:04.411Z  INFO 1 --- [benefits-core] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.9)
+
+2026-01-15T17:50:07.002Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Starting BenefitsCoreApplication v1.0.0 using Java 17.0.17 with PID 1 (/app/app.jar started by root in /app)
+2026-01-15T17:50:07.007Z DEBUG 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-15T17:50:07.008Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : The following 1 profile is active: "dev"
+2026-01-15T17:50:08.390Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-15T17:50:08.574Z  INFO 1 --- [benefits-core] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 174 ms. Found 20 R2DBC repository interfaces.
+2026-01-15T17:50:09.358Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8091 (http)
+2026-01-15T17:50:09.383Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-01-15T17:50:09.384Z  INFO 1 --- [benefits-core] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-01-15T17:50:09.430Z  INFO 1 --- [benefits-core] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-01-15T17:50:09.432Z  INFO 1 --- [benefits-core] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2310 ms
+2026-01-15T17:50:09.700Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : R2dbcConfig initialized
+2026-01-15T17:50:10.721Z  INFO 1 --- [benefits-core] [           main] com.benefits.core.config.R2dbcConfig     : Creating ReactiveTransactionManager bean
+2026-01-15T17:50:11.233Z  INFO 1 --- [benefits-core] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2026-01-15T17:50:11.284Z  WARN 1 --- [benefits-core] [           main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 8dfd0dc1-14c6-48fc-927d-316d8d1087e1
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-01-15T17:50:11.295Z  INFO 1 --- [benefits-core] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-01-15T17:50:12.016Z  INFO 1 --- [benefits-core] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8091 (http) with context path '/'
+2026-01-15T17:50:12.043Z  INFO 1 --- [benefits-core] [           main] c.benefits.core.BenefitsCoreApplication  : Started BenefitsCoreApplication in 5.748 seconds (process running for 6.368)
+2026-01-15T17:50:13.597Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-01-15T17:50:13.597Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-01-15T17:50:13.599Z  INFO 1 --- [benefits-core] [nio-8091-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms

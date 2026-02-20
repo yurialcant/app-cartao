@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: admin-bff
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  
+  # Disable JPA entirely
+  jpa:
+    enabled: false
+
+server:
+  port: ${SERVER_PORT:8083}
+  netty:
+    connection-timeout: 30s
+
+keycloak:
+  issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:8081/realms/benefits}
+  admin-client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:admin-cli}
+  admin-client-secret: ${KEYCLOAK_ADMIN_CLIENT_SECRET:}
+  admin-username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+  admin-password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+
+# Core Service Configuration
+core:
+  service:
+    url: ${CORE_SERVICE_URL:http://benefits-core:8091}
+    api-key: ${CORE_SERVICE_API_KEY:core-service-secret-key}
+
+# Tenant Service Configuration
+tenant:
+  service:
+    url: ${TENANT_SERVICE_URL:http://tenant-service:8106}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    com.benefits.adminbff: DEBUG
+    org.springframework.security: DEBUG
+    io.r2dbc: DEBUG
+

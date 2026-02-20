@@ -1,0 +1,293 @@
+{
+  "auth": {
+    "check_first_access": {
+      "success": {
+        "status": "first_access",
+        "isFirstAccess": true,
+        "message": "CPF válido para primeiro acesso",
+        "user": {
+          "cpf": "111.444.777-35",
+          "name": "João Silva",
+          "email": "joao.silva@empresa.com",
+          "phone": "+55 11 99999-9999"
+        }
+      },
+      "existing_user": {
+        "status": "has_account",
+        "isFirstAccess": false,
+        "message": "Usuário já possui conta",
+        "user": {
+          "cpf": "946.919.070-09",
+          "name": "Maria Santos",
+          "email": "maria.santos@empresa.com",
+          "phone": "+55 11 88888-8888"
+        }
+      },
+      "invalid_cpf": {
+        "status": "error",
+        "isFirstAccess": false,
+        "message": "CPF inválido ou não encontrado.",
+        "error": "VALIDATION_ERROR"
+      },
+      "unregistered_cpf": {
+        "status": "error",
+        "isFirstAccess": false,
+        "message": "CPF não cadastrado, fale com sua empresa.",
+        "error": "USER_NOT_FOUND"
+      }
+    },
+    "send_token": {
+      "success": {
+        "success": true,
+        "status": "sent",
+        "message": "Token enviado com sucesso",
+        "method": "sms",
+        "expiresIn": 300
+      },
+      "error": {
+        "success": false,
+        "status": "error",
+        "message": "Erro ao enviar token",
+        "error": "SEND_ERROR"
+      }
+    },
+    "validate_token": {
+      "success": {
+        "valid": true,
+        "message": "Token válido",
+        "expiresIn": 240
+      },
+      "invalid": {
+        "valid": false,
+        "message": "Token inválido.",
+        "error": "INVALID_TOKEN"
+      },
+      "expired": {
+        "valid": false,
+        "message": "Token expirado. Solicite um novo.",
+        "error": "EXPIRED_TOKEN"
+      }
+    },
+    "create_password": {
+      "success": {
+        "success": true,
+        "message": "Senha cadastrada com sucesso",
+        "user": {
+          "cpf": "111.444.777-35",
+          "name": "João Silva",
+          "email": "joao.silva@empresa.com"
+        }
+      },
+      "error": {
+        "success": false,
+        "message": "Senha não atende aos requisitos mínimos",
+        "error": "PASSWORD_VALIDATION_ERROR"
+      }
+    },
+    "login": {
+      "success": {
+        "success": true,
+        "message": "Login realizado com sucesso",
+        "user": {
+          "cpf": "946.919.070-09",
+          "name": "Maria Santos",
+          "email": "maria.santos@empresa.com",
+          "roles": ["user"]
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        "refreshToken": "refresh_token_123"
+      },
+      "wrong_password": {
+        "success": false,
+        "message": "Senha incorreta. Tentativas restantes: 2",
+        "error": "WRONG_PASSWORD",
+        "remainingAttempts": 2
+      },
+      "account_blocked": {
+        "success": false,
+        "message": "Conta bloqueada temporariamente. Tente novamente em 8 minutos.",
+        "error": "ACCOUNT_BLOCKED",
+        "blockInfo": {
+          "blocked": true,
+          "permanentlyBlocked": false,
+          "remainingTime": 480,
+          "remainingAttempts": 0
+        }
+      },
+      "account_permanently_blocked": {
+        "success": false,
+        "message": "Conta bloqueada permanentemente. Entre em contato com o suporte.",
+        "error": "ACCOUNT_PERMANENTLY_BLOCKED",
+        "blockInfo": {
+          "blocked": true,
+          "permanentlyBlocked": true,
+          "remainingTime": 0,
+          "remainingAttempts": 0
+        }
+      }
+    },
+    "password_recovery": {
+      "check_cpf": {
+        "success": {
+          "success": true,
+          "message": "CPF encontrado para recuperação",
+          "user": {
+            "cpf": "946.919.070-09",
+            "name": "Maria Santos",
+            "email": "maria.santos@empresa.com",
+            "phone": "+55 11 88888-8888"
+          }
+        },
+        "error": {
+          "success": false,
+          "message": "CPF não encontrado",
+          "error": "USER_NOT_FOUND"
+        }
+      },
+      "send_token": {
+        "success": {
+          "success": true,
+          "message": "Token de recuperação enviado",
+          "method": "sms",
+          "expiresIn": 300
+        }
+      },
+      "validate_token": {
+        "success": {
+          "valid": true,
+          "message": "Token válido para recuperação"
+        }
+      },
+      "update_password": {
+        "success": {
+          "success": true,
+          "message": "Senha alterada com sucesso"
+        }
+      }
+    },
+    "logout": {
+      "success": {
+        "success": true,
+        "message": "Logout realizado com sucesso"
+      }
+    }
+  },
+  "biometric": {
+    "check_availability": {
+      "available": {
+        "available": true,
+        "types": ["fingerprint", "face"],
+        "message": "Biometria disponível"
+      },
+      "not_available": {
+        "available": false,
+        "types": [],
+        "message": "Biometria não disponível"
+      }
+    },
+    "authenticate": {
+      "success": {
+        "success": true,
+        "message": "Autenticação biométrica realizada com sucesso",
+        "user": {
+          "cpf": "946.919.070-09",
+          "name": "Maria Santos"
+        }
+      },
+      "failed": {
+        "success": false,
+        "message": "Falha na autenticação biométrica",
+        "error": "BIOMETRIC_AUTH_FAILED"
+      }
+    }
+  },
+  "dashboard": {
+    "benefits": {
+      "list": {
+        "success": true,
+        "benefits": [
+          {
+            "id": "1",
+            "name": "Vale Refeição",
+            "balance": 450.00,
+            "currency": "BRL",
+            "icon": "restaurant",
+            "color": "#4CAF50"
+          },
+          {
+            "id": "2",
+            "name": "Vale Alimentação",
+            "balance": 800.00,
+            "currency": "BRL",
+            "icon": "shopping_cart",
+            "color": "#2196F3"
+          },
+          {
+            "id": "3",
+            "name": "Plano de Saúde",
+            "balance": 0.00,
+            "currency": "BRL",
+            "icon": "health_and_safety",
+            "color": "#FF9800"
+          },
+          {
+            "id": "4",
+            "name": "Gympass",
+            "balance": 0.00,
+            "currency": "BRL",
+            "icon": "fitness_center",
+            "color": "#9C27B0"
+          }
+        ]
+      }
+    },
+    "transactions": {
+      "list": {
+        "success": true,
+        "transactions": [
+          {
+            "id": "1",
+            "benefitId": "1",
+            "benefitName": "Vale Refeição",
+            "amount": -25.50,
+            "description": "Restaurante ABC",
+            "date": "2024-01-15T12:30:00Z",
+            "type": "expense"
+          },
+          {
+            "id": "2",
+            "benefitId": "1",
+            "benefitName": "Vale Refeição",
+            "amount": 450.00,
+            "description": "Recarga mensal",
+            "date": "2024-01-01T00:00:00Z",
+            "type": "credit"
+          }
+        ]
+      }
+    },
+    "notifications": {
+      "list": {
+        "success": true,
+        "notifications": [
+          {
+            "id": "1",
+            "title": "Vale Refeição",
+            "message": "Seu vale refeição foi recarregado",
+            "type": "info",
+            "read": false,
+            "date": "2024-01-01T00:00:00Z"
+          },
+          {
+            "id": "2",
+            "title": "Segurança",
+            "message": "Login realizado em novo dispositivo",
+            "type": "warning",
+            "read": true,
+            "date": "2024-01-14T10:15:00Z"
+          }
+        ]
+      }
+    }
+  }
+}

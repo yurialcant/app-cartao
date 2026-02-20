@@ -1,0 +1,216 @@
+{
+  "test_users": {
+    "first_access": [
+      {
+        "cpf": "111.444.777-35",
+        "name": "João Primeiro Acesso",
+        "email": "joao.primeiro@teste.com",
+        "phone": "(11) 11111-1111",
+        "isNewUser": true,
+        "needsRegistration": true
+      },
+      {
+        "cpf": "222.555.888-46",
+        "name": "Maria Primeiro Acesso",
+        "email": "maria.primeiro@teste.com",
+        "phone": "(11) 22222-2222",
+        "isNewUser": true,
+        "needsRegistration": true
+      }
+    ],
+    "existing": [
+      {
+        "cpf": "946.919.070-09",
+        "name": "João Silva",
+        "email": "joao.silva@email.com",
+        "phone": "(11) 99999-9999",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-15T10:30:00.000Z",
+        "isActive": true,
+        "roles": ["user"]
+      },
+      {
+        "cpf": "632.543.510-96",
+        "name": "Maria Santos",
+        "email": "maria.santos@email.com",
+        "phone": "(11) 88888-8888",
+        "password": "Test123!",
+        "isNewUser": false,
+        "needsRegistration": false,
+        "createdAt": "2024-01-01T00:00:00.000Z",
+        "lastLogin": "2024-01-14T15:45:00.000Z",
+        "isActive": true,
+        "roles": ["user"]
+      }
+    ]
+  },
+  "test_tokens": {
+    "sms": "1234",
+    "email": "1234",
+    "device": "DEVICE123"
+  },
+  "test_passwords": {
+    "valid": [
+      "Test1!",
+      "Abc123@",
+      "Xyz789#"
+    ],
+    "invalid": [
+      "teste123#",
+      "TESTE123#",
+      "Teste123",
+      "Test!",
+      "Teste12345!"
+    ]
+  },
+  "test_scenarios": {
+    "first_access_flow": {
+      "cpf": "111.444.777-35",
+      "token": "1234",
+      "password": "Test1!",
+      "expected_result": "dashboard"
+    },
+    "login_existing_user": {
+      "cpf": "946.919.070-09",
+      "password": "Test123!",
+      "expected_result": "dashboard"
+    },
+    "account_lockout": {
+      "cpf": "946.919.070-09",
+      "wrong_passwords": ["Wrong1!", "Wrong2!", "Wrong3!"],
+      "expected_result": "temporary_lockout"
+    },
+    "permanent_lockout": {
+      "cpf": "946.919.070-09",
+      "wrong_passwords": ["Wrong1!", "Wrong2!", "Wrong3!", "Wrong4!", "Wrong5!"],
+      "expected_result": "permanent_lockout"
+    }
+  },
+  "api_responses": {
+    "cpf_check": {
+      "success": {
+        "status": "success",
+        "message": "CPF verificado com sucesso",
+        "data": {
+          "isFirstAccess": true,
+          "userExists": false
+        }
+      },
+      "user_exists": {
+        "status": "success",
+        "message": "Usuário encontrado",
+        "data": {
+          "isFirstAccess": false,
+          "userExists": true
+        }
+      },
+      "invalid_cpf": {
+        "status": "error",
+        "message": "CPF inválido",
+        "error": "INVALID_CPF"
+      }
+    },
+    "login": {
+      "success": {
+        "status": "success",
+        "message": "Login realizado com sucesso",
+        "data": {
+          "user": {
+            "cpf": "946.919.070-09",
+            "name": "João Silva",
+            "email": "joao.silva@email.com"
+          },
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "expiresAt": "2024-12-31T23:59:59.000Z"
+        }
+      },
+      "invalid_credentials": {
+        "status": "error",
+        "message": "Credenciais inválidas",
+        "error": "INVALID_CREDENTIALS"
+      },
+      "account_locked": {
+        "status": "error",
+        "message": "Conta bloqueada temporariamente",
+        "error": "ACCOUNT_LOCKED",
+        "data": {
+          "remainingMinutes": 8
+        }
+      }
+    },
+    "first_access": {
+      "send_token": {
+        "success": {
+          "status": "success",
+          "message": "Token enviado com sucesso",
+          "data": {
+            "method": "email",
+            "expiresAt": "2024-12-31T23:59:59.000Z"
+          }
+        }
+      },
+      "verify_token": {
+        "success": {
+          "status": "success",
+          "message": "Token verificado com sucesso"
+        },
+        "invalid": {
+          "status": "error",
+          "message": "Token inválido",
+          "error": "INVALID_TOKEN"
+        }
+      },
+      "register": {
+        "success": {
+          "status": "success",
+          "message": "Usuário registrado com sucesso",
+          "data": {
+            "user": {
+              "cpf": "111.444.777-35",
+              "name": "João Primeiro Acesso"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      }
+    }
+  },
+  "error_codes": {
+    "AUTH_001": "CPF inválido",
+    "AUTH_002": "Senha inválida",
+    "AUTH_003": "Usuário não encontrado",
+    "AUTH_004": "Conta bloqueada temporariamente",
+    "AUTH_005": "Conta bloqueada permanentemente",
+    "AUTH_006": "Token inválido",
+    "AUTH_007": "Token expirado",
+    "AUTH_008": "Biometria não habilitada",
+    "AUTH_009": "Autenticação biométrica falhou",
+    "AUTH_010": "Termos de uso não aceitos"
+  },
+  "validation_rules": {
+    "cpf": {
+      "length": 11,
+      "pattern": "^[0-9]{11}$",
+      "description": "CPF deve ter 11 dígitos numéricos"
+    },
+    "password": {
+      "min_length": 6,
+      "max_length": 8,
+      "requirements": [
+        "Pelo menos uma letra maiúscula",
+        "Pelo menos uma letra minúscula",
+        "Pelo menos um número",
+        "Pelo menos um caractere especial (!@#$%^&*)"
+      ],
+      "description": "Senha deve ter entre 6 e 8 caracteres com requisitos específicos"
+    },
+    "token": {
+      "length": 4,
+      "pattern": "^[0-9]{4}$",
+      "description": "Token deve ter 4 dígitos numéricos"
+    }
+  }
+}

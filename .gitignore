@@ -14,3 +14,19 @@ logs/
 *.bak
 *.backup
 *.disabled
+# --- Node / Angular ---
+node_modules/
+dist/
+.angular/
+
+# --- Python ---
+__pycache__/
+*.pyc
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.backup
+
+# --- SO e IDEs adicionais ---
+.DS_Store

@@ -1,0 +1,41 @@
+2026-01-18 19:45:44 [main] INFO  c.b.e.EmployerBffApplication - Starting EmployerBffApplication using Java 24.0.2 with PID 33452 (C:\Users\gesch\Documents\projeto-lucas\services\employer-bff\target\classes started by gesch in C:\Users\gesch\Documents\projeto-lucas\services\employer-bff)
+2026-01-18 19:45:44 [main] DEBUG c.b.e.EmployerBffApplication - Running with Spring Boot v3.5.9, Spring v6.2.15
+2026-01-18 19:45:44 [main] INFO  c.b.e.EmployerBffApplication - No active profile set, falling back to 1 default profile: "default"
+2026-01-18 19:45:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2026-01-18 19:45:45 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 122 ms. Found 1 R2DBC repository interface.
+2026-01-18 19:45:46 [main] INFO  o.s.cloud.context.scope.GenericScope - BeanFactory id=360315d5-f8fb-35bf-b692-290fe20c2de4
+2026-01-18 19:45:46 [main] DEBUG io.r2dbc.postgresql.Extensions - Discovering Extensions using ServiceLoader
+2026-01-18 19:45:46 [main] DEBUG io.r2dbc.postgresql.Extensions - Registering extension io.r2dbc.postgresql.codec.BuiltinDynamicCodecs
+2026-01-18 19:45:48 [main] INFO  o.s.cloud.commons.util.InetUtils - Cannot determine local hostname
+2026-01-18 19:45:48 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 3 endpoints beneath base path '/actuator'
+2026-01-18 19:45:49 [main] INFO  o.s.cloud.commons.util.InetUtils - Cannot determine local hostname
+2026-01-18 19:45:49 [main] WARN  o.s.b.w.r.c.AnnotationConfigReactiveWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'compositeCompatibilityVerifier' defined in class path resource [org/springframework/cloud/configuration/CompatibilityVerifierAutoConfiguration.class]: Failed to instantiate [org.springframework.cloud.configuration.CompositeCompatibilityVerifier]: Factory method 'compositeCompatibilityVerifier' threw exception with message: Spring Cloud/ Spring Boot version compatibility checks have failed: [[VerificationResult@229514ff description = 'Spring Boot [3.5.9] is not compatible with this Spring Cloud release train', action = 'Change Spring Boot version to one of the following versions [3.4.x] .
+You can find the latest Spring Boot versions here [https://spring.io/projects/spring-boot#learn]. 
+If you want to learn more about the Spring Cloud Release train compatibility, you can visit this page [https://spring.io/projects/spring-cloud#overview] and check the [Release Trains] section.
+If you want to disable this check, just set the property [spring.cloud.compatibility-verifier.enabled=false]']]
+2026-01-18 19:45:49 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-01-18 19:45:49 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Your project setup is incompatible with our requirements due to following reasons:
+
+- Spring Boot [3.5.9] is not compatible with this Spring Cloud release train
+
+
+Action:
+
+Consider applying the following actions:
+
+- Change Spring Boot version to one of the following versions [3.4.x] .
+You can find the latest Spring Boot versions here [https://spring.io/projects/spring-boot#learn]. 
+If you want to learn more about the Spring Cloud Release train compatibility, you can visit this page [https://spring.io/projects/spring-cloud#overview] and check the [Release Trains] section.
+If you want to disable this check, just set the property [spring.cloud.compatibility-verifier.enabled=false]
+
+

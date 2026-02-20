@@ -1,0 +1,290 @@
+openapi: 3.1.0
+
+info:
+  title: POS/Merchant BFF API
+  version: 1.0.0
+  description: Backend para autorização e processamento de pagamentos no POS
+
+servers:
+  - url: http://localhost:8084
+    description: Local development
+  - url: http://merchant-bff:8084
+    description: Docker network
+
+security:
+  - bearerAuth: []
+  - apiKey: []
+
+paths:
+  /pos/payments/authorize:
+    post:
+      operationId: authorizePayment
+      summary: Autorizar pagamento no POS
+      description: |
+        Executar fluxo 3-phase: RESERVE → PROVIDER APPROVAL → CONFIRM
+        Idempotência: X-Idempotency-Key = {terminal_id}:{timestamp}:{sequence}
+        SLA: < 2s p99 (timeout 5s)
+        
+        Fluxo:
+        1. RESERVE em wallet_balance (atomic)
+        2. Enviar para provider (acquirer stub)
+        3. CONFIRM se aprovado, RELEASE se recusado
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [user_id, amount_cents, mcc]
+              properties:
+                user_id:
+                  type: string
+                  description: ID do portador (do Keycloak)
+                amount_cents:
+                  type: integer
+                  minimum: 1
+                  example: 5500
+                currency:
+                  type: string
+                  enum: [BRL]
+                  default: BRL
+                mcc:
+                  type: string
+                  example: "5411"
+                  description: Merchant Category Code
+                wallet_types:
+                  type: array
+                  items:
+                    type: string
+                    enum: [MEAL_VOUCHER, FLEXIBLE, FOOD_ALLOWANCE]
+                  description: Ordem de preferência
+                  default: [MEAL_VOUCHER]
+      responses:
+        '200':
+          description: Pagamento autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payment_id:
+                    type: string
+                    format: uuid
+                  status:
+                    type: string
+                    enum: [AUTHORIZED]
+                  amount_cents:
+                    type: integer
+                  approval_code:
+                    type: string
+                  authorization_code:
+                    type: string
+                    description: RRN ou NSU do provider
+                  wallet_id:
+                    type: string
+                    format: uuid
+                  remaining_balance_cents:
+                    type: integer
+                  timestamp:
+                    type: string
+                    format: date-time
+
+        '402':
+          description: Saldo insuficiente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [INSUFFICIENT_FUNDS]
+                  message:
+                    type: string
+                  available_cents:
+                    type: integer
+
+        '403':
+          description: Transação recusada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [POLICY_DENIED, RATE_LIMIT, WALLET_FROZEN, WALLET_EXPIRED]
+                  message:
+                    type: string
+
+        '404':
+          description: Wallet não encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [WALLET_NOT_FOUND]
+
+        '409':
+          description: Idempotency conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [CONFLICT]
+                  previous_payment_id:
+                    type: string
+                    format: uuid
+
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /payments/{paymentId}/refund:
+    post:
+      operationId: refundPayment
+      summary: Reembolsar pagamento
+      description: |
+        Reembolsar valor (total ou parcial).
+        Idempotência: X-Idempotency-Key
+        Lógica: 
+        - Se original CREDIT + refund_amount > available → aplicar refund_bonus
+        - Gerar DEBIT (reversão), CREDIT (bonus se houver)
+      tags:
+        - Payments
+      parameters:
+        - $ref: '#/components/parameters/X-Tenant-Id'
+        - $ref: '#/components/parameters/X-Request-Id'
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refund_amount_cents]
+              properties:
+                refund_amount_cents:
+                  type: integer
+                  minimum: 1
+                reason:
+                  type: string
+                  enum: [USER_REQUEST, MERCHANT_ERROR, DUPLICATE, OTHER]
+                metadata:
+                  type: object
+      responses:
+        '200':
+          description: Reembolso processado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refund_id:
+                    type: string
+                    format: uuid
+                  payment_id:
+                    type: string
+                    format: uuid
+                  refund_amount_cents:
+                    type: integer
+                  bonus_amount_cents:
+                    type: integer
+                    description: Bonus adicional aplicado
+                  status:
+                    type: string
+                    enum: [COMPLETED]
+                  timestamp:
+                    type: string
+                    format: date-time
+
+        '404':
+          description: Pagamento não encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [PAYMENT_NOT_FOUND]
+
+        '409':
+          description: Conflito (ex: pagamento já reembolsado)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    enum: [CONFLICT, ALREADY_REFUNDED]
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Para chamadas service-to-service
+
+  parameters:
+    X-Tenant-Id:
+      name: X-Tenant-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+
+    X-Request-Id:
+      name: X-Request-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+
+    X-Idempotency-Key:
+      name: X-Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        description: "Formato: {terminal_id}:{timestamp}:{sequence}"
+
+  responses:
+    InternalError:
+      description: Erro interno
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                enum: [INTERNAL_ERROR]
+              message:
+                type: string
+

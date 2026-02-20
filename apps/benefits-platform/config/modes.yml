@@ -1,0 +1,90 @@
+# config/modes.yml
+# Configurações para diferentes modos de execução (com/sem mocks)
+
+modes:
+  # Modo mínimo - apenas business logic, sem external dependencies
+  minimal:
+    description: "Business logic only - no external services"
+    services:
+      - benefits-core
+      - tenant-service
+    infrastructure:
+      - postgres
+      - redis
+    profiles:
+      - local
+      - no-external
+      - no-auth
+    excluded:
+      - keycloak
+      - localstack
+      - grafana
+      - prometheus
+      - bffs
+
+  # Modo desenvolvimento - com auth local e AWS local
+  development:
+    description: "Full development with local auth and AWS"
+    services:
+      - benefits-core
+      - tenant-service
+      - identity-service
+      - user-bff
+      - admin-bff
+    infrastructure:
+      - postgres
+      - redis
+      - keycloak
+      - localstack
+    profiles:
+      - local
+      - keycloak
+      - localstack
+    excluded:
+      - grafana
+      - prometheus
+
+  # Modo completo - tudo incluindo observabilidade
+  full:
+    description: "Complete system with monitoring"
+    services:
+      - benefits-core
+      - tenant-service
+      - identity-service
+      - user-bff
+      - admin-bff
+      - employer-bff
+      - ops-relay
+    infrastructure:
+      - postgres
+      - redis
+      - keycloak
+      - localstack
+      - grafana
+      - prometheus
+      - loki
+      - tempo
+    profiles:
+      - local
+      - keycloak
+      - localstack
+      - observability
+    excluded: []
+
+# Configurações específicas por serviço
+service_configs:
+  benefits-core:
+    profiles:
+      minimal: "local,no-external,no-auth"
+      development: "local,keycloak,localstack"
+      full: "local,keycloak,localstack,observability"
+
+  user-bff:
+    profiles:
+      development: "local,keycloak"
+      full: "local,keycloak,observability"
+
+  ops-relay:
+    profiles:
+      development: "local,localstack"
+      full: "local,localstack,observability"

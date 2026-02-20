@@ -1,0 +1,1764 @@
+openapi: 3.0.3
+info:
+  title: Benefits User BFF API
+  description: API completa para o app de benefícios (VR/VA)
+  version: 1.0.0
+  contact:
+    name: Benefits Team
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+  - url: https://api-stg.seudominio.com
+    description: Staging
+
+tags:
+  - name: Config
+    description: Configuração do app
+  - name: Auth
+    description: Autenticação e sessão
+  - name: User
+    description: Dados do usuário
+  - name: Wallet
+    description: Carteiras e saldos
+  - name: Transactions
+    description: Transações e extrato
+  - name: Payment
+    description: Pagamentos QR
+  - name: Card
+    description: Cartão e token
+  - name: Dispute
+    description: Disputas e reembolsos
+  - name: Notifications
+    description: Notificações
+  - name: Security
+    description: Segurança e dispositivos
+  - name: KYC
+    description: KYC e validações
+  - name: Onboarding
+    description: Onboarding e vinculação
+  - name: Support
+    description: Suporte e tickets
+  - name: Privacy
+    description: LGPD e privacidade
+  - name: Dev
+    description: Endpoints de desenvolvimento
+
+paths:
+  # ============================================
+  # CONFIG
+  # ============================================
+  /app/config:
+    get:
+      tags: [Config]
+      summary: Configuração do app
+      description: Retorna versão mínima, flags de feature, status de manutenção
+      security: []
+      responses:
+        '200':
+          description: Configuração do app
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppConfig'
+        '503':
+          description: App em manutenção
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MaintenanceInfo'
+
+  # ============================================
+  # AUTH
+  # ============================================
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      description: Autentica usuário e retorna tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  description: Email, telefone ou matrícula
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Credenciais inválidas
+        '403':
+          description: Conta bloqueada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh token
+      description: Renova tokens de acesso
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Tokens renovados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Refresh token inválido
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Logout
+      description: Encerra sessão
+      responses:
+        '200':
+          description: Logout bem-sucedido
+
+  /auth/verify-device:
+    post:
+      tags: [Auth]
+      summary: Verificar novo dispositivo
+      description: Valida novo dispositivo com OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [otp, device_id]
+              properties:
+                otp:
+                  type: string
+                device_id:
+                  type: string
+      responses:
+        '200':
+          description: Dispositivo verificado
+        '400':
+          description: OTP inválido
+
+  /auth/mfa:
+    post:
+      tags: [Auth]
+      summary: Verificar MFA
+      description: Valida MFA (TOTP/push/SMS)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_code, mfa_type]
+              properties:
+                mfa_code:
+                  type: string
+                mfa_type:
+                  type: string
+                  enum: [TOTP, PUSH, SMS]
+      responses:
+        '200':
+          description: MFA validado
+        '400':
+          description: Código MFA inválido
+
+  # ============================================
+  # USER
+  # ============================================
+  /me:
+    get:
+      tags: [User]
+      summary: Dados do usuário
+      description: Retorna informações do usuário autenticado
+      responses:
+        '200':
+          description: Dados do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /me/profile:
+    get:
+      tags: [User]
+      summary: Perfil completo
+      description: Retorna perfil completo do usuário
+      responses:
+        '200':
+          description: Perfil do usuário
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+    put:
+      tags: [User]
+      summary: Atualizar perfil
+      description: Atualiza dados do perfil
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+      responses:
+        '200':
+          description: Perfil atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+
+  # ============================================
+  # WALLET
+  # ============================================
+  /wallets/summary:
+    get:
+      tags: [Wallet]
+      summary: Resumo das carteiras
+      description: Retorna saldos de todas as carteiras (VR/VA)
+      responses:
+        '200':
+          description: Resumo das carteiras
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletSummary'
+
+  /wallets:
+    get:
+      tags: [Wallet]
+      summary: Lista de carteiras
+      description: Retorna todas as carteiras do usuário
+      responses:
+        '200':
+          description: Lista de carteiras
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wallets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Wallet'
+
+  /wallets/{walletId}:
+    get:
+      tags: [Wallet]
+      summary: Detalhe da carteira
+      description: Retorna detalhes de uma carteira específica
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Detalhe da carteira
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+
+  # ============================================
+  # TRANSACTIONS
+  # ============================================
+  /transactions:
+    get:
+      tags: [Transactions]
+      summary: Lista de transações
+      description: Retorna extrato paginado com filtros
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [CREATED, PENDING, APPROVED, DECLINED, CAPTURED, SETTLED, REVERSED, REFUNDED, DISPUTED]
+        - name: walletId
+          in: query
+          schema:
+            type: string
+        - name: merchant
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de transações
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionListResponse'
+
+  /transactions/{id}:
+    get:
+      tags: [Transactions]
+      summary: Detalhe da transação
+      description: Retorna detalhe completo com linha do tempo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detalhe da transação
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDetail'
+        '404':
+          description: Transação não encontrada
+
+  # ============================================
+  # PAYMENT QR
+  # ============================================
+  /payment/qr/validate:
+    post:
+      tags: [Payment]
+      summary: Validar QR code
+      description: Valida QR code e retorna dados do pagamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [qr_data]
+              properties:
+                qr_data:
+                  type: string
+                  description: Dados do QR code escaneado
+      responses:
+        '200':
+          description: QR válido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QrValidationResponse'
+        '400':
+          description: QR inválido ou expirado
+
+  /payment/qr/process:
+    post:
+      tags: [Payment]
+      summary: Processar pagamento QR
+      description: Processa pagamento via QR code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [qr_data, wallet_id, amount]
+              properties:
+                qr_data:
+                  type: string
+                wallet_id:
+                  type: string
+                amount:
+                  type: number
+                  format: decimal
+                mfa_code:
+                  type: string
+                  description: Código MFA se necessário
+      responses:
+        '200':
+          description: Pagamento processado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          description: Dados inválidos
+        '402':
+          description: Saldo insuficiente
+        '403':
+          description: Categoria não permitida ou limite excedido
+
+  /payment/{id}/status:
+    get:
+      tags: [Payment]
+      summary: Status do pagamento
+      description: Consulta status de pagamento pendente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Status do pagamento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatus'
+
+  /payment/{id}/receipt:
+    get:
+      tags: [Payment]
+      summary: Comprovante do pagamento
+      description: Retorna comprovante em PDF ou imagem
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [pdf, image]
+            default: pdf
+      responses:
+        '200':
+          description: Comprovante
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+  # ============================================
+  # CARD
+  # ============================================
+  /card:
+    get:
+      tags: [Card]
+      summary: Informações do cartão
+      description: Retorna dados mascarados do cartão virtual
+      responses:
+        '200':
+          description: Dados do cartão
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+
+  /card/block:
+    post:
+      tags: [Card]
+      summary: Bloquear cartão
+      description: Bloqueia cartão/token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_code]
+              properties:
+                mfa_code:
+                  type: string
+      responses:
+        '200':
+          description: Cartão bloqueado
+        '400':
+          description: MFA inválido
+
+  /card/unblock:
+    post:
+      tags: [Card]
+      summary: Desbloquear cartão
+      description: Desbloqueia cartão/token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_code]
+              properties:
+                mfa_code:
+                  type: string
+      responses:
+        '200':
+          description: Cartão desbloqueado
+
+  /card/rotate:
+    post:
+      tags: [Card]
+      summary: Rotacionar token
+      description: Gera novo token/cartão virtual
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_code]
+              properties:
+                mfa_code:
+                  type: string
+      responses:
+        '200':
+          description: Token rotacionado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+
+  /card/limits:
+    get:
+      tags: [Card]
+      summary: Limites do cartão
+      description: Retorna limites configurados
+      responses:
+        '200':
+          description: Limites do cartão
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardLimits'
+
+    put:
+      tags: [Card]
+      summary: Atualizar limites
+      description: Atualiza limites do cartão (se permitido)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CardLimitsUpdate'
+      responses:
+        '200':
+          description: Limites atualizados
+
+  /card/devices:
+    get:
+      tags: [Card]
+      summary: Dispositivos provisionados
+      description: Lista dispositivos onde o cartão está provisionado
+      responses:
+        '200':
+          description: Lista de dispositivos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  devices:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CardDevice'
+
+  # ============================================
+  # DISPUTE
+  # ============================================
+  /disputes:
+    get:
+      tags: [Dispute]
+      summary: Lista de disputas
+      description: Retorna disputas do usuário
+      responses:
+        '200':
+          description: Lista de disputas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  disputes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Dispute'
+
+    post:
+      tags: [Dispute]
+      summary: Criar disputa
+      description: Cria nova disputa para uma transação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [transaction_id, reason]
+              properties:
+                transaction_id:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+                preference:
+                  type: string
+                  enum: [REFUND, CONTEST]
+                attachments:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Disputa criada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dispute'
+
+  /disputes/{id}:
+    get:
+      tags: [Dispute]
+      summary: Detalhe da disputa
+      description: Retorna detalhe e linha do tempo da disputa
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detalhe da disputa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisputeDetail'
+
+  /refunds/request:
+    post:
+      tags: [Dispute]
+      summary: Solicitar reembolso
+      description: Solicita reembolso de uma transação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [transaction_id, reason]
+              properties:
+                transaction_id:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+      responses:
+        '201':
+          description: Reembolso solicitado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+
+  # ============================================
+  # NOTIFICATIONS
+  # ============================================
+  /notifications:
+    get:
+      tags: [Notifications]
+      summary: Lista de notificações
+      description: Retorna notificações do usuário
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: unread_only
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Lista de notificações
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  notifications:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notification'
+                  unread_count:
+                    type: integer
+
+  /notifications/{id}/read:
+    put:
+      tags: [Notifications]
+      summary: Marcar como lida
+      description: Marca notificação como lida
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Notificação marcada como lida
+
+  /notifications/settings:
+    get:
+      tags: [Notifications]
+      summary: Preferências de notificação
+      description: Retorna preferências do usuário
+      responses:
+        '200':
+          description: Preferências
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationSettings'
+
+    put:
+      tags: [Notifications]
+      summary: Atualizar preferências
+      description: Atualiza preferências de notificação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationSettings'
+      responses:
+        '200':
+          description: Preferências atualizadas
+
+  # ============================================
+  # SECURITY
+  # ============================================
+  /security/devices:
+    get:
+      tags: [Security]
+      summary: Dispositivos logados
+      description: Lista dispositivos com sessão ativa
+      responses:
+        '200':
+          description: Lista de dispositivos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  devices:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Device'
+
+  /security/devices/{deviceId}/revoke:
+    post:
+      tags: [Security]
+      summary: Revogar sessão
+      description: Revoga sessão de um dispositivo
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sessão revogada
+
+  /security/password:
+    put:
+      tags: [Security]
+      summary: Trocar senha
+      description: Altera senha do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [current_password, new_password]
+              properties:
+                current_password:
+                  type: string
+                  format: password
+                new_password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Senha alterada
+        '400':
+          description: Senha atual inválida
+
+  /security/mfa:
+    get:
+      tags: [Security]
+      summary: Status do MFA
+      description: Retorna status e configuração do MFA
+      responses:
+        '200':
+          description: Status do MFA
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MfaStatus'
+
+    post:
+      tags: [Security]
+      summary: Ativar MFA
+      description: Ativa MFA (TOTP/push/SMS)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_type]
+              properties:
+                mfa_type:
+                  type: string
+                  enum: [TOTP, PUSH, SMS]
+      responses:
+        '200':
+          description: MFA ativado
+
+  /security/panic-mode:
+    post:
+      tags: [Security]
+      summary: Modo pânico
+      description: Revoga todas sessões e bloqueia cartão
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mfa_code]
+              properties:
+                mfa_code:
+                  type: string
+      responses:
+        '200':
+          description: Modo pânico ativado
+
+  # ============================================
+  # KYC
+  # ============================================
+  /kyc/status:
+    get:
+      tags: [KYC]
+      summary: Status do KYC
+      description: Retorna status atual do KYC
+      responses:
+        '200':
+          description: Status do KYC
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycStatus'
+
+  /kyc/submit:
+    post:
+      tags: [KYC]
+      summary: Submeter KYC
+      description: Submete dados para validação KYC
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [level]
+              properties:
+                level:
+                  type: string
+                  enum: [LIGHT, MEDIUM]
+                document:
+                  type: string
+                  format: binary
+                selfie:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: KYC submetido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycStatus'
+
+  # ============================================
+  # ONBOARDING
+  # ============================================
+  /onboarding/link-benefit:
+    post:
+      tags: [Onboarding]
+      summary: Vincular benefício
+      description: Vincula usuário a um benefício/empresa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code]
+              properties:
+                code:
+                  type: string
+                  description: Código convite, matrícula ou CPF
+                employer_id:
+                  type: string
+                  description: ID da empresa (se conhecido)
+      responses:
+        '200':
+          description: Benefício vinculado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  benefits:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Benefit'
+
+  /onboarding/terms:
+    post:
+      tags: [Onboarding]
+      summary: Aceitar termos
+      description: Aceita termos e consentimentos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [terms_accepted, consents]
+              properties:
+                terms_accepted:
+                  type: boolean
+                consents:
+                  type: object
+      responses:
+        '200':
+          description: Termos aceitos
+
+  # ============================================
+  # SUPPORT
+  # ============================================
+  /support/tickets:
+    get:
+      tags: [Support]
+      summary: Lista de tickets
+      description: Retorna tickets de suporte do usuário
+      responses:
+        '200':
+          description: Lista de tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tickets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ticket'
+
+    post:
+      tags: [Support]
+      summary: Criar ticket
+      description: Cria novo ticket de suporte
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [category, description]
+              properties:
+                category:
+                  type: string
+                description:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: Ticket criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+
+  /support/tickets/{id}:
+    get:
+      tags: [Support]
+      summary: Detalhe do ticket
+      description: Retorna detalhe e histórico do ticket
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Detalhe do ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketDetail'
+
+  # ============================================
+  # PRIVACY (LGPD)
+  # ============================================
+  /privacy/data-export:
+    post:
+      tags: [Privacy]
+      summary: Exportar dados
+      description: Solicita exportação de dados pessoais
+      responses:
+        '202':
+          description: Exportação iniciada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  export_id:
+                    type: string
+                    format: uuid
+                  estimated_time:
+                    type: string
+
+  /privacy/data-export/{id}:
+    get:
+      tags: [Privacy]
+      summary: Status da exportação
+      description: Verifica status e download da exportação
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Exportação pronta
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+
+  /privacy/consents:
+    get:
+      tags: [Privacy]
+      summary: Consentimentos
+      description: Lista consentimentos do usuário
+      responses:
+        '200':
+          description: Lista de consentimentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  consents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Consent'
+
+    put:
+      tags: [Privacy]
+      summary: Atualizar consentimentos
+      description: Atualiza consentimentos do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                consents:
+                  type: object
+      responses:
+        '200':
+          description: Consentimentos atualizados
+
+  /privacy/deletion:
+    post:
+      tags: [Privacy]
+      summary: Solicitar exclusão
+      description: Solicita exclusão de dados (com avisos legais)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason:
+                  type: string
+      responses:
+        '202':
+          description: Exclusão solicitada
+
+  # ============================================
+  # DEV (apenas em dev)
+  # ============================================
+  /dev/transactions/generate:
+    post:
+      tags: [Dev]
+      summary: Gerar transações (dev)
+      description: Gera transações de teste (apenas em dev)
+      parameters:
+        - name: count
+          in: query
+          schema:
+            type: integer
+            default: 1000
+      responses:
+        '200':
+          description: Transações geradas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  generated:
+                    type: integer
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    AppConfig:
+      type: object
+      properties:
+        apiVersion:
+          type: string
+        minAppVersion:
+          type: string
+        features:
+          type: object
+          properties:
+            devMode:
+              type: boolean
+            qrPayment:
+              type: boolean
+            cardManagement:
+              type: boolean
+        maintenance:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+            message:
+              type: string
+
+    MaintenanceInfo:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        message:
+          type: string
+        estimatedEnd:
+          type: string
+          format: date-time
+
+    AuthResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        id_token:
+          type: string
+        expires_in:
+          type: integer
+        token_type:
+          type: string
+          default: Bearer
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        phone:
+          type: string
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        name:
+          type: string
+        document:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+
+    UserProfileUpdate:
+      type: object
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+        name:
+          type: string
+
+    WalletSummary:
+      type: object
+      properties:
+        totalBalance:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: BRL
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Wallet'
+
+    Wallet:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [VR, VA]
+        balance:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: BRL
+        lastUpdated:
+          type: string
+          format: date-time
+        employer:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+
+    TransactionListResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [DEBIT, CREDIT, TOPUP]
+        amount:
+          type: number
+          format: decimal
+        merchant:
+          type: string
+        description:
+          type: string
+        walletId:
+          type: string
+        walletType:
+          type: string
+          enum: [VR, VA]
+        status:
+          type: string
+          enum: [CREATED, PENDING, APPROVED, DECLINED, CAPTURED, SETTLED, REVERSED, REFUNDED, DISPUTED]
+        createdAt:
+          type: string
+          format: date-time
+        reference:
+          type: string
+
+    TransactionDetail:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            timeline:
+              type: array
+              items:
+                $ref: '#/components/schemas/TransactionTimelineItem'
+            receipt:
+              type: object
+              properties:
+                url:
+                  type: string
+                format:
+                  type: string
+            declineReason:
+              type: string
+            metadata:
+              type: object
+
+    TransactionTimelineItem:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+        message:
+          type: string
+        actor:
+          type: string
+          enum: [SYSTEM, USER, MERCHANT, ADQUIRENTE]
+
+    QrValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        merchant:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            category:
+              type: string
+        amount:
+          type: number
+          format: decimal
+        editable:
+          type: boolean
+        expiresAt:
+          type: string
+          format: date-time
+
+    PaymentResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [APPROVED, DECLINED, PENDING]
+        message:
+          type: string
+        declineReason:
+          type: string
+
+    PaymentStatus:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+        lastUpdated:
+          type: string
+          format: date-time
+
+    Card:
+      type: object
+      properties:
+        id:
+          type: string
+        number:
+          type: string
+          description: Número mascarado (ex: 1234 **** **** 5678)
+        expiryMonth:
+          type: integer
+        expiryYear:
+          type: integer
+        cvv:
+          type: string
+          description: CVV mascarado (ex: ***)
+        status:
+          type: string
+          enum: [ACTIVE, BLOCKED, EXPIRED]
+        type:
+          type: string
+          enum: [VIRTUAL, PHYSICAL]
+
+    CardLimits:
+      type: object
+      properties:
+        dailyLimit:
+          type: number
+          format: decimal
+        monthlyLimit:
+          type: number
+          format: decimal
+        transactionLimit:
+          type: number
+          format: decimal
+        allowedCategories:
+          type: array
+          items:
+            type: string
+
+    CardLimitsUpdate:
+      type: object
+      properties:
+        dailyLimit:
+          type: number
+          format: decimal
+        transactionLimit:
+          type: number
+          format: decimal
+
+    CardDevice:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+          enum: [MOBILE, WEARABLE]
+        lastUsed:
+          type: string
+          format: date-time
+
+    Dispute:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        transactionId:
+          type: string
+          format: uuid
+        reason:
+          type: string
+        status:
+          type: string
+          enum: [CREATED, IN_REVIEW, APPROVED, REJECTED, CLOSED]
+        createdAt:
+          type: string
+          format: date-time
+
+    DisputeDetail:
+      allOf:
+        - $ref: '#/components/schemas/Dispute'
+        - type: object
+          properties:
+            timeline:
+              type: array
+              items:
+                $ref: '#/components/schemas/DisputeTimelineItem'
+            attachments:
+              type: array
+              items:
+                type: string
+
+    DisputeTimelineItem:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: string
+        message:
+          type: string
+        actor:
+          type: string
+
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        transactionId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: decimal
+        status:
+          type: string
+          enum: [REQUESTED, PROCESSING, COMPLETED, REJECTED]
+        createdAt:
+          type: string
+          format: date-time
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [PAYMENT_APPROVED, PAYMENT_DECLINED, REFUND, LOGIN_NEW_DEVICE, LIMIT_CHANGED, CARD_BLOCKED, TICKET_UPDATED]
+        title:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        data:
+          type: object
+
+    NotificationSettings:
+      type: object
+      properties:
+        paymentNotifications:
+          type: boolean
+        refundNotifications:
+          type: boolean
+        securityNotifications:
+          type: boolean
+        ticketNotifications:
+          type: boolean
+
+    Device:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        lastActive:
+          type: string
+          format: date-time
+        current:
+          type: boolean
+
+    MfaStatus:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        type:
+          type: string
+          enum: [TOTP, PUSH, SMS]
+        totpSecret:
+          type: string
+          description: QR code para configurar TOTP
+
+    KycStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [NOT_STARTED, IN_PROGRESS, PENDING, APPROVED, REJECTED]
+        level:
+          type: string
+          enum: [LIGHT, MEDIUM, HIGH]
+        rejectionReason:
+          type: string
+        submittedAt:
+          type: string
+          format: date-time
+
+    Benefit:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [VR, VA]
+        employer:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+        subject:
+          type: string
+        status:
+          type: string
+          enum: [OPEN, IN_PROGRESS, RESOLVED, CLOSED]
+        createdAt:
+          type: string
+          format: date-time
+
+    TicketDetail:
+      allOf:
+        - $ref: '#/components/schemas/Ticket'
+        - type: object
+          properties:
+            description:
+              type: string
+            messages:
+              type: array
+              items:
+                $ref: '#/components/schemas/TicketMessage'
+            attachments:
+              type: array
+              items:
+                type: string
+
+    TicketMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        author:
+          type: string
+          enum: [USER, SUPPORT]
+        message:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    Consent:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        accepted:
+          type: boolean
+        acceptedAt:
+          type: string
+          format: date-time
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        number:
+          type: string
+        complement:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object

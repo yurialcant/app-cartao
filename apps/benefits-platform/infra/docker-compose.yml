@@ -1,0 +1,172 @@
+version: '3.9'
+
+services:
+  # ==================== POSTGRES ====================
+  postgres:
+    image: postgres:15-alpine
+    container_name: benefits-postgres
+    environment:
+      POSTGRES_DB: benefits
+      POSTGRES_USER: benefits
+      POSTGRES_PASSWORD: benefits123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-schemas.sql:/docker-entrypoint-initdb.d/01-schemas.sql
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benefits -d benefits"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ==================== REDIS ====================
+  redis:
+    image: redis:7-alpine
+    container_name: benefits-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - benefits-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ==================== KEYCLOAK ====================
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: benefits-keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/benefits_keycloak
+      KC_DB_USERNAME: benefits
+      KC_DB_PASSWORD: benefits123
+      KC_PROXY: edge
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    volumes:
+      - ./keycloak/realm-benefits.json:/opt/keycloak/data/import/realm-benefits.json
+    command: >
+      start-dev
+      --import-realm
+      --db=postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==================== LOCALSTACK (AWS local) ====================
+  localstack:
+    image: localstack/localstack:latest
+    container_name: benefits-localstack
+    environment:
+      SERVICES: s3,sqs,events,sns
+      DEBUG: 0
+      DATA_DIR: /tmp/localstack/data
+      LAMBDA_EXECUTOR: docker
+      DOCKER_HOST: unix:///var/run/docker.sock
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    ports:
+      - "4566:4566"
+    volumes:
+      - ./localstack/init-aws.sh:/docker-entrypoint-initaws.d/init-aws.sh
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack_data:/tmp/localstack
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "awslocal", "s3", "ls"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== JAEGER ====================
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: benefits-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: true
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+      - "14268:14268"
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:16686/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==================== PROMETHEUS ====================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: benefits-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./otel/prometheus-config.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/healthy"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==================== GRAFANA ====================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: benefits-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: admin
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./otel/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+    depends_on:
+      - prometheus
+      - jaeger
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  benefits-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  localstack_data:
+  prometheus_data:
+  grafana_data:

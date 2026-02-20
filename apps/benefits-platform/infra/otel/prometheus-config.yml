@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'jaeger'
+    static_configs:
+      - targets: ['jaeger:14269']
+
+  - job_name: 'spring-boot'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: 
+        - 'localhost:9000'  # tenant-service
+        - 'localhost:9001'  # benefits-core
+        - 'localhost:9002'  # payments-orchestrator
+        - 'localhost:8080'  # user-bff
+        - 'localhost:8082'  # pos-bff
+        - 'localhost:8084'  # employer-bff

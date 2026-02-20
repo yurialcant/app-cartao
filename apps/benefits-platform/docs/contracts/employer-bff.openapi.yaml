@@ -1,0 +1,438 @@
+openapi: 3.0.3
+info:
+  title: Employer BFF API
+  description: |
+    Backend for Frontend (BFF) API for Employer Portal operations.
+    
+    **F05 - Credit Batch Management**
+    - Bulk credit import with ACID transactions
+    - Idempotency via X-Idempotency-Key header
+    - Async event publishing via outbox pattern
+    
+    **Authorization:**
+    - Requires JWT with `employer_admin` role
+    - Tenant ID extracted from JWT `tenant_id` claim
+    - Employer ID extracted from JWT `sub` claim
+  version: 1.0.0
+  contact:
+    name: Benefits Platform Team
+
+servers:
+  - url: http://localhost:8083
+    description: Local development server
+  - url: https://api.benefits.example.com
+    description: Production server
+
+tags:
+  - name: Credit Batch
+    description: F05 - Credit batch operations (bulk import)
+
+paths:
+  /api/v1/test:
+    get:
+      summary: Health check endpoint
+      tags:
+        - Credit Batch
+      responses:
+        '200':
+          description: Service is running
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Employer BFF is running!"
+
+  /api/v1/credits/batch:
+    post:
+      summary: Submit credit batch (F05)
+      description: |
+        Submit bulk credit batch for processing.
+        
+        **Features:**
+        - Idempotent: X-Idempotency-Key header for 24h deduplication
+        - Atomic: All items commit or rollback together
+        - Async: Events published via outbox pattern
+        - Max 50,000 items per batch
+        
+        **Flow:**
+        1. Validate payload
+        2. Check idempotency (X-Idempotency-Key)
+        3. Create batch record
+        4. Process items (ACID transaction)
+        5. Create ledger entries
+        6. Publish outbox events
+        7. Return batch status
+      tags:
+        - Credit Batch
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditBatchRequest'
+            example:
+              batch_name: "January 2026 Credits"
+              wallet_type: "MEAL"
+              items:
+                - user_id: "550e8400-e29b-41d4-a716-446655440001"
+                  email: "lucas@example.com"
+                  amount: 500.00
+                  description: "Monthly meal credit"
+                  metadata:
+                    source: "payroll"
+                    period: "2026-01"
+      parameters:
+        - name: X-Idempotency-Key
+          in: header
+          required: true
+          description: Unique key for idempotency (24h TTL)
+          schema:
+            type: string
+            example: "batch-2026-01-18-001"
+        - name: X-Correlation-Id
+          in: header
+          required: false
+          description: Correlation ID for distributed tracing
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440999"
+      responses:
+        '201':
+          description: Batch created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditBatchResponse'
+        '400':
+          description: Invalid request (empty items, too many items, validation errors)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Idempotency key conflict (same key, different payload)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden (insufficient permissions)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized (missing or invalid JWT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+    get:
+      summary: List credit batches
+      description: |
+        List batches with filtering and pagination.
+        
+        **Filters:**
+        - status: PENDING, PROCESSING, COMPLETED, FAILED
+        - page: Page number (1-based)
+        - size: Items per page (default: 20, max: 100)
+      tags:
+        - Credit Batch
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          required: false
+          description: Filter by status
+          schema:
+            type: string
+            enum: [PENDING, PROCESSING, COMPLETED, FAILED]
+        - name: X-Correlation-Id
+          in: header
+          required: false
+          description: Correlation ID for distributed tracing
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of batches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditBatchResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /api/v1/credits/batch/{batchId}:
+    get:
+      summary: Get batch details
+      description: |
+        Get batch details including per-line status and error messages.
+        
+        Returns full batch information with item-level results.
+      tags:
+        - Credit Batch
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: batchId
+          in: path
+          required: true
+          description: Batch ID (UUID)
+          schema:
+            type: string
+            format: uuid
+            example: "550e8400-e29b-41d4-a716-446655440100"
+        - name: X-Correlation-Id
+          in: header
+          required: false
+          description: Correlation ID for distributed tracing
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Batch details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditBatchResponse'
+        '404':
+          description: Batch not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token with `employer_admin` role and `tenant_id` claim
+
+  schemas:
+    CreditBatchRequest:
+      type: object
+      required:
+        - items
+      properties:
+        batch_name:
+          type: string
+          description: Human-readable batch name
+          example: "January 2026 Credits"
+        wallet_type:
+          type: string
+          description: Wallet type (MEAL, FOOD, TRANSPORT, etc.)
+          example: "MEAL"
+        items:
+          type: array
+          description: Array of credit items (max 50,000)
+          maxItems: 50000
+          items:
+            $ref: '#/components/schemas/BatchItem'
+      example:
+        batch_name: "January 2026 Credits"
+        wallet_type: "MEAL"
+        items:
+          - user_id: "550e8400-e29b-41d4-a716-446655440001"
+            email: "lucas@example.com"
+            amount: 500.00
+            description: "Monthly meal credit"
+            metadata:
+              source: "payroll"
+              period: "2026-01"
+
+    BatchItem:
+      type: object
+      required:
+        - user_id
+        - amount
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          description: User/Person ID
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        email:
+          type: string
+          format: email
+          description: User email (optional, for validation)
+          example: "lucas@example.com"
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          description: Credit amount
+          example: 500.00
+        description:
+          type: string
+          description: Credit description
+          example: "Monthly meal credit"
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+          description: Additional metadata (key-value pairs)
+          example:
+            source: "payroll"
+            period: "2026-01"
+
+    CreditBatchResponse:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          format: uuid
+          description: Batch ID
+          example: "550e8400-e29b-41d4-a716-446655440100"
+        batch_name:
+          type: string
+          description: Batch name
+          example: "January 2026 Credits"
+        status:
+          type: string
+          enum: [PENDING, PROCESSING, COMPLETED, FAILED]
+          description: Batch status
+          example: "COMPLETED"
+        items_total:
+          type: integer
+          description: Total number of items
+          example: 100
+        items_succeeded:
+          type: integer
+          description: Number of succeeded items
+          example: 98
+        items_failed:
+          type: integer
+          description: Number of failed items
+          example: 2
+        created_at:
+          type: string
+          format: date-time
+          description: Batch creation timestamp
+          example: "2026-01-18T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-01-18T10:05:00Z"
+        items:
+          type: array
+          description: Per-item results
+          items:
+            $ref: '#/components/schemas/BatchItemResult'
+
+    BatchItemResult:
+      type: object
+      properties:
+        item_id:
+          type: string
+          format: uuid
+          description: Item ID
+          example: "550e8400-e29b-41d4-a716-446655440101"
+        user_id:
+          type: string
+          format: uuid
+          description: User ID
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        email:
+          type: string
+          format: email
+          description: User email
+          example: "lucas@example.com"
+        amount:
+          type: number
+          format: decimal
+          description: Credit amount
+          example: 500.00
+        status:
+          type: string
+          enum: [PENDING, SUCCEEDED, FAILED]
+          description: Item processing status
+          example: "SUCCEEDED"
+        error_message:
+          type: string
+          nullable: true
+          description: Error message (if status is FAILED)
+          example: null
+        ledger_entry_id:
+          type: string
+          format: uuid
+          nullable: true
+          description: Ledger entry ID (if succeeded)
+          example: "550e8400-e29b-41d4-a716-446655440200"
+
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: Problem type URI
+          example: "https://api.benefits.example.com/problems/validation-error"
+        title:
+          type: string
+          description: Problem title
+          example: "Validation Error"
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        detail:
+          type: string
+          description: Detailed error message
+          example: "Items array cannot be empty"
+        instance:
+          type: string
+          format: uri
+          description: Instance URI
+          example: "/api/v1/credits/batch"
+        code:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        retryable:
+          type: boolean
+          description: Whether the request can be retried
+          example: false
+        fields:
+          type: array
+          description: Field-level errors
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "items"
+              message:
+                type: string
+                example: "Items array cannot be empty"

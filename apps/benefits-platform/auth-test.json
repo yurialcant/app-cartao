@@ -1,0 +1,9 @@
+{
+  "terminalId": "TERM001",
+  "merchantId": "MERCH001",
+  "personId": "550e8400-e29b-41d4-a716-446655440001",
+  "walletId": "550e8400-e29b-41d4-a716-446655440200",
+  "amount": 50.00,
+  "description": "Smoke test POS authorization",
+  "idempotencyKey": "smoke-test-pos-001"
+}

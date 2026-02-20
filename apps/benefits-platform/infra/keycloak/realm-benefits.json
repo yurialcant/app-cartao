@@ -1,0 +1,335 @@
+{
+  "realm": "benefits",
+  "enabled": true,
+  "displayName": "Benefits Realm",
+  "loginTheme": "keycloak",
+  "roles": {
+    "realm": [
+      {
+        "name": "SUPER_ADMIN",
+        "description": "Super Administrador - acesso total a todos os tenants"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Administrador de tenant específico"
+      },
+      {
+        "name": "EMPLOYER_ADMIN",
+        "description": "Administrador de empresa (RH)"
+      },
+      {
+        "name": "EMPLOYER_USER",
+        "description": "Usuário de empresa com permissões limitadas"
+      },
+      {
+        "name": "MERCHANT_ADMIN",
+        "description": "Administrador do estabelecimento"
+      },
+      {
+        "name": "MERCHANT_USER",
+        "description": "Operador do estabelecimento"
+      },
+      {
+        "name": "USER",
+        "description": "Usuário final do app de benefícios"
+      }
+    ]
+  },
+  "users": [
+    {
+      "id": "super-admin-001",
+      "username": "superadmin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Super",
+      "lastName": "Admin",
+      "email": "superadmin@benefits.local",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Super@dmin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["SUPER_ADMIN"],
+      "attributes": {
+        "tenant_id": ["*"]
+      }
+    },
+    {
+      "id": "admin-id-001",
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "email": "admin@benefits.local",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["ADMIN"],
+      "attributes": {
+        "tenant_id": ["tenant-default"]
+      }
+    },
+    {
+      "id": "lucas-maia-001",
+      "username": "lucas@maia.com",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Lucas",
+      "lastName": "Maia",
+      "email": "lucas@maia.com",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "PassW0rd!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["USER"],
+      "attributes": {
+        "tenant_id": ["tenant-default"],
+        "employer_id": ["employer-001"]
+      }
+    },
+    {
+      "id": "employer-admin-001",
+      "username": "employer_admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Employer",
+      "lastName": "Admin",
+      "email": "employer@benefits.local",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "employer123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["EMPLOYER_ADMIN"],
+      "attributes": {
+        "tenant_id": ["tenant-default"],
+        "employer_id": ["employer-001"]
+      }
+    },
+    {
+      "id": "merchant-id-001",
+      "username": "merchant1",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Merchant",
+      "lastName": "Admin",
+      "email": "merchant1@benefits.local",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "merchant123",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["MERCHANT_ADMIN"],
+      "attributes": {
+        "tenant_id": ["tenant-default"],
+        "merchant_id": ["merchant-001"]
+      }
+    },
+    {
+      "id": "b9a3fdb4-688c-41c7-b705-bcc0e322c022",
+      "username": "user1",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "User",
+      "lastName": "One",
+      "email": "user1@benefits.local",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Passw0rd!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["USER"],
+      "attributes": {
+        "tenant_id": ["tenant-default"],
+        "employer_id": ["employer-001"]
+      }
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "benefits-user-app",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "com.benefits.app://oauthredirect",
+        "http://localhost:*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "protocol": "openid-connect",
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "defaultClientScopes": ["openid", "profile", "email", "roles"]
+    },
+    {
+      "clientId": "benefits-admin-portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4200/*",
+        "http://localhost:4200"
+      ],
+      "webOrigins": [
+        "http://localhost:4200"
+      ],
+      "protocol": "openid-connect",
+      "defaultClientScopes": ["openid", "profile", "email", "roles"]
+    },
+    {
+      "clientId": "benefits-employer-portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4201/*",
+        "http://localhost:4201"
+      ],
+      "webOrigins": [
+        "http://localhost:4201"
+      ],
+      "protocol": "openid-connect",
+      "defaultClientScopes": ["openid", "profile", "email", "roles"]
+    },
+    {
+      "clientId": "benefits-merchant-portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost:4202/*",
+        "http://localhost:4202"
+      ],
+      "webOrigins": [
+        "http://localhost:4202"
+      ],
+      "protocol": "openid-connect",
+      "defaultClientScopes": ["openid", "profile", "email", "roles"]
+    },
+    {
+      "clientId": "k6-dev",
+      "enabled": true,
+      "publicClient": false,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "secret": "k6-dev-secret",
+      "protocol": "openid-connect"
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "roles",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "tenant_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "tenant_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "tenant_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "employer_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "employer_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "employer_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "name": "merchant_id",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "merchant_id",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "merchant_id",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    }
+  ],
+  "defaultDefaultClientScopes": [
+    "openid",
+    "profile",
+    "email",
+    "roles"
+  ],
+  "protocolMappers": [
+    {
+      "name": "username",
+      "protocol": "openid-connect",
+      "protocolMapper": "oidc-usermodel-property-mapper",
+      "config": {
+        "user.attribute": "username",
+        "claim.name": "preferred_username",
+        "jsonType.label": "String",
+        "id.token.claim": "true",
+        "access.token.claim": "true"
+      }
+    }
+  ]
+}
+

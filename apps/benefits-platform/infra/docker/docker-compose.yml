@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: benefits-postgres
+    environment:
+      POSTGRES_DB: benefits_db
+      POSTGRES_USER: benefits
+      POSTGRES_PASSWORD: benefits_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benefits"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    container_name: benefits-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - benefits-network
+
+  # Identity Provider
+  keycloak:
+    image: keycloak/keycloak:26.0.0
+    container_name: benefits-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: benefits
+      KC_DB_PASSWORD: benefits_password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-benefits.json:/opt/keycloak/data/import/realm.json
+    command: start-dev --import-realm
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  benefits-network:
+    driver: bridge

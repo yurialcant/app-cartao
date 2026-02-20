@@ -1,0 +1,136 @@
+@startuml
+hide circle
+skinparam linetype ortho
+title ERD - Plataforma de Benefícios (MVP)
+
+entity tenant {
+  *id : UUID
+  administrator_id : UUID
+  name : TEXT
+  slug : TEXT [UNIQUE]
+  status : TEXT (ACTIVE | SUSPENDED | DELETED)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+entity branding {
+  *tenant_id : UUID [FK tenant.id]
+  app_name : TEXT
+  logo_url : TEXT
+  colors_json : JSONB
+  links_json : JSONB
+  updated_at : TIMESTAMPTZ
+}
+
+entity ui_composition {
+  *tenant_id : UUID [FK tenant.id]
+  schema_version : TEXT
+  home_json : JSONB
+  updated_at : TIMESTAMPTZ
+}
+
+entity wallet_definition {
+  *id : UUID
+  tenant_id : UUID [FK tenant.id]
+  wallet_type : TEXT
+  label : TEXT
+  sort_order : INT
+  rules_json : JSONB
+  created_at : TIMESTAMPTZ
+  UNIQUE(tenant_id, wallet_type)
+}
+
+entity wallet {
+  *id : UUID
+  tenant_id : UUID [FK tenant.id]
+  user_id : TEXT
+  wallet_type : TEXT
+  status : TEXT (ACTIVE | FROZEN | EXPIRED)
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+  UNIQUE(tenant_id, user_id, wallet_type)
+}
+
+entity wallet_balance {
+  *wallet_id : UUID [FK wallet.id]
+  available : BIGINT (centavos)
+  reserved : BIGINT
+  updated_at : TIMESTAMPTZ
+}
+
+entity ledger_entry {
+  *id : UUID
+  wallet_id : UUID [FK wallet.id]
+  entry_type : TEXT (CREDIT | DEBIT | RESERVE | RELEASE)
+  amount : BIGINT
+  currency : TEXT
+  ref_type : TEXT (BATCH | PAYMENT | REFUND | ADJUST)
+  ref_id : TEXT
+  description : TEXT
+  metadata_json : JSONB
+  created_at : TIMESTAMPTZ [IMMUTABLE]
+}
+
+entity payment {
+  *id : UUID
+  tenant_id : UUID [FK tenant.id]
+  merchant_id : UUID
+  terminal_id : UUID
+  user_id : TEXT
+  amount : BIGINT
+  currency : TEXT
+  mcc : TEXT
+  status : TEXT (CREATED | AUTHORIZING | AUTHORIZED | DECLINED | FAILED | REFUNDED)
+  idempotency_key : TEXT [UNIQUE]
+  provider_ref : TEXT
+  created_at : TIMESTAMPTZ
+  updated_at : TIMESTAMPTZ
+}
+
+entity idempotency_record {
+  *idempotency_key : TEXT
+  scope : TEXT
+  request_hash : TEXT
+  response_status : INT
+  response_body_json : JSONB
+  created_at : TIMESTAMPTZ
+  expires_at : TIMESTAMPTZ
+}
+
+entity outbox_event {
+  *id : UUID
+  aggregate_type : TEXT (Wallet | Payment | CreditBatch)
+  aggregate_id : TEXT
+  event_type : TEXT (wallet.credited | payment.authorized | ...)
+  tenant_id : UUID
+  correlation_id : UUID
+  payload_json : JSONB
+  status : TEXT (PENDING | PUBLISHED | FAILED)
+  fail_count : INT
+  created_at : TIMESTAMPTZ
+  published_at : TIMESTAMPTZ
+}
+
+entity inbox_processed {
+  *consumer : TEXT
+  *event_id : UUID [FK outbox_event.id]
+  processed_at : TIMESTAMPTZ
+  UNIQUE(consumer, event_id)
+}
+
+' Relationships
+tenant ||--|| branding
+tenant ||--|| ui_composition
+tenant ||--o{ wallet_definition
+tenant ||--o{ wallet
+tenant ||--o{ payment
+
+wallet ||--|| wallet_balance
+wallet ||--o{ ledger_entry
+wallet ||--o{ payment
+
+payment ||--o{ outbox_event
+
+outbox_event ||--o{ inbox_processed
+
+@enduml

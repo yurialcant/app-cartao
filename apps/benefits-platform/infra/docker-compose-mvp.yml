@@ -1,0 +1,78 @@
+services:
+  # ==================== POSTGRES ====================
+  postgres:
+    image: postgres:15-alpine
+    container_name: benefits-postgres
+    environment:
+      POSTGRES_DB: benefits
+      POSTGRES_USER: benefits
+      POSTGRES_PASSWORD: benefits123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init-schemas.sql:/docker-entrypoint-initdb.d/01-schemas.sql
+    networks:
+      - benefits-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U benefits -d benefits"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ==================== REDIS ====================
+  redis:
+    image: redis:7-alpine
+    container_name: benefits-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - benefits-network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ==================== KEYCLOAK ====================
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: benefits-keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/benefits_keycloak
+      KC_DB_USERNAME: benefits
+      KC_DB_PASSWORD: benefits123
+      KC_PROXY: edge
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - benefits-network
+    volumes:
+      - ./keycloak/realm-benefits.json:/opt/keycloak/data/import/realm-benefits.json
+    command: >
+      start-dev
+      --import-realm
+      --db=postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  benefits-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

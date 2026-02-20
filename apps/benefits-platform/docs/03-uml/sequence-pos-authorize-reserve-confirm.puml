@@ -1,0 +1,69 @@
+@startuml
+title Sequence - POS Authorize (Idempotency + Reserve/Confirm + Provider Stub)
+
+actor "POS Operator" as POS
+participant "POS App" as APP
+participant "pos-bff" as PBFF
+participant "payments-orchestrator" as PAY
+participant "provider-stub" as PROV
+participant "benefits-core" as BEN
+database "Postgres" as PG
+participant "Redis" as REDIS
+
+POS -> APP: Enter amount (user_id or card_token)
+POS -> APP: Press authorize button
+
+APP -> PBFF: POST /pos/payments/authorize\nBody: {merchant_id, terminal_id, amount, currency, mcc, user_id, occurred_at}\nIdempotency-Key: {key}\nX-Correlation-Id: {uuid}\nAuthorization: Bearer {JWT}
+
+PBFF -> PBFF: Extract tenant_id from JWT
+PBFF -> REDIS: GET idempotency:{key}
+alt idempotency hit
+  REDIS --> PBFF: {cached_response}
+  PBFF --> APP: Cached result (200)
+else idempotency miss
+  PBFF -> PAY: POST /payments/authorize
+  
+  PAY -> REDIS: SETNX idempotency:{key} processing
+  PAY -> PG: INSERT payment (status=CREATED, tenant_id, merchant_id, user_id, amount)
+  PAY -> PG: INSERT payment_event (AUTH_REQUESTED)
+
+  PAY -> BEN: POST /ledger/reserve (wallet_id, amount, ref=payment_id)
+  BEN -> PG: INSERT ledger_entry (RESERVE, wallet_id, amount)
+  BEN -> PG: UPDATE wallet_balance (reserved += amount)
+  BEN --> PAY: OK
+
+  PAY -> PROV: POST /authorize (provider_ref, terminal_id, amount, user_id)
+  alt provider approved
+    PROV --> PAY: {approved: true, provider_ref: "xyz"}
+    PAY -> BEN: POST /ledger/confirm (payment_id)
+    BEN -> PG: INSERT ledger_entry (DEBIT, amount)
+    BEN -> PG: INSERT ledger_entry (RELEASE, reserved amount)
+    BEN -> PG: UPDATE wallet_balance (available -= amount, reserved = 0)
+    BEN --> PAY: OK
+    PAY -> PG: UPDATE payment (status=AUTHORIZED, provider_ref)
+    PAY -> PG: INSERT outbox_event (payment.authorized)
+    PAY --> PBFF: 200 {payment_id, status=AUTHORIZED, approved_amount}
+  else provider declined
+    PROV --> PAY: {approved: false, reason: "card_blocked"}
+    PAY -> BEN: POST /ledger/release (payment_id)
+    BEN -> PG: INSERT ledger_entry (RELEASE, reserved amount)
+    BEN -> PG: UPDATE wallet_balance (reserved -= amount)
+    BEN --> PAY: OK
+    PAY -> PG: UPDATE payment (status=DECLINED, reason)
+    PAY -> PG: INSERT outbox_event (payment.declined)
+    PAY --> PBFF: 200 {payment_id, status=DECLINED, reason}
+  end
+
+  PBFF -> REDIS: SET idempotency:{key} {response} EX 86400
+  PBFF --> APP: 200 {payment_id, status, amount, reason?}
+end
+
+alt status=AUTHORIZED
+  APP -> APP: Show "Payment Approved"
+  APP -> APP: Clear form + auto-print/close
+else status=DECLINED
+  APP -> APP: Show "Payment Declined: {reason}"
+  APP -> APP: Allow retry
+end
+
+@enduml

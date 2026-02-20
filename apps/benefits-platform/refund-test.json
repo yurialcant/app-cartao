@@ -1,0 +1,8 @@
+{
+  "personId": "550e8400-e29b-41d4-a716-446655440001",
+  "walletId": "550e8400-e29b-41d4-a716-446655440200",
+  "originalTransactionId": "AUTH001-ORIGINAL-12345",
+  "amount": 25.00,
+  "reason": "Cliente solicitou cancelamento",
+  "idempotencyKey": "smoke-test-refund-001"
+}

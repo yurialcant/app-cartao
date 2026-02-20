@@ -1,0 +1,351 @@
+asyncapi: 3.0.0
+
+info:
+  title: Benefits Platform - Event Schemas
+  version: 1.0.0
+  description: |
+    Async API specification for all events published via outbox pattern.
+    All events follow CloudEvents spec (v1.0).
+    Transport: LocalStack EventBridge (dev) / AWS EventBridge (prod)
+
+defaultContentType: application/json
+
+servers:
+  - url: 'http://localstack:4566'
+    protocol: 'http'
+    description: 'LocalStack (development)'
+  - url: 'https://events.us-east-1.amazonaws.com'
+    protocol: 'https'
+    description: 'AWS EventBridge (production)'
+
+channels:
+  wallet.credited:
+    description: Disparado quando wallet recebe crédito
+    address: 'wallet.credited'
+    messages:
+      walletCreditedEvent:
+        $ref: '#/components/messages/WalletCreditedEvent'
+
+  wallet.debited:
+    description: Disparado quando wallet é debitada
+    address: 'wallet.debited'
+    messages:
+      walletDebitedEvent:
+        $ref: '#/components/messages/WalletDebitedEvent'
+
+  payment.authorized:
+    description: Disparado quando pagamento é autorizado
+    address: 'payment.authorized'
+    messages:
+      paymentAuthorizedEvent:
+        $ref: '#/components/messages/PaymentAuthorizedEvent'
+
+  payment.declined:
+    description: Disparado quando pagamento é recusado
+    address: 'payment.declined'
+    messages:
+      paymentDeclinedEvent:
+        $ref: '#/components/messages/PaymentDeclinedEvent'
+
+  payment.refunded:
+    description: Disparado quando pagamento é reembolsado
+    address: 'payment.refunded'
+    messages:
+      paymentRefundedEvent:
+        $ref: '#/components/messages/PaymentRefundedEvent'
+
+  batch.created:
+    description: Disparado quando batch de crédito é criado
+    address: 'batch.created'
+    messages:
+      batchCreatedEvent:
+        $ref: '#/components/messages/BatchCreatedEvent'
+
+  batch.completed:
+    description: Disparado quando batch é completado
+    address: 'batch.completed'
+    messages:
+      batchCompletedEvent:
+        $ref: '#/components/messages/BatchCompletedEvent'
+
+components:
+  messages:
+    CloudEventEnvelope:
+      description: CloudEvents v1.0 wrapper
+      contentType: application/json
+      payload:
+        type: object
+        required:
+          - specversion
+          - type
+          - source
+          - id
+          - time
+          - datacontenttype
+          - subject
+        properties:
+          specversion:
+            type: string
+            enum: ['1.0']
+          type:
+            type: string
+            description: Event type (e.g., wallet.credited)
+          source:
+            type: string
+            description: Origin service (e.g., benefits-core)
+          id:
+            type: string
+            format: uuid
+            description: Unique event ID
+          time:
+            type: string
+            format: date-time
+            description: Event timestamp (UTC)
+          datacontenttype:
+            type: string
+            enum: ['application/json']
+          subject:
+            type: string
+            description: Resource identifier (e.g., wallet/{walletId})
+          data:
+            type: object
+          correlationid:
+            type: string
+            format: uuid
+            description: Trace correlation ID
+          traceparent:
+            type: string
+            description: W3C Trace Context (parent trace ID)
+
+    WalletCreditedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - walletId
+                - amount
+                - currency
+              properties:
+                walletId:
+                  type: string
+                  format: uuid
+                userId:
+                  type: string
+                amount:
+                  type: integer
+                  description: Centavos
+                currency:
+                  type: string
+                  enum: [BRL]
+                walletType:
+                  type: string
+                  enum: [MEAL_VOUCHER, FLEXIBLE, FOOD_ALLOWANCE]
+                reference:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                      enum: [BATCH, ADJUSTMENT]
+                    id:
+                      type: string
+                balanceAfter:
+                  type: object
+                  properties:
+                    available:
+                      type: integer
+                    reserved:
+                      type: integer
+
+    WalletDebitedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - walletId
+                - amount
+              properties:
+                walletId:
+                  type: string
+                  format: uuid
+                amount:
+                  type: integer
+                  description: Centavos
+                paymentId:
+                  type: string
+                  format: uuid
+                reason:
+                  type: string
+                  enum: [PAYMENT, REFUND, ADJUSTMENT]
+                balanceAfter:
+                  type: object
+                  properties:
+                    available:
+                      type: integer
+                    reserved:
+                      type: integer
+
+    PaymentAuthorizedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - paymentId
+                - amount
+                - walletId
+              properties:
+                paymentId:
+                  type: string
+                  format: uuid
+                terminalId:
+                  type: string
+                  format: uuid
+                merchantId:
+                  type: string
+                  format: uuid
+                amount:
+                  type: integer
+                  description: Centavos
+                currency:
+                  type: string
+                  enum: [BRL]
+                mcc:
+                  type: string
+                walletId:
+                  type: string
+                  format: uuid
+                walletType:
+                  type: string
+                approvalCode:
+                  type: string
+                authorizationCode:
+                  type: string
+                  description: RRN ou NSU
+
+    PaymentDeclinedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - paymentId
+                - reason
+              properties:
+                paymentId:
+                  type: string
+                  format: uuid
+                amount:
+                  type: integer
+                reason:
+                  type: string
+                  enum:
+                    - INSUFFICIENT_FUNDS
+                    - WALLET_NOT_FOUND
+                    - WALLET_FROZEN
+                    - WALLET_EXPIRED
+                    - POLICY_DENIED
+                    - RATE_LIMIT
+                    - PROVIDER_DECLINED
+                errorCode:
+                  type: string
+
+    PaymentRefundedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - refundId
+                - paymentId
+                - amount
+              properties:
+                refundId:
+                  type: string
+                  format: uuid
+                paymentId:
+                  type: string
+                  format: uuid
+                amount:
+                  type: integer
+                bonusAmount:
+                  type: integer
+                  description: Bonus adicional (se aplicável)
+                reason:
+                  type: string
+                  enum:
+                    - USER_REQUEST
+                    - MERCHANT_ERROR
+                    - DUPLICATE
+                    - OTHER
+
+    BatchCreatedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - batchId
+                - totalLines
+              properties:
+                batchId:
+                  type: string
+                  format: uuid
+                description:
+                  type: string
+                totalLines:
+                  type: integer
+                totalAmountCents:
+                  type: integer
+                createdBy:
+                  type: string
+                  description: Employer ID
+
+    BatchCompletedEvent:
+      allOf:
+        - $ref: '#/components/messages/CloudEventEnvelope'
+        - type: object
+          properties:
+            data:
+              type: object
+              required:
+                - batchId
+                - statistics
+              properties:
+                batchId:
+                  type: string
+                  format: uuid
+                statistics:
+                  type: object
+                  properties:
+                    totalLines:
+                      type: integer
+                    successCount:
+                      type: integer
+                    failureCount:
+                      type: integer
+                    totalAmountCents:
+                      type: integer
+                status:
+                  type: string
+                  enum:
+                    - COMPLETED
+                    - PARTIAL_FAILURE
+                    - FAILED
+                completedAt:
+                  type: string
+                  format: date-time
+

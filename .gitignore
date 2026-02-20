@@ -8,3 +8,9 @@ build/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
+# --- Logs e Backups ---
+logs/
+*.log
+*.bak
+*.backup
+*.disabled

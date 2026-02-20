@@ -1,0 +1,67 @@
+# application-docker.yml - Configuração para execução em containers Docker
+spring:
+  profiles:
+    active: docker
+
+# Service URLs para Docker containers
+benefits:
+  core:
+    url: http://benefits-core:8091
+
+tenant:
+  service:
+    url: http://tenant-service:8106
+
+# Outros serviços
+identity:
+  service:
+    url: http://identity-service:8084
+
+notification:
+  service:
+    url: http://notification-service:8085
+
+payments:
+  orchestrator:
+    url: http://payments-orchestrator:8082
+
+employer:
+  service:
+    url: http://employer-service:8107
+
+merchant:
+  service:
+    url: http://merchant-service:8108
+
+support:
+  service:
+    url: http://support-service:8109
+
+device:
+  service:
+    url: http://device-service:8088
+
+card:
+  service:
+    url: http://card-service:8089
+
+risk:
+  service:
+    url: http://risk-service:8094
+
+# Acquirer services
+acquirer:
+  adapter:
+    url: http://acquirer-adapter:8093
+
+# Keycloak para Docker
+keycloak:
+  url: http://keycloak:8080
+  realm: benefits
+
+# Logging mais detalhado para debug em Docker
+logging:
+  level:
+    com.benefits: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+    org.springframework.web.client: DEBUG

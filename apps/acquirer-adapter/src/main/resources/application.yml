@@ -1,0 +1,27 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: acquirer-adapter
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+server:
+  port: ${SERVER_PORT:8093}
+
+acquirer:
+  stub:
+    url: ${ACQUIRER_STUB_URL:http://acquirer-stub:8104}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.benefits.acquireradapter: DEBUG

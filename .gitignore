@@ -1,7 +1,7 @@
-"target/" 
-"*.jar" 
-".idea/" 
-"*.iml" 
+target/
+*.jar
+.idea/
+*.iml 
 # --- Flutter / Dart ---
 build/
 .dart_tool/

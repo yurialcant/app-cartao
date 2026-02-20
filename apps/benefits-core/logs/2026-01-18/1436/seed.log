@@ -1,0 +1,30 @@
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+NOTICE:  Ô£à Seed 01-tenant-origami.sql aplicado com sucesso
+NOTICE:  Tenant: Origami (origami)
+NOTICE:  Planos: 2
+NOTICE:  Wallet Definitions: 3
+DO
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+INSERT 0 0
+NOTICE:  Ô£à Seed 02-users-wallets.sql aplicado com sucesso
+NOTICE:  Usu├írios: 3
+NOTICE:  Wallets: 6
+NOTICE:  Ledger Entries: 7
+DO
+NOTICE:  Saldo Lucas MEAL: R$ 334.5000000000000000.2f
+INSERT 0 0
+INSERT 0 0

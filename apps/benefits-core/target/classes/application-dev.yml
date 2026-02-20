@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    root: INFO
+    com.benefits.core: DEBUG
+
+core:
+  service:
+    api-key: core-service-secret-key

@@ -1,0 +1,33 @@
+-------------------------------------------------------------------------------
+Test set: com.benefits.core.controller.AuthorizationControllerTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.302 s <<< FAILURE! -- in com.benefits.core.controller.AuthorizationControllerTest
+com.benefits.core.controller.AuthorizationControllerTest -- Time elapsed: 0.302 s <<< ERROR!
+java.lang.NoClassDefFoundError: org/springframework/web/servlet/config/annotation/WebMvcConfigurer
+	at org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTypeExcludeFilter.<clinit>(WebMvcTypeExcludeFilter.java:65)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized0(Native Method)
+	at java.base/jdk.internal.misc.Unsafe.ensureClassInitialized(Unsafe.java:1166)
+	at java.base/java.lang.reflect.Constructor.acquireConstructorAccessor(Constructor.java:546)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:496)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:483)
+	at org.springframework.boot.test.autoconfigure.filter.TypeExcludeFiltersContextCustomizer.instantiateTypeExcludeFilter(TypeExcludeFiltersContextCustomizer.java:63)
+	at org.springframework.boot.test.autoconfigure.filter.TypeExcludeFiltersContextCustomizer.instantiateTypeExcludeFilters(TypeExcludeFiltersContextCustomizer.java:53)
+	at org.springframework.boot.test.autoconfigure.filter.TypeExcludeFiltersContextCustomizer.<init>(TypeExcludeFiltersContextCustomizer.java:46)
+	at org.springframework.boot.test.autoconfigure.filter.TypeExcludeFiltersContextCustomizerFactory.createContextCustomizer(TypeExcludeFiltersContextCustomizerFactory.java:61)
+	at org.springframework.boot.test.autoconfigure.filter.TypeExcludeFiltersContextCustomizerFactory.createContextCustomizer(TypeExcludeFiltersContextCustomizerFactory.java:55)
+	at org.springframework.test.context.support.AbstractTestContextBootstrapper.getContextCustomizers(AbstractTestContextBootstrapper.java:360)
+	at org.springframework.test.context.support.AbstractTestContextBootstrapper.buildMergedContextConfiguration(AbstractTestContextBootstrapper.java:332)
+	at org.springframework.test.context.support.AbstractTestContextBootstrapper.buildDefaultMergedContextConfiguration(AbstractTestContextBootstrapper.java:267)
+	at org.springframework.test.context.support.AbstractTestContextBootstrapper.buildMergedContextConfiguration(AbstractTestContextBootstrapper.java:215)
+	at org.springframework.test.context.support.AbstractTestContextBootstrapper.buildTestContext(AbstractTestContextBootstrapper.java:108)
+	at org.springframework.boot.test.context.SpringBootTestContextBootstrapper.buildTestContext(SpringBootTestContextBootstrapper.java:111)
+	at org.springframework.test.context.TestContextManager.<init>(TestContextManager.java:142)
+	at org.springframework.test.context.TestContextManager.<init>(TestContextManager.java:126)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.getTestContextManager(SpringExtension.java:362)
+	at org.springframework.test.context.junit.jupiter.SpringExtension.beforeAll(SpringExtension.java:128)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+Caused by: java.lang.ClassNotFoundException: org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:580)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:490)
+	... 22 more
+
